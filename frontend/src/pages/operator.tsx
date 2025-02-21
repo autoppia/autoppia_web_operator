@@ -18,8 +18,6 @@ import SideChatBar from "../components/sideChatBar";
 const BACKEND_URL = 'http://54.195.214.72:4000'
 
 function Operator(): React.ReactElement {
-  const [watcher, setWatcher] = useState<string | undefined>(undefined)
-
   const [showSideBar, setShowSideBar] = React.useState(
     window.screen.width > 1000
   );
@@ -42,7 +40,8 @@ function Operator(): React.ReactElement {
     const videoElement: HTMLVideoElement | null = document.querySelector("video");
 
     socket.on('connect', () => {
-      setWatcher(socket.id)
+      let watcher: string = socket.id!
+      submit(watcher)
     })
 
     socket.on("offer", (id: string, description: RTCSessionDescriptionInit) => {
@@ -86,11 +85,9 @@ function Operator(): React.ReactElement {
         peerConnection.close();
       }
     };
-
-    submit()
   }, [])
 
-  const submit = async () => {
+  const submit = async (watcher: string) => {
     const startUrl = "https://autoppia.com";
     const tasks = ""
 
