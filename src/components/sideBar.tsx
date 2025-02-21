@@ -38,25 +38,22 @@ function SideBar(props: I_SideBar) {
           <FontAwesomeIcon icon={faClose} color="white" />
         </div>
       </div>
-      <div className="w-full px-5 flex flex-col mt-10 justify-between flex-grow overflow-auto">
-        <div className="flex flex-col">
+      <div
+        className="w-full px-5 flex flex-col mt-10 justify-between flex-grow overflow-auto [&::-webkit-scrollbar-track]:rounded-full
+  [&::-webkit-scrollbar]:w-2
+  [&::-webkit-scrollbar-track]:rounded-full
+  [&::-webkit-scrollbar-track]:bg-gray-100/20
+  [&::-webkit-scrollbar-thumb]:rounded-full
+  [&::-webkit-scrollbar-thumb]:bg-gray-300/40
+  dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+  dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
+      >
+        <div className="flex flex-col   [&::-webkit-scrollbar]:w-2">
           <div className="border-[1px] border-dashed border-gray-100 w-full p-3 px-10 rounded-lg flex items-center mb-5 justify-center cursor-pointer">
             <FontAwesomeIcon icon={faPlus} color="white"></FontAwesomeIcon>
             <h1 className="text-gray-100 ms-5">Start New Task</h1>
           </div>
-          {/* <div className="flex flex-col mt-5">
-            <h1 className="text-gray-50 font-semibold text-xl">
-              Welcome to Operator!
-            </h1>
-            <h1 className="text-gray-300 mt-3">
-              A personalized AI assistant for you.<br></br> Analyze your files,
-              YouTube videos, or recorded content with ease. Extract key
-              insights, summarize important details, and interact with the
-              information in a way that suits you best. <br></br>We’re
-              constantly enhancing the platform, and your feedback is always
-              welcome!
-            </h1>
-          </div> */}
+
           <div className="flex flex-col mt-5">
             <div className="text-gray-50 font-semibold border-b-[1px] border-white">
               <FontAwesomeIcon icon={faClock} className="me-2" /> Histories
@@ -104,18 +101,6 @@ function SideBar(props: I_SideBar) {
               </div>
             </div>
           </div>
-          {/* <div className="p-3 flex  bg-white rounded-lg relative">
-            <input
-              className="border-none outline-none"
-              placeholder="Type here ..."
-            ></input>
-            <div className=" hover:bg-gray-100 rounded-full w-[30px] h-[30px] flex justify-center items-center transition-all duration-200 cursor-pointer">
-              <FontAwesomeIcon icon={faPaperclip} color="gray" />
-            </div>
-            <div className=" hover:bg-gray-100 rounded-full w-[30px] h-[30px] flex justify-center items-center transition-all duration-200 cursor-pointer">
-              <FontAwesomeIcon icon={faPaperPlane} color="gray" />
-            </div>
-          </div> */}
 
           <h1 className="text-gray-300 mt-3">Please Login</h1>
           <div className="flex justify-center items-center mt-3 border-[1px] bg-gray-300 rounded-lg py-3 px-8 cursor-pointer">
