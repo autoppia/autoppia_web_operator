@@ -2,6 +2,7 @@ import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import {
   faBook,
   faClock,
+  faClose,
   faDollar,
   faPaperclip,
   faPaperPlane,
@@ -10,20 +11,36 @@ import {
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { I_SideBar } from "../utils/types";
 
-function SideBar() {
+function SideBar(props: I_SideBar) {
+  const { open, onClick } = props;
   return (
-    <div className="w-[25%] transition-all duration-300 h-full bg-black px-5 py-10 flex flex-col overflow-hidden">
+    <div
+      className={`${
+        open
+          ? "fixed w-[100vw] h-[100vh] px-3 lg:px-10 md:relative md:w-[30vw] lg:px-5 xl:w-[25vw] z-10"
+          : "fixed w-0 px-0 lg:relative"
+      }  transition-all duration-300 h-full bg-black py-10 flex flex-col overflow-hidden dark:shadow-sm dark:shadow-gray-100`}
+    >
       <div className="header  flex flex-col items-center justify-center">
         <img
           src="./assets/images/logos/logo.png"
           className="w-[50px] h-[50px]"
         />
-        <h3 className="text-white text-2xl ">Autoppia Web Operator</h3>
+        <h3 className="text-white text-2xl text-center ">
+          Autoppia Web Operator
+        </h3>
+        <div
+          className="absolute flex lg:hidden cursor-pointer top-5 right-5 rounded-full h-[40px] w-[40px] justify-center items-center  p-2 hover:bg-gray-100/10"
+          onClick={onClick}
+        >
+          <FontAwesomeIcon icon={faClose} color="white" />
+        </div>
       </div>
-      <div className="w-full px-5 flex flex-col mt-10 justify-between flex-grow ">
+      <div className="w-full px-5 flex flex-col mt-10 justify-between flex-grow overflow-auto">
         <div className="flex flex-col">
-          <div className="border-[1px] border-dashed border-gray-100 w-full p-3 px-10 rounded-lg flex items-center mb-5 justify-around cursor-pointer">
+          <div className="border-[1px] border-dashed border-gray-100 w-full p-3 px-10 rounded-lg flex items-center mb-5 justify-center cursor-pointer">
             <FontAwesomeIcon icon={faPlus} color="white"></FontAwesomeIcon>
             <h1 className="text-gray-100 ms-5">Start New Task</h1>
           </div>
