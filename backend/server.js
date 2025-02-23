@@ -1,16 +1,17 @@
 const express = require("express");
-const cors = require("cors")
+const cors = require("cors");
 const http = require("http");
 const { chromium } = require("playwright");
+const { ApifiedWebAgent, executeAction } = require("./agent");
 
 const app = express();
 const server = http.createServer(app);
-const io = require('socket.io')(server, {  
-  cors: {  
+const io = require('socket.io')(server, {
+  cors: {
     origin: "*",
-    credentials: true 
-  }  
-});  
+    credentials: true
+  }
+});
 
 app.use(cors())
 app.use(express.json());
@@ -51,10 +52,13 @@ app.post("/start", async (req, res) => {
   try {
     const browser = await chromium.launch({
       headless: false,
+      channel: "chrome",
+      executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
       args: [
         "--start-maximized",
         "--auto-select-tab-capture-source-by-title=SharedPage",
       ],
+      ignoreDefaultArgs: ['--mute-audio']
     });
     const context = await browser.newContext({
       viewport: null,
@@ -69,6 +73,24 @@ app.post("/start", async (req, res) => {
     const broadcasterPage = await context.newPage();
     const broadcasterURL = `http://127.0.0.1:${port}/broadcaster.html?watcher=${watcher}`;
     await broadcasterPage.goto(broadcasterURL, { timeout: 60000 });
+
+    // const agent = new ApifiedWebAgent("127.0.0.1", 8000);
+    // const actions = await agent.solveTask(tasks)
+
+    // for (const action of actions) {
+    //   await executeAction(startPage, action)
+    // }
+
+    action = {
+      type: "ScrollAction",
+      down: true,
+      value: 1000
+    }
+
+    await executeAction(startPage, action)
+
+    // await context.close()
+    // await browser.close()
 
     res.json({ success: true, message: "Browser launched" });
   } catch (err) {
