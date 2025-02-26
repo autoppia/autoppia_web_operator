@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const http = require("http");
 const { chromium } = require("playwright");
-const { ApifiedWebAgent, executeAction } = require("./agent");
+// const { ApifiedWebAgent, executeAction } = require("./agent");
 
 const app = express();
 const server = http.createServer(app);
@@ -15,86 +15,73 @@ const io = require('socket.io')(server, {
 
 app.use(cors())
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(__dirname + "/public"));
 
-const port = 4000;
-let broadcasters = {};
+const sessions = {};
 
-io.sockets.on("error", (e) => console.log(e));
-io.sockets.on("connection", (socket) => {
-  socket.on("broadcaster", (watcher) => {
-    broadcasters[watcher] = socket.id;
-    socket.to(watcher).emit("broadcaster");
-  });
-  socket.on("watcher", () => {
-    socket.to(broadcasters[socket.id]).emit("watcher");
-  });
-  socket.on("offer", (id, message) => {
-    socket.to(id).emit("offer", socket.id, message);
-  });
-  socket.on("answer", (id, message) => {
-    socket.to(id).emit("answer", socket.id, message);
-  });
-  socket.on("candidate", (id, message) => {
-    socket.to(id).emit("candidate", socket.id, message);
-  });
-  socket.on("disconnect", () => {
-    socket.to(broadcasters[socket.id]).emit("disconnectPeer", socket.id);
-  });
-});
-server.listen(port, () => console.log(`Server is running on port ${port}`));
+const deleteSession = async (socketId) => {
+  const { browser, context, page } = sessions[socketId];
+  await page.close();
+  await context.close();
+  await browser.close();
+  delete sessions[socketId];
+};
 
-app.post("/start", async (req, res) => {
-  const { startUrl, tasks, watcher } = req.body;
-  console.log("Launching browser with:", startUrl, "Tasks:", tasks);
+io.on('connection', (socket) => {
+  console.log(`A user with id: ${socket.id} connected!`);
 
-  try {
-    const browser = await chromium.launch({
-      headless: false,
-      channel: "chrome",
-      executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-      args: [
-        "--start-maximized",
-        "--auto-select-tab-capture-source-by-title=SharedPage",
-      ],
-      ignoreDefaultArgs: ['--mute-audio']
-    });
-    const context = await browser.newContext({
-      viewport: null,
-    });
+  socket.on('start-operator', async (data) => {
+    if (sessions[socket.id]) {
+      await deleteSession(socket.id);
+    }
+    const url = data.url || 'https://www.google.com';
+    console.log(`Starting operator with URL: ${url} and task: ${task}`);
 
-    const startPage = await context.newPage();
-    await startPage.goto(startUrl, { timeout: 60000 });
-    await startPage.evaluate(() => {
-      document.title = "SharedPage";
-    });
+    try {
+      const browser = await chromium.launch({ headless: false });
+      const context = await browser.newContext({
+        viewport: null,
+      });
+      const page = await context.newPage();
+      sessions[socket.id] = { browser, context, page };
 
-    const broadcasterPage = await context.newPage();
-    const broadcasterURL = `http://127.0.0.1:${port}/broadcaster.html?watcher=${watcher}`;
-    await broadcasterPage.goto(broadcasterURL, { timeout: 60000 });
+      await page.goto(url);
+      const screenshot = await page.screenshot();
+      socket.emit('screenshot', { screenshot: screenshot.toString('base64') });
+    }
+    catch (error) {
+      console.error('Error launching browser:', error);
+      socket.emit('error', { message: "Internal Server Error" });
+    }
+  })
 
-    // const agent = new ApifiedWebAgent("127.0.0.1", 8000);
-    // const actions = await agent.solveTask(tasks)
-
-    // for (const action of actions) {
-    //   await executeAction(startPage, action)
-    // }
-
-    action = {
-      type: "ScrollAction",
-      down: true,
-      value: 1000
+  socket.on('perform-task', async (data) => {
+    const { task } = data;
+    if (!task) {
+      socket.emit('error', { message: "Task is required" });
+      return;
     }
 
-    await executeAction(startPage, action)
+    if (sessions[socket.id]) {
+      socket.emit('error', { message: "Session not found" });
+      return;
+    }
+    const { page } = sessions[socket.id];
 
-    // await context.close()
-    // await browser.close()
+    for (let i = 0; i < 10; i++) {
+      await page.evaluate((val) => window.scrollBy(0, val), Math.floor(Math.random() * 500));
+      const screenshot = await page.screenshot();
+      socket.emit('screenshot', { screenshot: screenshot.toString('base64') });
+      await page.waitForTimeout(500);
+    }
+  })
 
-    res.json({ success: true, message: "Browser launched" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: "Browser launch failed" });
-  }
+  socket.on('disconnect', () => {
+    console.log(`A user with id: ${socket.id} disconnected`);
+    if (sessions[socket.id]) {
+      deleteSession(socket.id);
+    }
+  });
 });
+
+const port = 4000;
+server.listen(port, () => console.log(`Server is running on port ${port}`));

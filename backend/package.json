@@ -1,14 +1,13 @@
 {
   "name": "web-operator",
   "version": "1.0.0",
-  "description": "A web operator using WebRTC, playwright and socket.io",
+  "description": "A web operator using playwright and socket.io",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
   "keywords": [
-    "WebRTC",
     "socket.io",
     "playwright"
   ],
