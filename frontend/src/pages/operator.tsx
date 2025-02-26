@@ -1,31 +1,29 @@
 import React, { FC, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBars,
-  faMicrophone,
-  faPaperclip,
-  faPaperPlane,
-  faSignIn,
-  faSignOut,
-  faSun,
-} from "@fortawesome/free-solid-svg-icons";
-import io from 'socket.io-client';
+import { faBars, faSignOut } from "@fortawesome/free-solid-svg-icons";
+import io from "socket.io-client";
 
 import { faComments } from "@fortawesome/free-regular-svg-icons";
 import ToggleTheme from "../components/toggleTheme";
 import SideChatBar from "../components/sideChatBar";
 
-const BACKEND_URL = 'http://54.195.214.72:4000'
+const BACKEND_URL = "http://54.195.214.72:4000";
 
 function Operator(): React.ReactElement {
   const [showSideBar, setShowSideBar] = React.useState(
     window.screen.width > 1000
   );
+  const [url, setUrl] = useState("");
+  const [prompt, setPrompt] = useState("");
 
   const sideBarHandler = () => {
     setShowSideBar(!showSideBar);
   };
 
+  useEffect(() => {
+    setUrl(localStorage.getItem("url") || "");
+    setPrompt(localStorage.getItem("prompt") || "");
+  }, []);
   useEffect(() => {
     let peerConnection: RTCPeerConnection;
     const config: RTCConfiguration = {
@@ -36,13 +34,14 @@ function Operator(): React.ReactElement {
       ],
     };
 
-    const socket = io(BACKEND_URL)
-    const videoElement: HTMLVideoElement | null = document.querySelector("video");
+    const socket = io(BACKEND_URL);
+    const videoElement: HTMLVideoElement | null =
+      document.querySelector("video");
 
-    socket.on('connect', () => {
-      let watcher: string = socket.id!
-      submit(watcher)
-    })
+    socket.on("connect", () => {
+      let watcher: string = socket.id!;
+      submit(watcher);
+    });
 
     socket.on("offer", (id: string, description: RTCSessionDescriptionInit) => {
       peerConnection = new RTCPeerConnection(config);
@@ -50,7 +49,9 @@ function Operator(): React.ReactElement {
       peerConnection
         .setRemoteDescription(new RTCSessionDescription(description))
         .then(() => peerConnection.createAnswer())
-        .then((sdp: RTCSessionDescriptionInit) => peerConnection.setLocalDescription(sdp))
+        .then((sdp: RTCSessionDescriptionInit) =>
+          peerConnection.setLocalDescription(sdp)
+        )
         .then(() => {
           socket.emit("answer", id, peerConnection.localDescription);
         })
@@ -85,11 +86,11 @@ function Operator(): React.ReactElement {
         peerConnection.close();
       }
     };
-  }, [])
+  }, []);
 
   const submit = async (watcher: string) => {
     const startUrl = "https://autoppia.com";
-    const tasks = ""
+    const tasks = "";
 
     try {
       const response = await fetch(`${BACKEND_URL}/start`, {
@@ -102,17 +103,21 @@ function Operator(): React.ReactElement {
     } catch (err) {
       console.error("Failed to start:", err);
     }
-  }
+  };
 
   return (
-    <div className="dark:bg-[#050608] bg-[#f1f5f9] w-[100vw] h-[100vh] flex">
+    <div className="dark:bg-[#050608] bg-[#f1f5f9] w-[100%] h-[100vh] flex">
       <SideChatBar open={showSideBar} onClick={sideBarHandler}></SideChatBar>
       <div
-        className={`flex flex-col px-5 md:px-10 lg:px-20 xl:px-40 py-20 h-full relative justify-between pb-20  ${showSideBar ? "md:w-[65vw] xl:w-[70vw]" : "w-[100vw]"
-          }`}
+        className={`flex flex-col px-10 py-20 h-full relative justify-between pb-20  ${
+          showSideBar ? "md:w-[65vw] xl:w-[75vw]" : "w-[100vw]"
+        }`}
       >
-        <div className="flex absolute top-10 left-10 hover:bg-gray-300 rounded-full justify-center items-center w-[50px] h-[50px] cursor-pointer transition-all duration-300 dark:text-white">
-          <FontAwesomeIcon icon={faBars} onClick={() => sideBarHandler()} />
+        <div
+          className="flex absolute top-10 left-10 hover:bg-gray-300 rounded-full justify-center items-center w-[50px] h-[50px] cursor-pointer transition-all duration-300 dark:text-white"
+          onClick={() => sideBarHandler()}
+        >
+          <FontAwesomeIcon icon={faBars} />
         </div>
         <div className="absolute flex top-10 right-10">
           <ToggleTheme />
@@ -132,9 +137,7 @@ function Operator(): React.ReactElement {
         dark:[&::-webkit-scrollbar-track]:bg-neutral-700
         dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500`}
         >
-          <video playsInline autoPlay muted
-            className="w-full h-full"
-          ></video>
+          <video playsInline autoPlay muted className="w-full h-full"></video>
         </div>
       </div>
     </div>
