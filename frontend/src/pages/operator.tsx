@@ -1,13 +1,8 @@
 import React, { FC, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faSignOut } from "@fortawesome/free-solid-svg-icons";
-import io from "socket.io-client";
-
-import { faComments } from "@fortawesome/free-regular-svg-icons";
 import ToggleTheme from "../components/toggleTheme";
 import SideChatBar from "../components/sideChatBar";
-
-const BACKEND_URL = "http://54.195.214.72:4000";
 
 function Operator(): React.ReactElement {
   const [showSideBar, setShowSideBar] = React.useState(
@@ -24,87 +19,6 @@ function Operator(): React.ReactElement {
     setUrl(localStorage.getItem("url") || "");
     setPrompt(localStorage.getItem("prompt") || "");
   }, []);
-  useEffect(() => {
-    let peerConnection: RTCPeerConnection;
-    const config: RTCConfiguration = {
-      iceServers: [
-        {
-          urls: "stun:stun.l.google.com:19302",
-        },
-      ],
-    };
-
-    const socket = io(BACKEND_URL);
-    const videoElement: HTMLVideoElement | null =
-      document.querySelector("video");
-
-    socket.on("connect", () => {
-      let watcher: string = socket.id!;
-      submit(watcher);
-    });
-
-    socket.on("offer", (id: string, description: RTCSessionDescriptionInit) => {
-      peerConnection = new RTCPeerConnection(config);
-
-      peerConnection
-        .setRemoteDescription(new RTCSessionDescription(description))
-        .then(() => peerConnection.createAnswer())
-        .then((sdp: RTCSessionDescriptionInit) =>
-          peerConnection.setLocalDescription(sdp)
-        )
-        .then(() => {
-          socket.emit("answer", id, peerConnection.localDescription);
-        })
-        .catch((error: any) => console.error(error));
-
-      peerConnection.ontrack = (event: RTCTrackEvent) => {
-        if (videoElement) {
-          videoElement.srcObject = event.streams[0];
-        }
-      };
-
-      peerConnection.onicecandidate = (event: RTCPeerConnectionIceEvent) => {
-        if (event.candidate) {
-          socket.emit("candidate", id, event.candidate);
-        }
-      };
-    });
-
-    socket.on("broadcaster", () => {
-      socket.emit("watcher");
-    });
-
-    socket.on("candidate", (id: string, candidate: RTCIceCandidateInit) => {
-      peerConnection
-        .addIceCandidate(new RTCIceCandidate(candidate))
-        .catch((error: any) => console.error(error));
-    });
-
-    window.onbeforeunload = () => {
-      socket.close();
-      if (peerConnection) {
-        peerConnection.close();
-      }
-    };
-  }, []);
-
-  const submit = async (watcher: string) => {
-    const startUrl = "https://autoppia.com";
-    const tasks = "";
-
-    try {
-      const response = await fetch(`${BACKEND_URL}/start`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ startUrl, tasks, watcher }),
-      });
-      const result = await response.json();
-      console.log(result.message);
-    } catch (err) {
-      console.error("Failed to start:", err);
-    }
-  };
-
   return (
     <div className="dark:bg-[#050608] bg-[#f1f5f9] w-[100%] h-[100vh] flex">
       <SideChatBar open={showSideBar} onClick={sideBarHandler}></SideChatBar>

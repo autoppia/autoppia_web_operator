@@ -4,8 +4,6 @@ import {
   faClock,
   faClose,
   faDollar,
-  faPaperclip,
-  faPaperPlane,
   faPlus,
   faSignIn,
   faThumbsUp,
@@ -19,7 +17,7 @@ function SideBar(props: I_SideBar) {
     <div
       className={`${
         open
-          ? "fixed w-[100vw] h-[100vh] px-3 lg:px-10 md:relative md:w-[30vw] lg:px-5 xl:w-[25vw] z-10"
+          ? "fixed w-[100vw] h-[100vh] px-3 lg:px-10 md:relative md:w-[30vw]  xl:w-[25vw] z-10"
           : "fixed w-0 px-0 lg:relative"
       }  transition-all duration-300 h-full bg-black py-10 flex flex-col overflow-hidden dark:shadow-sm dark:shadow-gray-100`}
     >

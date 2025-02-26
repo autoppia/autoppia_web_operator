@@ -20,6 +20,10 @@ import ToggleTheme from "../components/toggleTheme";
 import WebsiteItem from "../components/websiteItem";
 import { faGoogle, faGoogleDrive } from "@fortawesome/free-brands-svg-icons";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { io } from "socket.io-client";
+import { BACKEND_URL, socketAction } from "../store/action";
+import { SOCKET_CONNECT } from "../store/types";
 
 function Landing(): React.ReactElement {
   const [showSideBar, setShowSideBar] = React.useState(false);
@@ -27,6 +31,8 @@ function Landing(): React.ReactElement {
   const [showDropDown, setShowDropDown] = useState(false);
   const [selectedURL, setSelectedURL] = useState("");
   const [prompt, setPrompt] = useState("");
+
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -72,6 +78,12 @@ function Landing(): React.ReactElement {
       setShowDropDown(false);
     }
   }, [selectedURL]);
+
+  useEffect(() => {
+    const socket = io(BACKEND_URL);
+    socketAction(socket);
+    dispatch({ type: SOCKET_CONNECT, payload: socket });
+  }, []);
   return (
     <div className="dark:bg-[#050608] bg-[#f1f5f9] w-[100vw] h-[100vh] flex relative overflow-auto">
       <SideBar open={showSideBar} onClick={sideBarHandler}></SideBar>
