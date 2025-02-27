@@ -1,3 +1,6 @@
+import { faAws, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { faMap } from "@fortawesome/free-solid-svg-icons";
+
 export const DB = {
   messages: [
     {
@@ -20,3 +23,21 @@ export const DB = {
     },
   ],
 };
+
+export const websites = [
+  {
+    title: "Google Search",
+    url: "https://google.com",
+    icon: faGoogle,
+  },
+  {
+    title: "Amazon Web Service",
+    url: "https://aws.amazon.com/",
+    icon: faAws,
+  },
+  {
+    title: "Google Maps",
+    url: "https://maps.google.com",
+    icon: faMap,
+  },
+];

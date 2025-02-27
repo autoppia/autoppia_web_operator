@@ -18,10 +18,17 @@ import { faComments } from "@fortawesome/free-regular-svg-icons";
 import SideBar from "../components/sideBar";
 import ToggleTheme from "../components/toggleTheme";
 import WebsiteItem from "../components/websiteItem";
-import { faAmazon, faApple, faGoogle, faGooglePlay } from "@fortawesome/free-brands-svg-icons";
+import {
+  faAmazon,
+  faApple,
+  faGoogle,
+  faGooglePlay,
+} from "@fortawesome/free-brands-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import { websites } from "../utils/mock/mockDB";
+import { I_WebSiteUrl } from "../utils/types";
 
 function Landing(): React.ReactElement {
   const [showSideBar, setShowSideBar] = React.useState(false);
@@ -29,40 +36,59 @@ function Landing(): React.ReactElement {
   const [showDropDown, setShowDropDown] = useState(false);
   const [selectedURL, setSelectedURL] = useState("");
   const [prompt, setPrompt] = useState("");
+  const [filteredWebSites, setFilteredWebSites] = useState<I_WebSiteUrl[]>([]);
 
-  const socket = useSelector((state: RootState) => state.socket.socket); 
+  const socket = useSelector((state: RootState) => state.socket.socket);
 
   const navigate = useNavigate();
 
+  //===========================================Handlers========================================
+  //Collapse Sidebar
   const sideBarHandler = () => {
     setShowSideBar(!showSideBar);
   };
 
+  //On change the input (prompt)
   const handleChangePrompt = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPrompt(event.target.value);
   };
+
+  //On change the input (webURL)
   const handleChangeWebURL = (event: React.ChangeEvent<HTMLInputElement>) => {
     setWebURL(event.target.value);
+    handleFilter(event);
   };
 
-  const handleUnfocusedWebURL = () => {
-    setSelectedURL(webURL);
+  //const filter
+  const handleFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const input = event.target.value;
+    setFilteredWebSites(
+      websites.filter(
+        (item: I_WebSiteUrl) => item.title.toLowerCase().indexOf(input) >= 0
+      )
+    );
   };
 
+  //On click the Item of the dropdown
   const handleClickWebSiteItem = (url: string, name: string) => {
     setWebURL(name);
     setSelectedURL(url);
     setShowDropDown(false);
   };
 
+  //Navigate to next page
   const startOperating = () => {
     socket.emit("start-operator", {
-      url: webURL,
+      url: selectedURL,
       task: prompt,
     });
     navigate("/home");
   };
 
+  //===============================================================================================
+
+  //==================================Life Cycle==========================
+  //when the Prop(webURL) change
   useEffect(() => {
     if (webURL.length > 0) {
       setShowDropDown(true);
@@ -112,6 +138,7 @@ function Landing(): React.ReactElement {
               placeholder="You can upload the video, images or other files"
               value={prompt}
               onChange={handleChangePrompt}
+              // onFocus={handleUnfocusedWebURL}
             ></input>
             <div className="flex justify-between mt-5 items-center">
               <div className="flex">
@@ -134,7 +161,7 @@ function Landing(): React.ReactElement {
                   placeholder="WebSite URL..."
                   value={webURL}
                   onChange={handleChangeWebURL}
-                  onBlur={handleUnfocusedWebURL}
+                  // onBlur={handleUnfocusedWebURL}
                 />
                 <FontAwesomeIcon icon={faSortDesc} color="gray" />
                 <div
@@ -142,30 +169,14 @@ function Landing(): React.ReactElement {
                     showDropDown ? "h-auto p-5 " : "h-0 p-0"
                   }`}
                 >
-                  <WebsiteItem
-                    title="Google Search"
-                    icon={faGoogle}
-                    url="https://www.google.com"
-                    onClick={handleClickWebSiteItem}
-                  />
-                  <WebsiteItem
-                    title="Amazon"
-                    icon={faAmazon}
-                    url="https://www.amazon.com"
-                    onClick={handleClickWebSiteItem}
-                  />
-                  <WebsiteItem
-                    title="Google App Store"
-                    icon={faGooglePlay}
-                    url="https://play.google.com/store/apps"
-                    onClick={handleClickWebSiteItem}
-                  />
-                  <WebsiteItem
-                    title="Google App Store"
-                    icon={faApple}
-                    url="https://www.apple.com/app-store/"
-                    onClick={handleClickWebSiteItem}
-                  />
+                  {filteredWebSites.map((item: I_WebSiteUrl) => (
+                    <WebsiteItem
+                      title={item.title}
+                      icon={item.icon}
+                      url={item.url}
+                      onClick={handleClickWebSiteItem}
+                    />
+                  ))}
                 </div>
               </div>
               <div

@@ -21,3 +21,9 @@ export interface I_WebsiteItem {
   url: string;
   onClick?: (url: string, name: string) => void;
 }
+
+export interface I_WebSiteUrl {
+  icon: any;
+  title: string;
+  url: string;
+}
