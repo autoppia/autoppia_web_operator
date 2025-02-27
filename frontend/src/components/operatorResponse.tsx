@@ -48,8 +48,8 @@ function OperatorResponse(props: I_O_Res) {
         }`}
       >
         {action &&
-          action.map((item) => (
-            <div className="text-gray-300 rounded-full  p-1 px-5 cursor-pointer hover:ms-1 transition-all duration-200">
+          action.map((item, index) => (
+            <div key={item+index} className="text-gray-300 rounded-full  p-1 px-5 cursor-pointer hover:ms-1 transition-all duration-200">
               <FontAwesomeIcon icon={faMailBulk} className="me-3" />
               {item}
               <FontAwesomeIcon

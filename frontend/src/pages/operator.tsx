@@ -54,14 +54,13 @@ function Operator(): React.ReactElement {
         dark:[&::-webkit-scrollbar-track]:bg-neutral-700
         dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500`}
         >
-          {!imageLoading ? (
+          
             <img
-              id="screenshot"
-              className="w-full"
-              alt="screenshot"
+              className="w-full screenshot"
               onError={handleError}
               onLoad={handleLoad}
-            />
+          
+            />{!imageLoading ? (<></>
           ) : (
             <div
               role="status"

@@ -1,5 +1,5 @@
-import { faAws, faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { faMap } from "@fortawesome/free-solid-svg-icons";
+import { faAws, faGoogle, } from "@fortawesome/free-brands-svg-icons";
+import { faGlobe, faMap } from "@fortawesome/free-solid-svg-icons";
 
 export const DB = {
   messages: [
@@ -39,5 +39,10 @@ export const websites = [
     title: "Google Maps",
     url: "https://maps.google.com",
     icon: faMap,
+  },
+  {
+    title: "Autoppia",
+    url: "https://autoppia.com",
+    icon: faGlobe,
   },
 ];

@@ -169,8 +169,9 @@ function Landing(): React.ReactElement {
                     showDropDown ? "h-auto p-5 " : "h-0 p-0"
                   }`}
                 >
-                  {filteredWebSites.map((item: I_WebSiteUrl) => (
+                  {filteredWebSites.map((item: I_WebSiteUrl, index:number) => (
                     <WebsiteItem
+                    key={item.title+index}
                       title={item.title}
                       icon={item.icon}
                       url={item.url}

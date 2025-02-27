@@ -22,11 +22,10 @@ function SideChatBar(props: I_SideBar) {
 
   return (
     <div
-      className={`${
-        open
+      className={`${open
           ? "fixed w-[100vw] h-[100vh] px-3 lg:px-10 lg:relative lg:w-[35vw] xl:w-[25vw] z-10"
           : "fixed w-[100vw] h-[100vh] lg:w-0  px-3 lg:px-0 lg:relative z-10"
-      }  transition-all duration-300 h-full bg-black py-10 flex flex-col overflow-hidden dark:shadow-sm dark:shadow-gray-100`}
+        }  transition-all duration-300 h-full bg-black py-10 flex flex-col overflow-hidden dark:shadow-sm dark:shadow-gray-100`}
     >
       <div className="header  flex flex-col items-center justify-center">
         <img
@@ -48,8 +47,8 @@ function SideChatBar(props: I_SideBar) {
         <div className="flex flex-col">
           {chats.map((message: any, index: number) => {
             if (message.role == "assistant")
-              return <OperatorResponse key={index} {...message} />;
-            else return <UserMsg key={index} content={message.content} />;
+              return <OperatorResponse key={"OperationRES"+index} {...message} />;
+            else return <UserMsg key={"UserRES"+index} content={message.content} />;
           })}
         </div>
         <div
@@ -62,14 +61,12 @@ function SideChatBar(props: I_SideBar) {
         dark:[&::-webkit-scrollbar-track]:bg-neutral-700
         dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500`}
         >
-          {!imageLoading ? (
-            <img
-              id="screenshot"
-              className="w-full"
-              alt="screenshot"
-              onError={handleError}
-              onLoad={handleLoad}
-            />
+          <img
+            className="w-full screenshot"
+            onError={handleError}
+            onLoad={handleLoad}
+          />
+          {!imageLoading ? (<></>
           ) : (
             <div
               role="status"

@@ -29,7 +29,7 @@ const deleteSession = async (socketId) => {
 const performTask = async (socket, page, task) => {
   // Randomly scroll the page
   for (let i = 0; i < 10; i++) {
-    await page.evaluate((val) => window.scrollBy(0, val), Math.floor(Math.random() * 500));
+    await page.evaluate((val) => window.scrollBy(0, val), Math.floor(Math.random() * 200));
     const screenshot = await page.screenshot();
     socket.emit('screenshot', { screenshot: screenshot.toString('base64') });
     await page.waitForTimeout(500);
@@ -44,15 +44,14 @@ io.on('connection', (socket) => {
       await deleteSession(socket.id);
     }
 
-    // const url = data.url || 'https://www.google.com';
-    const url = 'https://autoppia.com';
+    const url = data.url || 'https://www.google.com';
     const task = data.task || 'None';
     console.log(`Starting operator with URL: ${url} and task: ${task}`);
 
     try {
       const browser = await chromium.launch({ headless: false });
       const context = await browser.newContext({
-        viewport: null,
+        viewport: { width: 1600, height: 800 },
       });
       const page = await context.newPage();
       sessions[socket.id] = { browser, context, page };

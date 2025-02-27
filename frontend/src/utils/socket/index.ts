@@ -19,10 +19,12 @@ export const initializeSocket = (dispatch: AppDispatch, url: string) => {
     })
 
     socket.on('screenshot', ({ screenshot }) => {
-        const screenElement = document.getElementById('screenshot') as HTMLImageElement;
+        const screenElement = document.getElementsByClassName('screenshot') as HTMLCollectionOf<any>;
         if (screenElement) {
+
             const base64Prefix = 'data:image/png;base64,';
-            screenElement.src = base64Prefix + screenshot;
+            screenElement[0].src = base64Prefix + screenshot;
+            screenElement[1].src = base64Prefix + screenshot;
         }
     });
 
