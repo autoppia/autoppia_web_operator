@@ -6,8 +6,6 @@ import UserMsg from "./userMsg";
 import { I_SideBar } from "../utils/types";
 import { useState } from "react";
 
-const BACKEND_URL = "http://localhost:4000";
-
 function SideChatBar(props: I_SideBar) {
   const [chats, setChats] = useState<any>(DB.messages);
   const { open, onClick } = props;
@@ -45,7 +43,7 @@ function SideChatBar(props: I_SideBar) {
           })}
         </div>
         <div
-          className={`flex flex-col p-5  bg-white rounded-xl w-full self-center shadow-md flex-grow min-h-[300px] mt-5 overflow-auto lg:hidden
+          className={`flex flex-col p-5 justify-center bg-white rounded-xl w-full self-center shadow-md flex-grow min-h-[300px] mt-5 overflow-auto lg:hidden
         [&::-webkit-scrollbar]:w-2
         [&::-webkit-scrollbar-track]:rounded-full
         [&::-webkit-scrollbar-track]:bg-gray-100
@@ -54,7 +52,7 @@ function SideChatBar(props: I_SideBar) {
         dark:[&::-webkit-scrollbar-track]:bg-neutral-700
         dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500`}
         >
-          <video playsInline autoPlay muted className="w-full h-full"></video>
+          {/* <img id="screenshot" className="w-full" alt="screenshot" /> */}
         </div>
       </div>
       <div className="flex flex-col">

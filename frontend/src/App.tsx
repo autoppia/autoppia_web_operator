@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 
@@ -5,21 +6,25 @@ import "./App.css";
 import Landing from "./pages/landing";
 import Operator from "./pages/operator";
 
-//Redux
+import { useDispatch } from "react-redux";
+import { initializeSocket } from './utils/socket';
 
-import { Provider } from "react-redux";
-import store from "./store/store";
+const BACKEND_URL = 'http://54.195.214.72:4000';
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    initializeSocket(dispatch, BACKEND_URL);
+  }, []);
+  
   return (
-    <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/home" element={<Operator />} />
-        </Routes>
-      </BrowserRouter>
-    </Provider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/home" element={<Operator />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

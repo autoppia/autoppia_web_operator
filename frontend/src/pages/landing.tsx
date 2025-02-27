@@ -18,12 +18,10 @@ import { faComments } from "@fortawesome/free-regular-svg-icons";
 import SideBar from "../components/sideBar";
 import ToggleTheme from "../components/toggleTheme";
 import WebsiteItem from "../components/websiteItem";
-import { faGoogle, faGoogleDrive } from "@fortawesome/free-brands-svg-icons";
+import { faAmazon, faApple, faGoogle, faGooglePlay } from "@fortawesome/free-brands-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { io } from "socket.io-client";
-import { BACKEND_URL, socketAction } from "../store/action";
-import { SOCKET_CONNECT } from "../store/types";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 function Landing(): React.ReactElement {
   const [showSideBar, setShowSideBar] = React.useState(false);
@@ -32,7 +30,7 @@ function Landing(): React.ReactElement {
   const [selectedURL, setSelectedURL] = useState("");
   const [prompt, setPrompt] = useState("");
 
-  const dispatch = useDispatch();
+  const socket = useSelector((state: RootState) => state.socket.socket); 
 
   const navigate = useNavigate();
 
@@ -58,8 +56,10 @@ function Landing(): React.ReactElement {
   };
 
   const startOperating = () => {
-    localStorage.setItem("url", webURL);
-    localStorage.setItem("prompt", prompt);
+    socket.emit("start-operator", {
+      url: webURL,
+      task: prompt,
+    });
     navigate("/home");
   };
 
@@ -79,11 +79,6 @@ function Landing(): React.ReactElement {
     }
   }, [selectedURL]);
 
-  useEffect(() => {
-    const socket = io(BACKEND_URL);
-    socketAction(socket);
-    dispatch({ type: SOCKET_CONNECT, payload: socket });
-  }, []);
   return (
     <div className="dark:bg-[#050608] bg-[#f1f5f9] w-[100vw] h-[100vh] flex relative overflow-auto">
       <SideBar open={showSideBar} onClick={sideBarHandler}></SideBar>
@@ -148,21 +143,27 @@ function Landing(): React.ReactElement {
                   }`}
                 >
                   <WebsiteItem
-                    title="Google Drive"
-                    icon={faGoogleDrive}
-                    url="https://drive.google.com/drive/my-drive"
-                    onClick={handleClickWebSiteItem}
-                  />
-                  <WebsiteItem
-                    title="Google Account Management"
+                    title="Google Search"
                     icon={faGoogle}
-                    url="https://myaccount.google.com/"
+                    url="https://www.google.com"
                     onClick={handleClickWebSiteItem}
                   />
                   <WebsiteItem
-                    title="Google Map"
-                    icon={faMap}
-                    url="https://www.google.com/maps"
+                    title="Amazon"
+                    icon={faAmazon}
+                    url="https://www.amazon.com"
+                    onClick={handleClickWebSiteItem}
+                  />
+                  <WebsiteItem
+                    title="Google App Store"
+                    icon={faGooglePlay}
+                    url="https://play.google.com/store/apps"
+                    onClick={handleClickWebSiteItem}
+                  />
+                  <WebsiteItem
+                    title="Google App Store"
+                    icon={faApple}
+                    url="https://www.apple.com/app-store/"
                     onClick={handleClickWebSiteItem}
                   />
                 </div>

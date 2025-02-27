@@ -26,6 +26,16 @@ const deleteSession = async (socketId) => {
   delete sessions[socketId];
 };
 
+const performTask = async (socket, page, task) => {
+  // Randomly scroll the page
+  for (let i = 0; i < 10; i++) {
+    await page.evaluate((val) => window.scrollBy(0, val), Math.floor(Math.random() * 500));
+    const screenshot = await page.screenshot();
+    socket.emit('screenshot', { screenshot: screenshot.toString('base64') });
+    await page.waitForTimeout(500);
+  }
+}
+
 io.on('connection', (socket) => {
   console.log(`A user with id: ${socket.id} connected!`);
 
@@ -33,7 +43,10 @@ io.on('connection', (socket) => {
     if (sessions[socket.id]) {
       await deleteSession(socket.id);
     }
-    const url = data.url || 'https://www.google.com';
+
+    // const url = data.url || 'https://www.google.com';
+    const url = 'https://autoppia.com';
+    const task = data.task || 'None';
     console.log(`Starting operator with URL: ${url} and task: ${task}`);
 
     try {
@@ -47,6 +60,10 @@ io.on('connection', (socket) => {
       await page.goto(url);
       const screenshot = await page.screenshot();
       socket.emit('screenshot', { screenshot: screenshot.toString('base64') });
+
+      if (task) {
+        await performTask(socket, page, task);
+      }
     }
     catch (error) {
       console.error('Error launching browser:', error);
@@ -67,18 +84,18 @@ io.on('connection', (socket) => {
     }
     const { page } = sessions[socket.id];
 
-    for (let i = 0; i < 10; i++) {
-      await page.evaluate((val) => window.scrollBy(0, val), Math.floor(Math.random() * 500));
-      const screenshot = await page.screenshot();
-      socket.emit('screenshot', { screenshot: screenshot.toString('base64') });
-      await page.waitForTimeout(500);
+    try {
+      await performTask(socket, page, task);
+    } catch (error) {
+      console.error('Error performing task:', error);
+      socket.emit('error', { message: "Internal Server Error" });
     }
   })
 
-  socket.on('disconnect', () => {
+  socket.on('disconnect', async () => {
     console.log(`A user with id: ${socket.id} disconnected`);
     if (sessions[socket.id]) {
-      deleteSession(socket.id);
+      await deleteSession(socket.id);
     }
   });
 });

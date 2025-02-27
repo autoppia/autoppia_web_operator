@@ -8,17 +8,11 @@ function Operator(): React.ReactElement {
   const [showSideBar, setShowSideBar] = React.useState(
     window.screen.width > 1000
   );
-  const [url, setUrl] = useState("");
-  const [prompt, setPrompt] = useState("");
 
   const sideBarHandler = () => {
     setShowSideBar(!showSideBar);
   };
 
-  useEffect(() => {
-    setUrl(localStorage.getItem("url") || "");
-    setPrompt(localStorage.getItem("prompt") || "");
-  }, []);
   return (
     <div className="dark:bg-[#050608] bg-[#f1f5f9] w-[100%] h-[100vh] flex">
       <SideChatBar open={showSideBar} onClick={sideBarHandler}></SideChatBar>
@@ -42,7 +36,7 @@ function Operator(): React.ReactElement {
         </div>
 
         <div
-          className={`flex flex-col p-5  bg-white rounded-xl w-full self-center shadow-md flex-grow mt-5 overflow-auto 
+          className={`flex flex-col p-5 justify-center bg-white rounded-xl w-full self-center shadow-md flex-grow mt-5 overflow-auto 
         [&::-webkit-scrollbar]:w-2
         [&::-webkit-scrollbar-track]:rounded-full
         [&::-webkit-scrollbar-track]:bg-gray-100
@@ -51,7 +45,7 @@ function Operator(): React.ReactElement {
         dark:[&::-webkit-scrollbar-track]:bg-neutral-700
         dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500`}
         >
-          <video playsInline autoPlay muted className="w-full h-full"></video>
+          <img id="screenshot" className="w-full" alt="screenshot" />
         </div>
       </div>
     </div>
