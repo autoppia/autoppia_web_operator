@@ -1,16 +1,34 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faSignOut } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBars,
+  faCompress,
+  faCompressAlt,
+  faCompressArrowsAlt,
+  faMaximize,
+  faSave,
+  faShare,
+  faSignOut,
+} from "@fortawesome/free-solid-svg-icons";
+import { faShareFromSquare } from "@fortawesome/free-regular-svg-icons";
 import ToggleTheme from "../components/toggleTheme";
 import SideChatBar from "../components/sideChatBar";
 
 function Operator(): React.ReactElement {
+  const imageRef = useRef<HTMLImageElement | null>(null);
   const [showSideBar, setShowSideBar] = React.useState(
     window.screen.width > 1000
   );
+  const [url, setUrl] = useState<string | null>("");
 
   const [imageLoading, setImageLoading] = useState(true);
 
+  const handleFullScreen = () => {
+    console.log(imageRef.current);
+    if (imageRef.current) {
+      imageRef.current.requestFullscreen?.();
+    }
+  };
   const handleError = () => {
     setImageLoading(true);
   };
@@ -21,26 +39,53 @@ function Operator(): React.ReactElement {
   const sideBarHandler = () => {
     setShowSideBar(!showSideBar);
   };
+  useEffect(() => {
+    setUrl(localStorage.getItem("url"));
+  }, []);
 
   return (
-    <div className="dark:bg-[#050608] bg-[#f1f5f9] w-[100%] h-[100vh] flex">
+    <div className="dark:bg-[#050608] bg-[#f1f5f9] w-[100%] h-[100vh] flex z-0">
+      <div className="fixed w-full h-full hidden dark:block">
+        <img
+          src="./assets/images/bg/dark-bg.png"
+          className="w-full h-full"
+        ></img>
+      </div>
       <SideChatBar open={showSideBar} onClick={sideBarHandler}></SideChatBar>
       <div
-        className={`flex flex-col px-10 py-20 h-full relative justify-between pb-20  ${
-          showSideBar ? "md:w-[65vw] xl:w-[75vw]" : "w-[100vw]"
+        className={`hidden lg:flex flex-col px-5 py-5 h-full relative justify-between  items-center ${
+          showSideBar ? "md:w-[55vw] xl:w-[65vw]" : "w-[100vw]"
         }`}
       >
-        <div
-          className="flex absolute top-10 left-10 hover:bg-gray-300 rounded-full justify-center items-center w-[50px] h-[50px] cursor-pointer transition-all duration-300 dark:text-white"
-          onClick={() => sideBarHandler()}
-        >
-          <FontAwesomeIcon icon={faBars} />
-        </div>
-        <div className="absolute flex top-10 right-10">
-          <ToggleTheme />
-
-          <div className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[50px] h-[50px] cursor-pointer transition-all duration-300 dark:text-white">
-            <FontAwesomeIcon icon={faSignOut} />
+        <div className="flex justify-between w-full">
+          <div className="flex items-center">
+            {!showSideBar && (
+              <div
+                className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 text-gray-500 dark:text-white"
+                onClick={() => sideBarHandler()}
+              >
+                <FontAwesomeIcon icon={faBars} />
+              </div>
+            )}
+            <div
+              className=" ms-2 flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 text-gray-500 dark:text-white"
+              onClick={handleFullScreen}
+            >
+              <FontAwesomeIcon icon={faCompressAlt} />
+            </div>
+            <div className="font-semibold ms-2 rounded-full text-gray-700 dark:text-white">
+              {url}
+            </div>
+          </div>
+          <div className=" flex ">
+            <div className="flex hover:bg-gray-300 rounded-full justify-center items-center px-3 me-3 cursor-pointer transition-all duration-300 font-semibold text-gray-600 dark:text-white">
+              <FontAwesomeIcon icon={faShareFromSquare} />
+              <span className="ms-2">Share</span>
+            </div>
+            <div className="flex hover:bg-gray-300 rounded-full justify-center items-center px-3 border-[1px] border-gray-400 cursor-pointer transition-all duration-300 font-semibold text-gray-600 dark:text-white">
+              <FontAwesomeIcon icon={faSave} />
+              <span className="ms-2">Save Task</span>
+            </div>
           </div>
         </div>
 
@@ -54,13 +99,14 @@ function Operator(): React.ReactElement {
         dark:[&::-webkit-scrollbar-track]:bg-neutral-700
         dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500`}
         >
-          
-            <img
-              className="w-full screenshot"
-              onError={handleError}
-              onLoad={handleLoad}
-          
-            />{!imageLoading ? (<></>
+          <img
+            ref={imageRef}
+            className="w-full screenshot"
+            onError={handleError}
+            onLoad={handleLoad}
+          />
+          {!imageLoading ? (
+            <></>
           ) : (
             <div
               role="status"
@@ -79,7 +125,7 @@ function Operator(): React.ReactElement {
                 />
                 <path
                   d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                  fill="currentFill"
+                  fill="black"
                 />
               </svg>
               <span className="sr-only">Loading...</span>

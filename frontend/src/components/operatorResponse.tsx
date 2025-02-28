@@ -25,9 +25,9 @@ function OperatorResponse(props: I_O_Res) {
       {period && (
         <div className="text-gray-500">Worked for {period} seconds</div>
       )}
-      <div className="flex justify-between items-center w-full bg-gray-400/20 p-3 rounded-lg">
+      <div className="flex justify-between items-center w-full p-3 py-2 rounded-lg border-2 ">
         {thinking && (
-          <div className="animate-pulse text-white flex items-center">
+          <div className="animate-pulse text-gray-600 flex items-center dark:text-gray-100">
             <FontAwesomeIcon
               icon={faCircleNotch}
               className="animate-spin me-2"
@@ -37,25 +37,24 @@ function OperatorResponse(props: I_O_Res) {
         )}
         <FontAwesomeIcon
           icon={!collapse ? faSortDesc : faSortAsc}
-          color="white"
+          color="gray"
           onClick={handleCollapse}
         />
       </div>
 
       <div
-        className={`border-l-[1px] border-gray-50 ms-5 ${
+        className={`border-l-[1px] border-gray-500 ms-5  ${
           collapse ? "block" : "hidden"
         }`}
       >
         {action &&
           action.map((item, index) => (
-            <div key={item+index} className="text-gray-300 rounded-full  p-1 px-5 cursor-pointer hover:ms-1 transition-all duration-200">
+            <div
+              key={item + index}
+              className="text-gray-700 rounded-full  p-[1px] px-5 cursor-pointer hover:ms-1 transition-all duration-200 dark:text-gray-100"
+            >
               <FontAwesomeIcon icon={faMailBulk} className="me-3" />
               {item}
-              <FontAwesomeIcon
-                icon={faArrowDown}
-                className="ms-3 animate-bounce"
-              />
             </div>
           ))}
       </div>

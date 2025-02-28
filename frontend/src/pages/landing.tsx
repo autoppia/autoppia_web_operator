@@ -5,6 +5,7 @@ import {
   faBars,
   faEarth,
   faExternalLink,
+  faHome,
   faMap,
   faMicrophone,
   faPaperclip,
@@ -82,9 +83,13 @@ function Landing(): React.ReactElement {
       url: selectedURL,
       task: prompt,
     });
+    localStorage.setItem("url", selectedURL);
     navigate("/home");
   };
 
+  const returnHome = () => {
+    window.location.href = "https://autoppia.com/";
+  };
   //===============================================================================================
 
   //==================================Life Cycle==========================
@@ -107,6 +112,12 @@ function Landing(): React.ReactElement {
 
   return (
     <div className="dark:bg-[#050608] bg-[#f1f5f9] w-[100vw] h-[100vh] flex relative overflow-auto">
+      <div className="fixed w-full h-full hidden dark:block">
+        <img
+          src="./assets/images/bg/dark-bg.png"
+          className="w-full h-full"
+        ></img>
+      </div>
       <SideBar open={showSideBar} onClick={sideBarHandler}></SideBar>
       <div
         className={`flex flex-col px-10 lg:px-10 xl:px-20 flex-grow h-full relative ${
@@ -122,10 +133,12 @@ function Landing(): React.ReactElement {
           </div> */}
           <div className="flex ">
             <ToggleTheme />
-            {/* <div className="px-8 flex items-center  dark:text-white hover:bg-white hover:text-black hover:shadow-lg hover:border-transparent rounded-full border-[1px] border-gray-300 justify-center items-center  cursor-pointer transition-all duration-300">
-              <div className="mr-2">Login</div>
-              <FontAwesomeIcon icon={faSignIn} />
-            </div> */}
+            <div
+              className="px-3 flex   dark:text-white hover:bg-white hover:text-black hover:shadow-lg hover:border-transparent rounded-full  justify-center items-center  cursor-pointer transition-all duration-300 text-gray-500"
+              onClick={returnHome}
+            >
+              <FontAwesomeIcon icon={faHome} />
+            </div>
           </div>
         </div>
         <div className="flex flex-col justify-center items-center flex-grow">
@@ -146,15 +159,15 @@ function Landing(): React.ReactElement {
                   <FontAwesomeIcon icon={faPaperclip} color="333333" />
                 </div>
 
-                <div className=" hover:bg-gray-100 rounded-full w-[50px] h-[50px] flex justify-center items-center transition-all duration-200 cursor-pointer">
+                <div className=" hover:bg-gray-100 rounded-full w-[50px] h-[50px] flex justify-center items-center transition-all duration-200 cursor-pointer max-[500px]:hidden">
                   <FontAwesomeIcon icon={faMicrophone} />
                 </div>
               </div>
-              <div className="flex flex-grow mx-10 bg-gray-200/50 px-5 py-2 rounded-lg shadow-sm items-center relative">
+              <div className="flex flex-grow mx-1 min-[500px]:mx-3 lg:mx-5 xl:mx-10 bg-gray-200/50 px-5 py-2 rounded-lg shadow-sm items-center relative">
                 <FontAwesomeIcon
                   icon={faExternalLink}
                   color="gray"
-                  className="me-2"
+                  className="me-2 max-[400px]:hidden"
                 />
                 <input
                   className="bg-transparent w-full outline-none border-none"
@@ -166,7 +179,7 @@ function Landing(): React.ReactElement {
                 <FontAwesomeIcon icon={faSortDesc} color="gray" />
                 <div
                   className={` overflow-hidden mt-2 absolute top-full left-0 bg-gray-50 shadow-xl w-full  rounded-lg ${
-                    showDropDown ? "h-auto p-5 " : "h-0 p-0"
+                    showDropDown ? "h-auto p-5 max-[500px]:p-1 " : "h-0 p-0"
                   }`}
                 >
                   {filteredWebSites.map((item: I_WebSiteUrl, index:number) => (
