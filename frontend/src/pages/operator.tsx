@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faAnglesRight,
   faBars,
   faCompress,
   faCompressAlt,
@@ -13,9 +14,13 @@ import {
 import { faShareFromSquare } from "@fortawesome/free-regular-svg-icons";
 import ToggleTheme from "../components/toggleTheme";
 import SideChatBar from "../components/sideChatBar";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function Operator(): React.ReactElement {
   const imageRef = useRef<HTMLImageElement | null>(null);
+  const baseUrl = useSelector((state: any) => state.task.baseUrl);
+  const navigate = useNavigate();
   const [showSideBar, setShowSideBar] = React.useState(
     window.screen.width > 1000
   );
@@ -40,8 +45,9 @@ function Operator(): React.ReactElement {
     setShowSideBar(!showSideBar);
   };
   useEffect(() => {
-    setUrl(localStorage.getItem("url"));
-  }, []);
+    setUrl(baseUrl);
+    if (!baseUrl) navigate("/execution/-1");
+  }, [baseUrl]);
 
   return (
     <div className="dark:bg-[#050608] bg-[#f1f5f9] w-[100%] h-[100vh] flex z-0">
@@ -90,18 +96,18 @@ function Operator(): React.ReactElement {
         </div>
 
         <div
-          className={`flex flex-col p-5 justify-center bg-white rounded-xl w-full self-center shadow-md flex-grow mt-5 overflow-auto 
+          className={`flex flex-col  justify-center bg-white rounded-xl w-full self-center shadow-md flex-grow mt-5 overflow-auto dark:border-2 dark:border-gray-100
         [&::-webkit-scrollbar]:w-2
         [&::-webkit-scrollbar-track]:rounded-full
         [&::-webkit-scrollbar-track]:bg-gray-100
         [&::-webkit-scrollbar-thumb]:rounded-full
         [&::-webkit-scrollbar-thumb]:bg-gray-300
-        dark:[&::-webkit-scrollbar-track]:bg-neutral-700
-        dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500`}
+        dark:[&::-webkit-scrollbar-track]:bg-neutral-700/50
+        dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500/50`}
         >
           <img
             ref={imageRef}
-            className="w-full screenshot"
+            className="w-full screenshot "
             onError={handleError}
             onLoad={handleLoad}
           />

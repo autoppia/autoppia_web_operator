@@ -12,8 +12,9 @@ import { DB } from "../utils/mock/mockDB";
 import OperatorResponse from "./operatorResponse";
 import UserMsg from "./userMsg";
 import { I_SideBar } from "../utils/types";
-import { useState } from "react";
+import React, { useState } from "react";
 import ToggleTheme from "./toggleTheme";
+import { useNavigate } from "react-router-dom";
 
 function SideChatBar(props: I_SideBar) {
   const [chats, setChats] = useState<any>(DB.messages);
@@ -21,8 +22,34 @@ function SideChatBar(props: I_SideBar) {
 
   const [imageLoading, setImageLoading] = useState(true);
 
+  const [task, setTask] = useState("");
+
+  const navigate = useNavigate();
   const handleClickMenueBar = () => {
     onClick();
+  };
+
+  const updateChat = () => {
+    setChats([
+      ...chats,
+      { role: "user", content: task },
+      ...DB.messages.slice(1),
+    ]);
+  };
+  const handleClickNew = () => {
+    setChats([]);
+  };
+  const submitTask = () => {
+    setTimeout(() => {
+      updateChat();
+      setTask("");
+    }, 300);
+  };
+  const handleChangeTask = (even: React.ChangeEvent<HTMLInputElement>) => {
+    setTask(even.target.value);
+  };
+  const handleOut = () => {
+    navigate("/");
   };
   const handleError = () => {
     setImageLoading(true);
@@ -48,10 +75,16 @@ function SideChatBar(props: I_SideBar) {
           >
             <FontAwesomeIcon icon={faBars} />
           </div>
-          <div className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 text-gray-500 dark:text-white ms-2">
-            <FontAwesomeIcon icon={faHistory} />
+          <div
+            className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 text-gray-500 dark:text-white ms-2"
+            onClick={handleOut}
+          >
+            <FontAwesomeIcon icon={faSignOut} />
           </div>
-          <div className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 text-gray-500 dark:text-white ms-2">
+          <div
+            className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 text-gray-500 dark:text-white ms-2"
+            onClick={handleClickNew}
+          >
             <FontAwesomeIcon icon={faEdit} />
           </div>
         </div>
@@ -122,14 +155,19 @@ function SideChatBar(props: I_SideBar) {
           )}
         </div>
       </div>
-      <div className="flex flex-col px-1 mb-1">
+      <div className="flex flex-col px-1 mb-4">
         <div className="px-3 flex  bg-gray-200 rounded-lg relative">
           <input
             className="border-none outline-none bg-gray-200 flex-grow"
             placeholder="Type here ..."
+            value={task}
+            onChange={handleChangeTask}
           ></input>
 
-          <div className=" hover:bg-gray-100 rounded-full w-[40px] h-[40px] flex justify-center items-center transition-all duration-200 cursor-pointer">
+          <div
+            className=" hover:bg-gray-100 rounded-full w-[40px] h-[40px] flex justify-center items-center transition-all duration-200 cursor-pointer"
+            onClick={submitTask}
+          >
             <FontAwesomeIcon icon={faPaperPlane} color="gray" />
           </div>
         </div>

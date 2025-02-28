@@ -26,10 +26,11 @@ import {
   faGooglePlay,
 } from "@fortawesome/free-brands-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { websites } from "../utils/mock/mockDB";
 import { I_WebSiteUrl } from "../utils/types";
+import { setBaseUrl } from "../redux/taskSlice";
 
 function Landing(): React.ReactElement {
   const [showSideBar, setShowSideBar] = React.useState(false);
@@ -42,6 +43,7 @@ function Landing(): React.ReactElement {
   const socket = useSelector((state: RootState) => state.socket.socket);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   //===========================================Handlers========================================
   //Collapse Sidebar
@@ -65,7 +67,8 @@ function Landing(): React.ReactElement {
     const input = event.target.value;
     setFilteredWebSites(
       websites.filter(
-        (item: I_WebSiteUrl) => item.title.toLowerCase().indexOf(input) >= 0
+        (item: I_WebSiteUrl) =>
+          item.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
       )
     );
   };
@@ -83,6 +86,7 @@ function Landing(): React.ReactElement {
       url: selectedURL,
       task: prompt,
     });
+    dispatch(setBaseUrl(selectedURL));
     localStorage.setItem("url", selectedURL);
     navigate("/home");
   };
