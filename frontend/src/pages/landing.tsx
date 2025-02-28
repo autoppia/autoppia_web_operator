@@ -124,13 +124,15 @@ function Landing(): React.ReactElement {
           showSideBar ? "md:w-[70vw] xl:w-[75vw]" : "w-[100vw]"
         }`}
       >
-        <div className="relative flex justify-end mt-10 mb-10">
-          {/* <div
-            className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[50px] h-[50px] cursor-pointer transition-all duration-300 dark:text-white"
-            onClick={() => sideBarHandler()}
-          >
-            <FontAwesomeIcon icon={faBars} />
-          </div> */}
+        <div className="relative flex justify-between items-center mt-10 mb-10">
+          <img
+            src="./assets/images/logos/main-dark.png"
+            className="h-[50px] dark:block hidden"
+          />
+          <img
+            src="./assets/images/logos/main.png"
+            className="h-[50px] dark:hidden block"
+          />
           <div className="flex ">
             <ToggleTheme />
             <div
@@ -154,15 +156,6 @@ function Landing(): React.ReactElement {
               // onFocus={handleUnfocusedWebURL}
             ></input>
             <div className="flex justify-between mt-5 items-center">
-              <div className="flex">
-                <div className=" hover:bg-gray-100 rounded-full w-[50px] h-[50px] flex justify-center items-center transition-all duration-200 cursor-pointer">
-                  <FontAwesomeIcon icon={faPaperclip} color="333333" />
-                </div>
-
-                <div className=" hover:bg-gray-100 rounded-full w-[50px] h-[50px] flex justify-center items-center transition-all duration-200 cursor-pointer max-[500px]:hidden">
-                  <FontAwesomeIcon icon={faMicrophone} />
-                </div>
-              </div>
               <div className="flex flex-grow mx-1 min-[500px]:mx-3 lg:mx-5 xl:mx-10 bg-gray-200/50 px-5 py-2 rounded-lg shadow-sm items-center relative">
                 <FontAwesomeIcon
                   icon={faExternalLink}
@@ -182,9 +175,9 @@ function Landing(): React.ReactElement {
                     showDropDown ? "h-auto p-5 max-[500px]:p-1 " : "h-0 p-0"
                   }`}
                 >
-                  {filteredWebSites.map((item: I_WebSiteUrl, index:number) => (
+                  {filteredWebSites.map((item: I_WebSiteUrl, index: number) => (
                     <WebsiteItem
-                    key={item.title+index}
+                      key={item.title + index}
                       title={item.title}
                       icon={item.icon}
                       url={item.url}

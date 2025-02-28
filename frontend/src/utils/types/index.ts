@@ -2,7 +2,12 @@ export interface I_O_Res {
   content: string;
   status?: string;
   period?: number;
-  action?: string[];
+  action?: [
+    {
+      name: string;
+      icon: any;
+    }
+  ];
   thinking?: string;
 }
 

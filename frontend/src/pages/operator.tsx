@@ -78,11 +78,11 @@ function Operator(): React.ReactElement {
             </div>
           </div>
           <div className=" flex ">
-            <div className="flex hover:bg-gray-300 rounded-full justify-center items-center px-3 me-3 cursor-pointer transition-all duration-300 font-semibold text-gray-600 dark:text-white">
+            <div className="flex  rounded-full justify-center items-center px-3 me-3 cursor-not-allowed transition-all duration-300 font-semibold text-gray-600 dark:text-white">
               <FontAwesomeIcon icon={faShareFromSquare} />
               <span className="ms-2">Share</span>
             </div>
-            <div className="flex hover:bg-gray-300 rounded-full justify-center items-center px-3 border-[1px] border-gray-400 cursor-pointer transition-all duration-300 font-semibold text-gray-600 dark:text-white">
+            <div className="flex  rounded-full justify-center items-center px-3 border-[1px] border-gray-400 cursor-not-allowed transition-all duration-300 font-semibold text-gray-600 dark:text-white">
               <FontAwesomeIcon icon={faSave} />
               <span className="ms-2">Save Task</span>
             </div>

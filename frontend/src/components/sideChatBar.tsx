@@ -122,7 +122,7 @@ function SideChatBar(props: I_SideBar) {
           )}
         </div>
       </div>
-      <div className="flex flex-col px-1">
+      <div className="flex flex-col px-1 mb-1">
         <div className="px-3 flex  bg-gray-200 rounded-lg relative">
           <input
             className="border-none outline-none bg-gray-200 flex-grow"

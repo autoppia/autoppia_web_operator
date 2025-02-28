@@ -39,6 +39,7 @@ function OperatorResponse(props: I_O_Res) {
           icon={!collapse ? faSortDesc : faSortAsc}
           color="gray"
           onClick={handleCollapse}
+          className="cursor-pointer"
         />
       </div>
 
@@ -50,11 +51,11 @@ function OperatorResponse(props: I_O_Res) {
         {action &&
           action.map((item, index) => (
             <div
-              key={item + index}
-              className="text-gray-700 rounded-full  p-[1px] px-5 cursor-pointer hover:ms-1 transition-all duration-200 dark:text-gray-100"
+              key={item.name + index}
+              className="text-gray-700 rounded-full  p-1 px-5 cursor-pointer hover:ms-1 transition-all duration-200 dark:text-gray-100"
             >
-              <FontAwesomeIcon icon={faMailBulk} className="me-3" />
-              {item}
+              <FontAwesomeIcon icon={item.icon} className="me-3" />
+              {item.name}
             </div>
           ))}
       </div>

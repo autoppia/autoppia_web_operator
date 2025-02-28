@@ -1,5 +1,12 @@
-import { faAws, faGoogle, } from "@fortawesome/free-brands-svg-icons";
-import { faGlobe, faMap } from "@fortawesome/free-solid-svg-icons";
+import { faAws, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import {
+  faGlobe,
+  faICursor,
+  faMap,
+  faMousePointer,
+  faNavicon,
+  faSignIn,
+} from "@fortawesome/free-solid-svg-icons";
 
 export const DB = {
   messages: [
@@ -13,11 +20,11 @@ export const DB = {
       content:
         "Sure! I just checked the server, and everything is running smoothly. No downtime or performance issues detected. Let me know if you need a more detailed report on server logs or resource usage.",
       action: [
-        "Navigating to Hipcamp for campsite",
-        'Entering "Joshua Tree" for search',
-        "Selecting broader area, Joshua Tree",
-        "Entering dates for Joshua Tree trip",
-        "Selecting dates for weekend stay",
+        { name: "Navigating to Hipcamp for campsite", icon: faNavicon },
+        { name: 'Entering "Joshua Tree" for search', icon: faSignIn },
+        { name: "Selecting broader area, Joshua Tree", icon: faMousePointer },
+        { name: "Entering dates for Joshua Tree trip", icon: faSignIn },
+        { name: "Selecting dates for weekend stay", icon: faMousePointer },
       ],
       status: "success",
     },
