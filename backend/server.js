@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const http = require("http");
+const axios = require("axios");
 const { chromium } = require("playwright");
 // const { ApifiedWebAgent, executeAction } = require("./agent");
 
@@ -17,24 +18,16 @@ app.use(cors())
 app.use(express.json());
 
 const sessions = {};
+const agent_url = ""
 
 const deleteSession = async (socketId) => {
-  const { browser, context, page } = sessions[socketId];
+  const { browser, context, page, intervalId } = sessions[socketId];
+  clearInterval(intervalId);
   await page.close();
   await context.close();
   await browser.close();
   delete sessions[socketId];
 };
-
-const performTask = async (socket, page, task) => {
-  // Randomly scroll the page
-  for (let i = 0; i < 10; i++) {
-    await page.evaluate((val) => window.scrollBy(0, val), Math.floor(Math.random() * 200));
-    const screenshot = await page.screenshot();
-    socket.emit('screenshot', { screenshot: screenshot.toString('base64') });
-    await page.waitForTimeout(500);
-  }
-}
 
 io.on('connection', (socket) => {
   console.log(`A user with id: ${socket.id} connected!`);
@@ -49,20 +42,25 @@ io.on('connection', (socket) => {
     console.log(`Starting operator with URL: ${url} and task: ${task}`);
 
     try {
-      const browser = await chromium.launch({ headless: true });
+      const browserServer = await chromium.launchServer({ headless: true });
+      const wsEndpoint = browserServer.wsEndpoint();
+      const browser = await chromium.connect({ wsEndpoint });
       const context = await browser.newContext({
         viewport: { width: 1600, height: 800 },
       });
       const page = await context.newPage();
-      sessions[socket.id] = { browser, context, page };
 
       await page.goto(url);
-      const screenshot = await page.screenshot();
-      socket.emit('screenshot', { screenshot: screenshot.toString('base64') });
+      intervalId = setInterval(async () => {
+        const screenshot = await page.screenshot();
+        socket.emit('screenshot', { screenshot: screenshot.toString('base64') });
+      }, 500);
+      sessions[socket.id] = { browser, context, page, intervalId };
 
-      if (task) {
-        await performTask(socket, page, task);
-      }
+      // await axios.post(agent_url, {
+      //   wsEndpoint: wsEndpoint,
+      //   task: task,
+      // });        
     }
     catch (error) {
       console.error('Error launching browser:', error);
@@ -81,14 +79,16 @@ io.on('connection', (socket) => {
       socket.emit('error', { message: "Session not found" });
       return;
     }
-    const { page } = sessions[socket.id];
 
-    try {
-      await performTask(socket, page, task);
-    } catch (error) {
-      console.error('Error performing task:', error);
-      socket.emit('error', { message: "Internal Server Error" });
-    }
+    // try {
+    //   await axios.post(agent_url, {
+    //     wsEndpoint: sessions[socket.id].wsEndpoint,
+    //     task: task,
+    //   })
+    // } catch (error) {
+    //   console.error('Error performing task:', error);
+    //   socket.emit('error', { message: "Internal Server Error" });
+    // }
   })
 
   socket.on('disconnect', async () => {
