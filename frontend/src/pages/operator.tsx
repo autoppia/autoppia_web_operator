@@ -59,7 +59,7 @@ function Operator(): React.ReactElement {
       </div>
       <SideChatBar open={showSideBar} onClick={sideBarHandler}></SideChatBar>
       <div
-        className={`hidden lg:flex flex-col px-5 py-5 h-full relative justify-between  items-center ${
+        className={`hidden md:flex flex-col px-5 py-5 h-full relative justify-between  items-center ${
           showSideBar ? "md:w-[55vw] xl:w-[65vw]" : "w-[100vw]"
         }`}
       >

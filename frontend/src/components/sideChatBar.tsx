@@ -63,8 +63,8 @@ function SideChatBar(props: I_SideBar) {
     <div
       className={`${
         open
-          ? "fixed w-[100vw] h-[100vh] px-1 lg:relative lg:w-[45vw] xl:w-[35vw] z-10"
-          : "fixed w-[100vw] h-[100vh] lg:w-0  px-1 lg:px-0 lg:relative z-10"
+          ? "fixed w-[100vw] h-[100vh] px-1 md:relative md:w-[45vw] xl:w-[35vw] z-10"
+          : "fixed w-[100vw] h-[100vh] md:w-0  px-1 md:px-0 md:relative z-10"
       }  transition-all duration-300 h-full bg-white pt-1 pb-1 flex flex-col overflow-hidden dark:bg-transparent dark:shadow-sm dark:shadow-gray-100`}
     >
       <div className="flex justify-between">
@@ -113,7 +113,7 @@ function SideChatBar(props: I_SideBar) {
           })}
         </div>
         <div
-          className={`relative flex flex-col p-5 justify-center bg-white rounded-xl w-full self-center flex-grow min-h-[300px] max-h-[500px] mt-5 overflow-auto lg:hidden shadow-lg border-2 border-gray-300 
+          className={`relative flex flex-col p-5 justify-center bg-white rounded-xl w-full self-center flex-grow min-h-[300px] max-h-[500px] mt-5 overflow-auto md:hidden shadow-lg border-2 border-gray-300 
         [&::-webkit-scrollbar]:w-2
         [&::-webkit-scrollbar-track]:rounded-full
         [&::-webkit-scrollbar-track]:bg-gray-100
