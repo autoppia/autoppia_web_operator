@@ -44,10 +44,6 @@ function Operator(): React.ReactElement {
   const sideBarHandler = () => {
     setShowSideBar(!showSideBar);
   };
-  useEffect(() => {
-    setUrl(baseUrl);
-    if (!baseUrl) navigate("/execution/-1");
-  }, [baseUrl]);
 
   return (
     <div className="dark:bg-[#050608] bg-[#f1f5f9] w-[100%] h-[100vh] flex z-0">

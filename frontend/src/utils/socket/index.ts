@@ -3,8 +3,8 @@ import { io } from 'socket.io-client';
 import { setSocket } from '../../redux/socketSlice';
 import { AppDispatch } from '../../redux/store';
 
-export const initializeSocket = (dispatch: AppDispatch, url: string) => {
-    const socket = io(url);
+export const initializeSocket = (dispatch: AppDispatch, agentEndpoint: string) => {
+    const socket = io(agentEndpoint);
 
     socket.on('connect', () => {
         console.log('Connected to the server');
@@ -29,4 +29,6 @@ export const initializeSocket = (dispatch: AppDispatch, url: string) => {
     });
 
     dispatch(setSocket(socket));
+
+    return socket;  
 };

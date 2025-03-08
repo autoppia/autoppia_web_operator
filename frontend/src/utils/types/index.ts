@@ -32,3 +32,8 @@ export interface I_WebSiteUrl {
   title: string;
   url: string;
 }
+
+export interface I_Task {
+  task: string; 
+  url: string;
+}

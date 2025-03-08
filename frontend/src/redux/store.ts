@@ -1,7 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import socketReducer from "./socketSlice";
 import taskReducer from "./taskSlice";
-import { composeWithDevTools } from "@redux-devtools/extension";
 
 const store = configureStore({
   reducer: {

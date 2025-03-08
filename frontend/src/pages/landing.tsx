@@ -28,9 +28,11 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import { initializeSocket } from "../utils/socket";
 import { websites } from "../utils/mock/mockDB";
 import { I_WebSiteUrl } from "../utils/types";
-import { setBaseUrl } from "../redux/taskSlice";
+import { resetPrompts, addPrompt, setBaseUrl } from "../redux/taskSlice";
+import { BACKEND_URL } from "../config";
 
 function Landing(): React.ReactElement {
   const [showSideBar, setShowSideBar] = React.useState(false);
@@ -39,8 +41,6 @@ function Landing(): React.ReactElement {
   const [selectedURL, setSelectedURL] = useState("");
   const [prompt, setPrompt] = useState("");
   const [filteredWebSites, setFilteredWebSites] = useState<I_WebSiteUrl[]>([]);
-
-  const socket = useSelector((state: RootState) => state.socket.socket);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -81,14 +81,28 @@ function Landing(): React.ReactElement {
   };
 
   //Navigate to next page
-  const startOperating = () => {
-    socket.emit("start-operator", {
-      url: selectedURL,
-      task: prompt,
-    });
-    dispatch(setBaseUrl(selectedURL));
-    localStorage.setItem("url", selectedURL);
-    navigate("/home");
+  const startOperating = async () => {
+    try {
+      const res = await fetch(`${BACKEND_URL}/operator`)
+      if (res.status === 200) {
+        const data = await res.json();
+        const socket = initializeSocket(dispatch, data.endpoint);
+        socket.emit("perform-task", {
+          task: prompt,
+          url: selectedURL,
+        })        
+        dispatch(resetPrompts()); 
+        dispatch(addPrompt(prompt));
+        dispatch(setBaseUrl(selectedURL));
+        localStorage.setItem("url", selectedURL);
+        navigate("/home");
+      } else {
+        const errorData = await res.json();
+        console.log(errorData);
+      }
+    } catch (error) {
+      console.log(error);
+    };
   };
 
   const returnHome = () => {
@@ -124,9 +138,8 @@ function Landing(): React.ReactElement {
       </div>
       <SideBar open={showSideBar} onClick={sideBarHandler}></SideBar>
       <div
-        className={`flex flex-col px-10 lg:px-10 xl:px-20 flex-grow h-full relative ${
-          showSideBar ? "md:w-[70vw] xl:w-[75vw]" : "w-[100vw]"
-        }`}
+        className={`flex flex-col px-10 lg:px-10 xl:px-20 flex-grow h-full relative ${showSideBar ? "md:w-[70vw] xl:w-[75vw]" : "w-[100vw]"
+          }`}
       >
         <div className="relative flex justify-between items-center mt-10 mb-10">
           <img
@@ -157,7 +170,7 @@ function Landing(): React.ReactElement {
               placeholder="You can upload the video, images or other files"
               value={prompt}
               onChange={handleChangePrompt}
-              // onFocus={handleUnfocusedWebURL}
+            // onFocus={handleUnfocusedWebURL}
             ></input>
             <div className="flex justify-between mt-5 items-center">
               <div className="flex flex-grow mx-1 min-[500px]:mx-3 lg:mx-5 xl:mx-10 bg-gray-200/50 px-5 py-2 rounded-lg shadow-sm items-center relative">
@@ -171,13 +184,12 @@ function Landing(): React.ReactElement {
                   placeholder="WebSite URL..."
                   value={webURL}
                   onChange={handleChangeWebURL}
-                  // onBlur={handleUnfocusedWebURL}
+                // onBlur={handleUnfocusedWebURL}
                 />
                 <FontAwesomeIcon icon={faSortDesc} color="gray" />
                 <div
-                  className={` overflow-hidden mt-2 absolute top-full left-0 bg-gray-50 shadow-xl w-full  rounded-lg ${
-                    showDropDown ? "h-auto p-5 max-[500px]:p-1 " : "h-0 p-0"
-                  }`}
+                  className={` overflow-hidden mt-2 absolute top-full left-0 bg-gray-50 shadow-xl w-full  rounded-lg ${showDropDown ? "h-auto p-5 max-[500px]:p-1 " : "h-0 p-0"
+                    }`}
                 >
                   {filteredWebSites.map((item: I_WebSiteUrl, index: number) => (
                     <WebsiteItem

@@ -6,18 +6,7 @@ import "./App.css";
 import Landing from "./pages/landing";
 import Operator from "./pages/operator";
 
-import { useDispatch } from "react-redux";
-import { initializeSocket } from './utils/socket';
-
-const BACKEND_URL = 'http://54.195.214.72:4000';
-
-function App() {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    initializeSocket(dispatch, BACKEND_URL);
-  }, []);
-  
+function App() {  
   return (
     <BrowserRouter>
       <Routes>
