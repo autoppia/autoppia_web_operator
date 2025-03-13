@@ -26,12 +26,11 @@ import {
   faGooglePlay,
 } from "@fortawesome/free-brands-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { useDispatch } from "react-redux";
 import { initializeSocket } from "../utils/socket";
 import { websites } from "../utils/mock/mockDB";
 import { I_WebSiteUrl } from "../utils/types";
-import { resetPrompts, addPrompt, setBaseUrl } from "../redux/taskSlice";
+import { resetChat, addTask, addAction } from "../redux/chatSlice";
 import { BACKEND_URL } from "../config";
 
 function Landing(): React.ReactElement {
@@ -90,10 +89,10 @@ function Landing(): React.ReactElement {
         socket.emit("perform-task", {
           task: prompt,
           url: selectedURL,
-        })        
-        dispatch(resetPrompts()); 
-        dispatch(addPrompt(prompt));
-        dispatch(setBaseUrl(selectedURL));
+        })
+        dispatch(resetChat());
+        dispatch(addTask(prompt))
+        dispatch(addAction("Initialize browser."))
         localStorage.setItem("url", selectedURL);
         navigate("/home");
       } else {

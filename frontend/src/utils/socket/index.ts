@@ -1,6 +1,7 @@
 import { io } from 'socket.io-client';
 
 import { setSocket } from '../../redux/socketSlice';
+import { addAction, addResult } from '../../redux/chatSlice';
 import { AppDispatch } from '../../redux/store';
 
 export const initializeSocket = (dispatch: AppDispatch, agentEndpoint: string) => {
@@ -21,14 +22,21 @@ export const initializeSocket = (dispatch: AppDispatch, agentEndpoint: string) =
     socket.on('screenshot', ({ screenshot }) => {
         const screenElement = document.getElementsByClassName('screenshot') as HTMLCollectionOf<any>;
         if (screenElement) {
-
             const base64Prefix = 'data:image/png;base64,';
             screenElement[0].src = base64Prefix + screenshot;
             screenElement[1].src = base64Prefix + screenshot;
         }
     });
 
+    socket.on('action', ({ action }) => {
+        dispatch(addAction(action));
+    });
+
+    socket.on('result', ({ result }) => {
+        dispatch(addResult(result));
+    });
+
     dispatch(setSocket(socket));
 
-    return socket;  
+    return socket;
 };

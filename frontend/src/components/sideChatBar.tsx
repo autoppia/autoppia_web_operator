@@ -8,42 +8,34 @@ import {
   faSignOut,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { DB } from "../utils/mock/mockDB";
+import { useSelector, useDispatch } from "react-redux";
 import OperatorResponse from "./operatorResponse";
 import UserMsg from "./userMsg";
 import { I_SideBar } from "../utils/types";
 import React, { useState } from "react";
 import ToggleTheme from "./toggleTheme";
 import { useNavigate } from "react-router-dom";
+import { addTask } from "../redux/chatSlice";
 
 function SideChatBar(props: I_SideBar) {
-  const [chats, setChats] = useState<any>(DB.messages);
   const { open, onClick } = props;
 
   const [imageLoading, setImageLoading] = useState(true);
-
   const [task, setTask] = useState("");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch(); 
+  const chats = useSelector((state: any) => state.chat.chats);
+  const socket = useSelector((state: any) => state.socket.socket);
   const handleClickMenueBar = () => {
     onClick();
   };
-
-  const updateChat = () => {
-    setChats([
-      ...chats,
-      { role: "user", content: task },
-      ...DB.messages.slice(1),
-    ]);
-  };
-  const handleClickNew = () => {
-    setChats([]);
-  };
+  
   const submitTask = () => {
-    setTimeout(() => {
-      updateChat();
-      setTask("");
-    }, 300);
+    socket.emit("perform-task", {
+      task: task,
+    })
+    dispatch(addTask(task))
   };
   const handleChangeTask = (even: React.ChangeEvent<HTMLInputElement>) => {
     setTask(even.target.value);
@@ -61,11 +53,10 @@ function SideChatBar(props: I_SideBar) {
 
   return (
     <div
-      className={`${
-        open
-          ? "fixed w-[100vw] h-[100vh] px-1 md:relative md:w-[45vw] xl:w-[35vw] z-10"
-          : "fixed w-[100vw] h-[100vh] md:w-0  px-1 md:px-0 md:relative z-10"
-      }  transition-all duration-300 h-full bg-white pt-1 pb-1 flex flex-col overflow-hidden dark:bg-transparent dark:shadow-sm dark:shadow-gray-100`}
+      className={`${open
+        ? "fixed w-[100vw] h-[100vh] px-1 md:relative md:w-[45vw] xl:w-[35vw] z-10"
+        : "fixed w-[100vw] h-[100vh] md:w-0  px-1 md:px-0 md:relative z-10"
+        }  transition-all duration-300 h-full bg-white pt-1 pb-1 flex flex-col overflow-hidden dark:bg-transparent dark:shadow-sm dark:shadow-gray-100`}
     >
       <div className="flex justify-between">
         <div className="flex justify-start w-full">
@@ -83,7 +74,7 @@ function SideChatBar(props: I_SideBar) {
           </div>
           <div
             className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 text-gray-500 dark:text-white ms-2"
-            onClick={handleClickNew}
+            onClick={() => console.log("Temp Function")}
           >
             <FontAwesomeIcon icon={faEdit} />
           </div>
@@ -108,7 +99,7 @@ function SideChatBar(props: I_SideBar) {
               );
             else
               return (
-                <UserMsg key={"UserRES" + index} content={message.content} />
+                <UserMsg key={"UserRES" + index} {...message} />
               );
           })}
         </div>

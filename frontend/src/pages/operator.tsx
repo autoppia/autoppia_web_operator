@@ -19,7 +19,6 @@ import { useNavigate } from "react-router-dom";
 
 function Operator(): React.ReactElement {
   const imageRef = useRef<HTMLImageElement | null>(null);
-  const baseUrl = useSelector((state: any) => state.task.baseUrl);
   const navigate = useNavigate();
   const [showSideBar, setShowSideBar] = React.useState(
     window.screen.width > 1000

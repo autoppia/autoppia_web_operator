@@ -6,24 +6,28 @@ import base64
 import asyncio
 import socketio
 from aiohttp import web
+from pprint import pprint
 
 from langchain_openai import ChatOpenAI
 from browser_use import Agent
-from browser_use.browser.browser import Browser
+from browser_use.browser.browser import Browser, BrowserConfig
 
 async def send_screenshot(context, sio, client_sid):    
     pages = context.pages
-    print('Page Length', len(pages))
     if len(pages) > 0:
         page = pages[-1]
         screenshot = await page.screenshot()
         screenshot_b64 = base64.b64encode(screenshot).decode('utf-8')
         await sio.emit('screenshot', {'screenshot': screenshot_b64}, to=client_sid)
 
+async def send_action(action, sio, client_sid):
+    await sio.emit('action', {'action': action}, to=client_sid)
+
 class AutoppiaAgent:
     def __init__(self):
         self.status = 'idle'
         self.client_sid = None
+        self.browser = None
 
         self.sio = socketio.AsyncServer(async_mode='aiohttp', cors_allowed_origins='*')
         self.app = web.Application()
@@ -42,7 +46,11 @@ class AutoppiaAgent:
             if self.client_sid == None:
                 print(f'Client connected: {sid}')   
                 self.client_sid = sid
-                self.browser = Browser() 
+                self.browser = Browser(
+                    config=BrowserConfig(
+                        headless=True,
+                    )
+                ) 
             else:
                 await self.sio.emit('error', {'error': 'Another client is using the agent'}, to=sid)
                 await self.sio.disconnect(sid)
@@ -74,15 +82,25 @@ class AutoppiaAgent:
             await self.sio.emit('error', {'message': 'No task provided'}, to=sid)
             return
 
+        if url:
+            initial_actions = [{'open_tab': {'url': url}}]
+        else:
+            initial_actions = []
+
         agent = Agent(
             task=task,
             llm=ChatOpenAI(model='gpt-4o'),
             browser=self.browser,
+            initial_actions=initial_actions,
             send_screenshot_callback=send_screenshot,
+            send_action_callback=send_action,
             socketio_server=self.sio, 
             client_socket_id=sid,
         )
-        await agent.run()
+        history = await agent.run()
+        final_result = history.final_result()
+        await self.sio.emit('result', {'result': final_result}, to=sid)
+        
         self.status = 'idle'
 
     def run(self, host='0.0.0.0', port=5000):

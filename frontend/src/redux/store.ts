@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import socketReducer from "./socketSlice";
-import taskReducer from "./taskSlice";
+import chatReducer from "./chatSlice";
 
 const store = configureStore({
   reducer: {
     socket: socketReducer,
-    task: taskReducer,
+    chat: chatReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

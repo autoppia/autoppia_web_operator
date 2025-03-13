@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { I_O_Res } from "../utils/types";
+import { I_Chat } from "../utils/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowDown,
@@ -13,8 +13,8 @@ import {
   faSortDesc,
   faSyringe,
 } from "@fortawesome/free-solid-svg-icons";
-function OperatorResponse(props: I_O_Res) {
-  const { content, status, period, action, thinking } = props;
+function OperatorResponse(props: I_Chat) {
+  const { content, period, actions, thinking } = props;
   const [collapse, setCollapse] = useState(false);
 
   const handleCollapse = () => {
@@ -25,16 +25,14 @@ function OperatorResponse(props: I_O_Res) {
       {period && (
         <div className="text-gray-500">Worked for {period} seconds</div>
       )}
-      <div className="flex justify-between items-center w-full p-3 py-2 rounded-lg border-2 ">
-        {thinking && (
-          <div className="animate-pulse text-gray-600 flex items-center dark:text-gray-100">
-            <FontAwesomeIcon
-              icon={faCircleNotch}
-              className="animate-spin me-2"
-            />
-            {thinking}
-          </div>
-        )}
+      {thinking && (<div className="flex justify-between items-center w-full p-3 py-2 rounded-lg border-2 ">
+        <div className="animate-pulse text-gray-600 flex items-center dark:text-gray-100">
+          <FontAwesomeIcon
+            icon={faCircleNotch}
+            className="animate-spin me-2"
+          />
+          {thinking}
+        </div>
         <FontAwesomeIcon
           icon={!collapse ? faSortDesc : faSortAsc}
           color="gray"
@@ -42,24 +40,24 @@ function OperatorResponse(props: I_O_Res) {
           className="cursor-pointer"
         />
       </div>
+      )}
 
       <div
-        className={`border-l-[1px] border-gray-500 ms-5  ${
-          collapse ? "block" : "hidden"
-        }`}
+        className={`border-l-[1px] border-gray-500 ms-5  ${collapse ? "block" : "hidden"
+          }`}
       >
-        {action &&
-          action.map((item, index) => (
+        {actions &&
+          actions.map((item, index) => (
             <div
               key={item.name + index}
               className="text-gray-700 rounded-full  p-1 px-5 cursor-pointer hover:ms-1 transition-all duration-200 dark:text-gray-100"
             >
-              <FontAwesomeIcon icon={item.icon} className="me-3" />
+              {/* <FontAwesomeIcon icon={item.icon} className="me-3" /> */}
               {item.name}
             </div>
           ))}
       </div>
-      {/* {content && <div className="text-gray-100">{content}</div>} */}
+      {content && <div className="text-black-100">{content}</div>}
     </div>
   );
 }

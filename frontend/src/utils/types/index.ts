@@ -1,18 +1,14 @@
-export interface I_O_Res {
-  content: string;
-  status?: string;
-  period?: number;
-  action?: [
-    {
-      name: string;
-      icon: any;
-    }
-  ];
-  thinking?: string;
+export interface I_Action {
+  name: string;
+  icon: any;
 }
 
-export interface I_U_Msg {
-  content: string;
+export interface I_Chat {
+  role: string;
+  content?: string;
+  period?: number;
+  actions?: I_Action[];
+  thinking?: string;
 }
 
 export interface I_SideBar {

@@ -129,8 +129,9 @@ class Agent(Generic[Context]):
 		injected_agent_state: Optional[AgentState] = None,
 		#
 		context: Context | None = None,
-		# Screenshot		
+		# Socketio	
 		send_screenshot_callback: callable | None = None,
+		send_action_callback: callable | None = None,
 		socketio_server: socketio.AsyncServer | None = None,
 		client_socket_id: str | None = None,
 	):
@@ -227,8 +228,9 @@ class Agent(Generic[Context]):
 		if self.settings.save_conversation_path:
 			logger.info(f'Saving conversation to {self.settings.save_conversation_path}')
 
-		# Screenshot
+		# Socketio
 		self.send_screenshot_callback = send_screenshot_callback
+		self.send_action_callback = send_action_callback
 		self.socketio_server = socketio_server
 		self.client_socket_id = client_socket_id
 
@@ -541,6 +543,9 @@ class Agent(Generic[Context]):
 			parsed.action = parsed.action[: self.settings.max_actions_per_step]
 
 		log_response(parsed)
+
+		# Send next goal
+		await self.send_action_callback(parsed.current_state.next_goal, self.socketio_server, self.client_socket_id)
 
 		return parsed
 
