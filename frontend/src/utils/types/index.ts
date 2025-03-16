@@ -9,6 +9,7 @@ export interface I_Chat {
   period?: number;
   actions?: I_Action[];
   thinking?: string;
+  state?: string;
 }
 
 export interface I_SideBar {

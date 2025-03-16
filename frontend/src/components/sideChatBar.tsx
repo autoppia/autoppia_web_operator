@@ -24,21 +24,28 @@ function SideChatBar(props: I_SideBar) {
   const [task, setTask] = useState("");
 
   const navigate = useNavigate();
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
   const chats = useSelector((state: any) => state.chat.chats);
   const socket = useSelector((state: any) => state.socket.socket);
   const handleClickMenueBar = () => {
     onClick();
   };
-  
-  const submitTask = () => {
-    socket.emit("perform-task", {
+
+  const handleSubmit = () => {
+    socket.emit("continue-task", {
       task: task,
     })
     dispatch(addTask(task))
+    setTask("");
   };
   const handleChangeTask = (even: React.ChangeEvent<HTMLInputElement>) => {
     setTask(even.target.value);
+  };
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleSubmit();
+      setTask("");
+    }
   };
   const handleOut = () => {
     navigate("/");
@@ -46,7 +53,6 @@ function SideChatBar(props: I_SideBar) {
   const handleError = () => {
     setImageLoading(true);
   };
-
   const handleLoad = () => {
     setImageLoading(false);
   };
@@ -153,11 +159,12 @@ function SideChatBar(props: I_SideBar) {
             placeholder="Type here ..."
             value={task}
             onChange={handleChangeTask}
+            onKeyDown={handleKeyDown}
           ></input>
 
           <div
             className=" hover:bg-gray-100 rounded-full w-[40px] h-[40px] flex justify-center items-center transition-all duration-200 cursor-pointer"
-            onClick={submitTask}
+            onClick={handleSubmit}
           >
             <FontAwesomeIcon icon={faPaperPlane} color="gray" />
           </div>

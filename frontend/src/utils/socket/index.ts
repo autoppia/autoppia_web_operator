@@ -32,7 +32,7 @@ export const initializeSocket = (dispatch: AppDispatch, agentEndpoint: string) =
         dispatch(addAction(action));
     });
 
-    socket.on('result', ({ result }) => {
+    socket.on('result', (result) => {
         dispatch(addResult(result));
     });
 

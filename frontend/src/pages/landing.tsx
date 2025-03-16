@@ -55,6 +55,14 @@ function Landing(): React.ReactElement {
     setPrompt(event.target.value);
   };
 
+  //On Enter key down of the input (prompt)
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleSubmit();
+      setPrompt("");
+    }
+  };
+
   //On change the input (webURL)
   const handleChangeWebURL = (event: React.ChangeEvent<HTMLInputElement>) => {
     setWebURL(event.target.value);
@@ -80,13 +88,13 @@ function Landing(): React.ReactElement {
   };
 
   //Navigate to next page
-  const startOperating = async () => {
+  const handleSubmit = async () => {
     try {
       const res = await fetch(`${BACKEND_URL}/operator`)
       if (res.status === 200) {
         const data = await res.json();
         const socket = initializeSocket(dispatch, data.endpoint);
-        socket.emit("perform-task", {
+        socket.emit("new-task", {
           task: prompt,
           url: selectedURL,
         })
@@ -169,6 +177,7 @@ function Landing(): React.ReactElement {
               placeholder="You can upload the video, images or other files"
               value={prompt}
               onChange={handleChangePrompt}
+              onKeyDown={handleKeyDown}
             // onFocus={handleUnfocusedWebURL}
             ></input>
             <div className="flex justify-between mt-5 items-center">
@@ -203,7 +212,7 @@ function Landing(): React.ReactElement {
               </div>
               <div
                 className=" hover:bg-gray-100 rounded-full w-[50px] h-[50px] flex justify-center items-center transition-all duration-200 cursor-pointer"
-                onClick={startOperating}
+                onClick={handleSubmit}
               >
                 <FontAwesomeIcon icon={faPaperPlane} />
               </div>

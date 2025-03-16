@@ -30,6 +30,7 @@ const chatSlice = createSlice({
           {
             role: "assistant",
             thinking: action.payload,
+            state: "thinking",
             actions: [{ name: action.payload, icon: null }],
           },
         ];
@@ -37,6 +38,7 @@ const chatSlice = createSlice({
         state.chats[length - 1] = {
           ...state.chats[length - 1],
           thinking: action.payload,
+          state: "thinking",
           actions: [
             ...state.chats[length - 1].actions!,
             { name: action.payload, icon: null },
@@ -51,14 +53,15 @@ const chatSlice = createSlice({
           ...state.chats,
           {
             role: "assistant",
-            content: action.payload,
+            content: action.payload.content,
+            state: action.payload.success ? "success" : "error",
           },
         ];
       } else {
         state.chats[length - 1] = {
           ...state.chats[length - 1],
-          thinking: "Task completed. Waiting for new task.",
-          content: action.payload,
+          content: action.payload.content,
+          state: action.payload.success ? "success" : "error",
         }
       }
     }
