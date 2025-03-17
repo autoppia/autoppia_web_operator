@@ -7,7 +7,7 @@ import socketio
 from aiohttp import web
 
 from langchain_openai import ChatOpenAI
-from browser_use import Agent
+from agent.browser_use_agent import Agent
 from browser_use.agent.views import AgentState
 from browser_use.browser.browser import Browser, BrowserConfig
 
