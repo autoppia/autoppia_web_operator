@@ -16,19 +16,7 @@ const agentEndpoints = [
 ]
 
 app.get("/operator", async (req, res) => {
-  availableAgents = agentEndpoints.filter(async (url) => {
-    try {
-      const response = await axios.get(`${url}/status`);
-      return response.data.available
-    } catch (error) {
-      return false
-    }
-  });
-  if (availableAgents.length === 0) {
-    console.log("No available agents");
-    return res.status(500).json({ error: "No available agents" });
-  }
-  const endpoint = availableAgents[Math.floor(Math.random() * availableAgents.length)];
+  const endpoint = agentEndpoints[Math.floor(Math.random() * agentEndpoints.length)];
   console.log("Allocated an agent:", endpoint);
   res.json({ endpoint: endpoint })
 });

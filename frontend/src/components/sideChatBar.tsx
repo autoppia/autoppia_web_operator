@@ -27,6 +27,7 @@ function SideChatBar(props: I_SideBar) {
   const dispatch = useDispatch();
   const chats = useSelector((state: any) => state.chat.chats);
   const socket = useSelector((state: any) => state.socket.socket);
+  const running = useSelector((state: any) => state.chat.running);
   const handleClickMenueBar = () => {
     onClick();
   };
@@ -158,6 +159,7 @@ function SideChatBar(props: I_SideBar) {
             className="border-none outline-none bg-gray-200 flex-grow"
             placeholder="Type here ..."
             value={task}
+            disabled={running}
             onChange={handleChangeTask}
             onKeyDown={handleKeyDown}
           ></input>

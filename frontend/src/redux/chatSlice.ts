@@ -3,10 +3,12 @@ import { I_Chat } from "../utils/types";
 
 interface ChatState {
   chats: I_Chat[];
+  running: boolean;
 }
 
 const initialState: ChatState = {
   chats: [],
+  running: false,
 };
 
 const chatSlice = createSlice({
@@ -15,12 +17,14 @@ const chatSlice = createSlice({
   reducers: {
     resetChat: (state) => {
       state.chats = [];
+      state.running = false;
     },
     addTask: (state, action) => {
       state.chats = [...state.chats, {
         role: "user",
         content: action.payload,
       }];
+      state.running = true;
     },
     addAction: (state, action) => {
       const length = state.chats.length;
@@ -64,6 +68,7 @@ const chatSlice = createSlice({
           state: action.payload.success ? "success" : "error",
         }
       }
+      state.running = false;
     }
   },
 });
