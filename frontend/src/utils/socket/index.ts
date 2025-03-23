@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-import { setSocket } from '../../redux/socketSlice';
+import { addSocket, addSocketId } from '../../redux/socketSlice';
 import { addAction, addResult } from '../../redux/chatSlice';
 import { AppDispatch } from '../../redux/store';
 
@@ -9,6 +9,7 @@ export const initializeSocket = (dispatch: AppDispatch, agentEndpoint: string) =
 
     socket.on('connect', () => {
         console.log('Connected to the server');
+        dispatch(addSocketId(socket.id));
     });
 
     socket.on('disconnect', () => {
@@ -20,11 +21,10 @@ export const initializeSocket = (dispatch: AppDispatch, agentEndpoint: string) =
     })
 
     socket.on('screenshot', ({ screenshot }) => {
-        const screenElement = document.getElementsByClassName('screenshot') as HTMLCollectionOf<any>;
+        const screenElement = document.getElementById(`${socket.id}_screenshot_main`) as HTMLImageElement;
         if (screenElement) {
             const base64Prefix = 'data:image/png;base64,';
-            screenElement[0].src = base64Prefix + screenshot;
-            screenElement[1].src = base64Prefix + screenshot;
+            screenElement.src = base64Prefix + screenshot;
         }
     });
 
@@ -36,7 +36,7 @@ export const initializeSocket = (dispatch: AppDispatch, agentEndpoint: string) =
         dispatch(addResult(result));
     });
 
-    dispatch(setSocket(socket));
+    dispatch(addSocket(socket));
 
     return socket;
 };

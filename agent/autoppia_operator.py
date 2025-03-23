@@ -116,5 +116,5 @@ class AutoppiaOperator:
 
 
 if __name__ == '__main__':
-    autoppia_operator = AutoppiaOperator()
-    autoppia_operator.run()
+    operator = AutoppiaOperator()
+    operator.run()

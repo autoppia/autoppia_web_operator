@@ -19,12 +19,6 @@ import { faComments } from "@fortawesome/free-regular-svg-icons";
 import SideBar from "../components/sideBar";
 import ToggleTheme from "../components/toggleTheme";
 import WebsiteItem from "../components/websiteItem";
-import {
-  faAmazon,
-  faApple,
-  faGoogle,
-  faGooglePlay,
-} from "@fortawesome/free-brands-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { initializeSocket } from "../utils/socket";
@@ -32,6 +26,7 @@ import { websites } from "../utils/mock/mockDB";
 import { I_WebSiteUrl } from "../utils/types";
 import { resetChat, addTask, addAction } from "../redux/chatSlice";
 import { BACKEND_URL } from "../config";
+import { faWindows } from "@fortawesome/free-brands-svg-icons";
 
 function Landing(): React.ReactElement {
   const [showSideBar, setShowSideBar] = React.useState(false);
@@ -39,6 +34,8 @@ function Landing(): React.ReactElement {
   const [showDropDown, setShowDropDown] = useState(false);
   const [selectedURL, setSelectedURL] = useState("");
   const [prompt, setPrompt] = useState("");
+  const [agentCount, setAgentCount] = useState(1);
+  const [network, setNetwork] = useState("Autoppia");
   const [filteredWebSites, setFilteredWebSites] = useState<I_WebSiteUrl[]>([]);
 
   const navigate = useNavigate();
@@ -90,18 +87,28 @@ function Landing(): React.ReactElement {
   //Navigate to next page
   const handleSubmit = async () => {
     try {
-      const res = await fetch(`${BACKEND_URL}/operator`)
+      const res = await fetch(`${BACKEND_URL}/operator`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          targetAgent: network,
+          agentCount: agentCount,
+        })
+      })
       if (res.status === 200) {
         const data = await res.json();
-        const socket = initializeSocket(dispatch, data.endpoint);
-        socket.emit("new-task", {
-          task: prompt,
-          url: selectedURL,
-        })
-        dispatch(resetChat());
-        dispatch(addTask(prompt))
-        dispatch(addAction("Initialize browser."))
-        localStorage.setItem("url", selectedURL);
+        data.endpoints.forEach((endpoint: string) => {
+          const socket = initializeSocket(dispatch, endpoint);          
+          socket.emit("new-task", {
+            task: prompt,
+            url: selectedURL,
+          })
+          dispatch(resetChat());
+          dispatch(addTask(prompt))
+          dispatch(addAction("Initialize browser."))
+        });
         navigate("/home");
       } else {
         const errorData = await res.json();
@@ -135,6 +142,33 @@ function Landing(): React.ReactElement {
     }
   }, [selectedURL]);
 
+  useEffect(() => {
+    window.addEventListener('click', (event) => {
+      const agentCountButton = document.getElementById("agentCountButton");
+      const agentCountMenu = document.getElementById("agentCountMenu");
+      if(!agentCountButton?.contains(event.target as Node) && !agentCountMenu?.contains(event.target as Node)) {
+        agentCountMenu?.classList.add('hidden');
+      }
+
+      const accountMenuButton = document.getElementById("accountMenuButton");
+      const accountMenu = document.getElementById("accountMenu");
+      if(!accountMenuButton?.contains(event.target as Node) && !accountMenuButton?.contains(event.target as Node)) {
+        accountMenu?.classList.add('hidden');
+      }
+    })
+  }, [])
+  const handleDropDown = (id: string) => {
+    document.getElementById(id)?.classList.toggle("hidden");
+  }
+  const handleDropDownMenu = (id: string, val: number|string) => {
+    if(id === "agentCountMenu")
+      setAgentCount(val as number);
+    if(id === "networkMenu")
+      setNetwork(val as string);
+    const menu = document.getElementById(id);
+    menu?.classList.add('hidden');
+  }
+
   return (
     <div className="dark:bg-[#050608] bg-[#f1f5f9] w-[100vw] h-[100vh] flex relative overflow-auto">
       <div className="fixed w-full h-full hidden dark:block">
@@ -150,11 +184,11 @@ function Landing(): React.ReactElement {
       >
         <div className="relative flex justify-between items-center mt-10 mb-10">
           <img
-            src="./assets/images/logos/main-dark.png"
+            src="./assets/images/logos/logo copy.png"
             className="h-[50px] dark:block hidden"
           />
           <img
-            src="./assets/images/logos/main.png"
+            src="./assets/images/logos/logo copy.png"
             className="h-[50px] dark:hidden block"
           />
           <div className="flex ">
@@ -181,7 +215,7 @@ function Landing(): React.ReactElement {
             // onFocus={handleUnfocusedWebURL}
             ></input>
             <div className="flex justify-between mt-5 items-center">
-              <div className="flex flex-grow mx-1 min-[500px]:mx-3 lg:mx-5 xl:mx-10 bg-gray-200/50 px-5 py-2 rounded-lg shadow-sm items-center relative">
+              <div className="flex flex-grow mx-1 min-[500px]:mx-3 bg-gray-200/50 px-1 py-2 rounded-lg shadow-sm items-center relative">
                 <FontAwesomeIcon
                   icon={faExternalLink}
                   color="gray"
@@ -208,6 +242,37 @@ function Landing(): React.ReactElement {
                       onClick={handleClickWebSiteItem}
                     />
                   ))}
+                </div>
+              </div>
+              <div className="relative flex justify-center items-center mr-1">
+                <button id="networkButton" className="bg-gray-200/50 px-4 py-2 rounded items-center mr-1" onClick={() => handleDropDown("networkMenu")}>
+                  <span className="mr-[5px]">{network}</span>
+                  <FontAwesomeIcon className="pl-1" icon={faSortDesc} />
+                </button>
+                <div id="networkMenu" className="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg">
+                  <div className="hover:bg-gray-200 cursor-pointer p-1  flex items-center border-b-[1px]" onClick={() => handleDropDownMenu("networkMenu", "Autoppia")}>
+                    Autoppia
+                  </div>
+                  <div className="hover:bg-gray-200 cursor-pointer p-1  flex items-center border-b-[1px]" onClick={() => handleDropDownMenu("networkMenu", "Bittensor")}>
+                    Bittensor
+                  </div>
+                </div>
+              </div>
+              <div className="relative flex justify-center items-center mr-1">
+                <button id="agentCountButton" className="bg-gray-200/50 px-4 py-2 rounded items-center mr-1" onClick={() => handleDropDown("agentCountMenu")}>
+                  <span className="mr-[5px]">{agentCount}X</span>
+                  <FontAwesomeIcon className="pl-1" icon={faSortDesc} />
+                </button>
+                <div id="agentCountMenu" className="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg">
+                  <div className="hover:bg-gray-200 cursor-pointer p-1  flex items-center border-b-[1px]" onClick={() => handleDropDownMenu("agentCountMenu", 1)}>
+                    1X
+                  </div>
+                  <div className="hover:bg-gray-200 cursor-pointer p-1  flex items-center border-b-[1px]" onClick={() => handleDropDownMenu("agentCountMenu", 2)}>
+                    2X
+                  </div>
+                  <div className="hover:bg-gray-200 cursor-pointer p-1  flex items-center border-b-[1px]" onClick={() => handleDropDownMenu("agentCountMenu", 4)}>
+                    4X
+                  </div>
                 </div>
               </div>
               <div

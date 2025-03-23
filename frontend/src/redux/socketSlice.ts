@@ -1,37 +1,31 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 interface SocketState {
-    endpoint: string;
-    socket: any;
-    connected: boolean;
+    sockets: any[];
+    socketIds: string[];
 }
 
 const initialState: SocketState = {
-    endpoint: '',
-    socket: null,
-    connected: false,
+    sockets: [],
+    socketIds: [],
 };
 
 const socketSlice = createSlice({
     name: 'socket',
     initialState,
     reducers: {
-        setEndpoint: (state, action) => {
-            state.endpoint = action.payload;
+        resetSocket: (state) => {
+            state.sockets = [];
+            state.socketIds = [];
         },
-        setSocket: (state, action) => {
-            state.socket = action.payload;
-            state.connected = action.payload !== null;
+        addSocket: (state, action) => {
+            state.sockets = [...state.sockets, action.payload];
         },
-        disconnect: (state) => {
-            if (state.socket) {
-                state.socket.close();
-            }
-            state.socket = null;
-            state.connected = false;
-        },
+        addSocketId: (state, action) => {
+            state.socketIds = [...state.socketIds, action.payload];
+        }
     },
 });
 
-export const { setSocket, disconnect } = socketSlice.actions;
+export const { resetSocket, addSocket, addSocketId } = socketSlice.actions;
 export default socketSlice.reducer;
