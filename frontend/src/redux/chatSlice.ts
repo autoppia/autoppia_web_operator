@@ -3,12 +3,12 @@ import { I_Chat } from "../utils/types";
 
 interface ChatState {
   chats: I_Chat[];
-  running: boolean;
+  completed: number;
 }
 
 const initialState: ChatState = {
   chats: [],
-  running: false,
+  completed: 0,
 };
 
 const chatSlice = createSlice({
@@ -17,58 +17,71 @@ const chatSlice = createSlice({
   reducers: {
     resetChat: (state) => {
       state.chats = [];
-      state.running = false;
+      state.completed = 0;
     },
     addTask: (state, action) => {
       state.chats = [...state.chats, {
         role: "user",
         content: action.payload,
       }];
-      state.running = true;
+      state.completed = 0;
     },
     addAction: (state, action) => {
-      const length = state.chats.length;
-      if (state.chats[length - 1].role === "user") {
+      const indexes: number[] = [];
+      state.chats.forEach((chat, index) => {
+        if (chat.socketId === action.payload.socketId) {
+          indexes.push(index);
+        }
+      });
+      const lastIndex = indexes.length > 0 ? indexes[indexes.length - 1] : -1
+      if (lastIndex >= 0 && state.chats[lastIndex].state === "thinking") {
+        state.chats[lastIndex] = {
+          ...state.chats[lastIndex],
+          actions: [
+            ...state.chats[lastIndex].actions!,
+            { name: action.payload.action, icon: null },
+          ],
+        };
+      } else {
         state.chats = [
           ...state.chats,
           {
             role: "assistant",
-            thinking: action.payload,
+            socketId: action.payload.socketId,
+            thinking: action.payload.action,
             state: "thinking",
-            actions: [{ name: action.payload, icon: null }],
+            actions: [{ name: action.payload.action, icon: null }],
           },
         ];
-      } else {
-        state.chats[length - 1] = {
-          ...state.chats[length - 1],
-          thinking: action.payload,
-          state: "thinking",
-          actions: [
-            ...state.chats[length - 1].actions!,
-            { name: action.payload, icon: null },
-          ]
-        };
       }
     },
     addResult: (state, action) => {
-      const length = state.chats.length;
-      if (state.chats[length - 1].role === "user") {
+      const indexes: number[] = [];
+      state.chats.forEach((chat, index) => {
+        if (chat.socketId === action.payload.socketId) {
+          indexes.push(index);
+        }
+      });
+      const lastIndex = indexes.length > 0 ? indexes[indexes.length - 1] : -1
+      if (lastIndex >= 0 && state.chats[lastIndex].state === "thinking") {
+        state.chats[lastIndex] = {
+          ...state.chats[lastIndex],
+          content: action.payload.result,
+          state: action.payload.success ? "success" : "error",
+        };
+        state.completed += 1;
+      } else {
         state.chats = [
           ...state.chats,
           {
             role: "assistant",
-            content: action.payload.content,
+            socketId: action.payload.socketId,
+            content: action.payload.result,
             state: action.payload.success ? "success" : "error",
           },
         ];
-      } else {
-        state.chats[length - 1] = {
-          ...state.chats[length - 1],
-          content: action.payload.content,
-          state: action.payload.success ? "success" : "error",
-        }
+        state.completed += 1;
       }
-      state.running = false;
     }
   },
 });

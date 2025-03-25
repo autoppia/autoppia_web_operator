@@ -6,6 +6,7 @@ export interface I_Action {
 export interface I_Chat {
   role: string;
   content?: string;
+  socketId?: string;
   period?: number;
   actions?: I_Action[];
   thinking?: string;

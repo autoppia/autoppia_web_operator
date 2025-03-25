@@ -1,9 +1,6 @@
 import {
   faBars,
   faEdit,
-  faHistory,
-  faHome,
-  faPaperclip,
   faPaperPlane,
   faSignOut,
 } from "@fortawesome/free-solid-svg-icons";
@@ -23,22 +20,22 @@ function SideChatBar(props: I_SideBar) {
   const [imageLoading, setImageLoading] = useState(true);
   const [task, setTask] = useState("");
   const [dlgOpen, setDlgOpen] = useState(false);
-  const [dlgType, setDlgType] = useState(0);
-  const [dlgTitle, setDlgTitle] = useState("Are you sure?");
-  const [dlgContent, setDlgContent] = useState("");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const chats = useSelector((state: any) => state.chat.chats);
   const sockets = useSelector((state: any) => state.socket.sockets);
-  const running = useSelector((state: any) => state.chat.running);
+  const socketIds = useSelector((state: any) => state.socket.socketIds);
+  const completed = useSelector((state: any) => state.chat.completed);
   const handleClickMenueBar = () => {
     onClick();
   };
 
   const handleSubmit = () => {
-    sockets[0].emit("continue-task", {
-      task: task,
+    sockets.forEach((socket: any) => {
+      socket.emit("continue-task", {
+        task: task,
+      });
     });
     dispatch(addTask(task))
     setTask("");
@@ -52,30 +49,17 @@ function SideChatBar(props: I_SideBar) {
       setTask("");
     }
   };
-  const handleOut = () => {
-    setDlgType(0);
-    setDlgContent("Do you want to go back to dashboard?");
-    setDlgOpen(true);
-  };
   const handleError = () => {
     setImageLoading(true);
   };
   const handleLoad = () => {
     setImageLoading(false);
   };
-  const handleTempFunction = () => {
-    setDlgType(1);
-    setDlgContent("Do you want a new chat?");
+  const handleNew = () => {
     setDlgOpen(true);
   }
   const handleYes = () => {
-    if (dlgType === 0) {
-      navigate("/");
-    }
-    else if (dlgType === 1) {
-      console.log("Temp function");
-    }
-    setDlgOpen(false);
+    navigate("/");
   }
 
   return (
@@ -95,23 +79,21 @@ function SideChatBar(props: I_SideBar) {
           </div>
           <div
             className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 text-gray-500 dark:text-white ms-2"
-            onClick={handleOut}
-          >
-            <FontAwesomeIcon icon={faSignOut} />
-          </div>
-          <div
-            className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 text-gray-500 dark:text-white ms-2"
-            onClick={handleTempFunction}
+            onClick={handleNew}
           >
             <FontAwesomeIcon icon={faEdit} />
           </div>
         </div>
         <ToggleTheme />
       </div>
-      <div className="flex justify-center mt-1 m1-2">
+      <div className="flex justify-center mt-1 m1-2 mb-2">
         <img
-          src="./assets/images/logos/logo copy.png"
-          className="h-[50px]"
+          src="./assets/images/logos/main_dark.png"
+          className="h-[25px] dark:block hidden"
+        />
+        <img
+          src="./assets/images/logos/main.png"
+          className="h-[25px] dark:hidden block"
         />
       </div>
       <div
@@ -136,7 +118,7 @@ function SideChatBar(props: I_SideBar) {
               );
           })}
         </div>
-        {sockets.map((socket: any, index: Number) => (
+        {socketIds.map((socketId: any, index: Number) => (
           <div
             className="relative flex flex-col p-5 justify-center bg-white rounded-xl w-full self-center flex-grow min-h-[300px] max-h-[500px] mt-5 overflow-auto md:hidden shadow-lg border-2 border-gray-300 
                       [&::-webkit-scrollbar]:w-2
@@ -146,10 +128,10 @@ function SideChatBar(props: I_SideBar) {
                       [&::-webkit-scrollbar-thumb]:bg-gray-300
                       dark:[&::-webkit-scrollbar-track]:bg-neutral-700
                       dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
-            key={`${socket.id}_screenshot_side`}
+            key={`${socketId}_screenshot_side`}
           >
             <img
-              id={`${socket.id}_screenshot_side`}
+              id={`${socketId}_screenshot_side`}
               className="w-full screenshot"
               onError={handleError}
               onLoad={handleLoad}
@@ -189,7 +171,7 @@ function SideChatBar(props: I_SideBar) {
             className="border-none outline-none bg-gray-200 flex-grow"
             placeholder="Type here ..."
             value={task}
-            disabled={running}
+            disabled={completed < socketIds.length}
             onChange={handleChangeTask}
             onKeyDown={handleKeyDown}
           ></input>
@@ -206,8 +188,8 @@ function SideChatBar(props: I_SideBar) {
         dlgOpen &&
         <div id="alertDialog" className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
           <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-            <h2 className="text-lg font-bold mb-4">{dlgTitle}</h2>
-            <p className="mb-4">{dlgContent}</p>
+            <h2 className="text-lg font-bold mb-4">Are you sure?</h2>
+            <p className="mb-4">Do you want to start new task?</p>
             <div className="flex justify-end">
               <button id="noButton" className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2" onClick={() => setDlgOpen(false)}>
                 No

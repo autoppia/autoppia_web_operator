@@ -15,6 +15,9 @@ const socketSlice = createSlice({
     initialState,
     reducers: {
         resetSocket: (state) => {
+            state.sockets.forEach((socket) => {
+                socket.close();
+            });
             state.sockets = [];
             state.socketIds = [];
         },
@@ -23,9 +26,12 @@ const socketSlice = createSlice({
         },
         addSocketId: (state, action) => {
             state.socketIds = [...state.socketIds, action.payload];
+        },
+        removeSocketId: (state, action) => {
+            state.socketIds = state.socketIds.filter((id) => id !== action.payload);
         }
     },
 });
 
-export const { resetSocket, addSocket, addSocketId } = socketSlice.actions;
+export const { resetSocket, addSocket, addSocketId, removeSocketId } = socketSlice.actions;
 export default socketSlice.reducer;

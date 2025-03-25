@@ -1,18 +1,10 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faArrowDown,
-  faBars,
-  faEarth,
   faExternalLink,
   faHome,
-  faMap,
-  faMicrophone,
-  faPaperclip,
   faPaperPlane,
-  faSignIn,
   faSortDesc,
-  faSun,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { faComments } from "@fortawesome/free-regular-svg-icons";
@@ -25,8 +17,8 @@ import { initializeSocket } from "../utils/socket";
 import { websites } from "../utils/mock/mockDB";
 import { I_WebSiteUrl } from "../utils/types";
 import { resetChat, addTask, addAction } from "../redux/chatSlice";
+import { resetSocket } from "../redux/socketSlice";
 import { BACKEND_URL } from "../config";
-import { faWindows } from "@fortawesome/free-brands-svg-icons";
 
 function Landing(): React.ReactElement {
   const [showSideBar, setShowSideBar] = React.useState(false);
@@ -99,15 +91,15 @@ function Landing(): React.ReactElement {
       })
       if (res.status === 200) {
         const data = await res.json();
+        dispatch(resetSocket());
+        dispatch(resetChat());
+        dispatch(addTask(prompt))
         data.endpoints.forEach((endpoint: string) => {
-          const socket = initializeSocket(dispatch, endpoint);          
+          const socket = initializeSocket(dispatch, endpoint);
           socket.emit("new-task", {
             task: prompt,
             url: selectedURL,
           })
-          dispatch(resetChat());
-          dispatch(addTask(prompt))
-          dispatch(addAction("Initialize browser."))
         });
         navigate("/home");
       } else {
@@ -146,24 +138,26 @@ function Landing(): React.ReactElement {
     window.addEventListener('click', (event) => {
       const agentCountButton = document.getElementById("agentCountButton");
       const agentCountMenu = document.getElementById("agentCountMenu");
-      if(!agentCountButton?.contains(event.target as Node) && !agentCountMenu?.contains(event.target as Node)) {
+      if (!agentCountButton?.contains(event.target as Node) && !agentCountMenu?.contains(event.target as Node)) {
         agentCountMenu?.classList.add('hidden');
       }
 
       const accountMenuButton = document.getElementById("accountMenuButton");
       const accountMenu = document.getElementById("accountMenu");
-      if(!accountMenuButton?.contains(event.target as Node) && !accountMenuButton?.contains(event.target as Node)) {
+      if (!accountMenuButton?.contains(event.target as Node) && !accountMenuButton?.contains(event.target as Node)) {
         accountMenu?.classList.add('hidden');
       }
     })
   }, [])
+
   const handleDropDown = (id: string) => {
     document.getElementById(id)?.classList.toggle("hidden");
   }
-  const handleDropDownMenu = (id: string, val: number|string) => {
-    if(id === "agentCountMenu")
+
+  const handleDropDownMenu = (id: string, val: number | string) => {
+    if (id === "agentCountMenu")
       setAgentCount(val as number);
-    if(id === "networkMenu")
+    if (id === "networkMenu")
       setNetwork(val as string);
     const menu = document.getElementById(id);
     menu?.classList.add('hidden');
@@ -184,17 +178,17 @@ function Landing(): React.ReactElement {
       >
         <div className="relative flex justify-between items-center mt-10 mb-10">
           <img
-            src="./assets/images/logos/logo copy.png"
-            className="h-[50px] dark:block hidden"
+            src="./assets/images/logos/main_dark.png"
+            className="h-[25px] dark:block hidden"
           />
           <img
-            src="./assets/images/logos/logo copy.png"
-            className="h-[50px] dark:hidden block"
+            src="./assets/images/logos/main.png"
+            className="h-[25px] dark:hidden block"
           />
           <div className="flex ">
             <ToggleTheme />
             <div
-              className="px-3 flex   dark:text-white hover:bg-white hover:text-black hover:shadow-lg hover:border-transparent rounded-full  justify-center items-center  cursor-pointer transition-all duration-300 text-gray-500"
+              className="px-3 flex dark:text-white hover:bg-white hover:text-black hover:shadow-lg hover:border-transparent rounded-full  justify-center items-center  cursor-pointer transition-all duration-300 text-gray-500"
               onClick={returnHome}
             >
               <FontAwesomeIcon icon={faHome} />
@@ -203,12 +197,12 @@ function Landing(): React.ReactElement {
         </div>
         <div className="flex flex-col justify-center items-center flex-grow">
           <h1 className="w-full text-center mb-10 text-4xl font-semibold dark:text-white">
-            What do you want today?
+            How can I assist you today?
           </h1>
           <div className="flex flex-col p-5  bg-white rounded-xl w-[80%] md:w-[60%] self-center shadow-md">
             <input
               className="border-none outline-none"
-              placeholder="You can upload the video, images or other files"
+              placeholder="Ask me anything..."
               value={prompt}
               onChange={handleChangePrompt}
               onKeyDown={handleKeyDown}
@@ -218,8 +212,7 @@ function Landing(): React.ReactElement {
               <div className="flex flex-grow mx-1 min-[500px]:mx-3 bg-gray-200/50 px-1 py-2 rounded-lg shadow-sm items-center relative">
                 <FontAwesomeIcon
                   icon={faExternalLink}
-                  color="gray"
-                  className="me-2 max-[400px]:hidden"
+                  className="ms-2 me-2 max-[400px]:hidden"
                 />
                 <input
                   className="bg-transparent w-full outline-none border-none"
@@ -228,9 +221,12 @@ function Landing(): React.ReactElement {
                   onChange={handleChangeWebURL}
                 // onBlur={handleUnfocusedWebURL}
                 />
-                <FontAwesomeIcon icon={faSortDesc} color="gray" />
+                <FontAwesomeIcon
+                  icon={faSortDesc}
+                  className="ms-2 me-2 cursor-pointer"
+                />
                 <div
-                  className={` overflow-hidden mt-2 absolute top-full left-0 bg-gray-50 shadow-xl w-full  rounded-lg ${showDropDown ? "h-auto p-5 max-[500px]:p-1 " : "h-0 p-0"
+                  className={`overflow-hidden mt-2 absolute top-full left-0 bg-gray-50 shadow-xl w-full rounded-lg ${showDropDown ? "h-auto p-5 max-[500px]:p-1 " : "h-0 p-0"
                     }`}
                 >
                   {filteredWebSites.map((item: I_WebSiteUrl, index: number) => (
@@ -245,33 +241,35 @@ function Landing(): React.ReactElement {
                 </div>
               </div>
               <div className="relative flex justify-center items-center mr-1">
-                <button id="networkButton" className="bg-gray-200/50 px-4 py-2 rounded items-center mr-1" onClick={() => handleDropDown("networkMenu")}>
-                  <span className="mr-[5px]">{network}</span>
-                  <FontAwesomeIcon className="pl-1" icon={faSortDesc} />
+                <button id="networkButton" className="bg-gray-200/50 w-48 px-3 py-2 rounded flex justify-between items-center mr-1" onClick={() => handleDropDown("networkMenu")}>
+                  <span className="me-2">
+                    {network == "Autoppia" ? "Autoppia Server" : "Bittensor s36 Miners"}
+                  </span>
+                  <FontAwesomeIcon icon={faSortDesc} />
                 </button>
                 <div id="networkMenu" className="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg">
                   <div className="hover:bg-gray-200 cursor-pointer p-1  flex items-center border-b-[1px]" onClick={() => handleDropDownMenu("networkMenu", "Autoppia")}>
-                    Autoppia
+                    Autoppia Server
                   </div>
                   <div className="hover:bg-gray-200 cursor-pointer p-1  flex items-center border-b-[1px]" onClick={() => handleDropDownMenu("networkMenu", "Bittensor")}>
-                    Bittensor
+                    Bittensor s36 Miners
                   </div>
                 </div>
               </div>
               <div className="relative flex justify-center items-center mr-1">
-                <button id="agentCountButton" className="bg-gray-200/50 px-4 py-2 rounded items-center mr-1" onClick={() => handleDropDown("agentCountMenu")}>
-                  <span className="mr-[5px]">{agentCount}X</span>
-                  <FontAwesomeIcon className="pl-1" icon={faSortDesc} />
+                <button id="agentCountButton" className="bg-gray-200/50 w-28 px-3 py-2 rounded flex justify-between items-center mr-1" onClick={() => handleDropDown("agentCountMenu")}>
+                  <span className="me-2">{agentCount} x Agent</span>
+                  <FontAwesomeIcon icon={faSortDesc} />
                 </button>
-                <div id="agentCountMenu" className="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg">
+                <div id="agentCountMenu" className="hidden absolute right-0 mt-2 w-28 bg-white border border-gray-300 rounded shadow-lg">
                   <div className="hover:bg-gray-200 cursor-pointer p-1  flex items-center border-b-[1px]" onClick={() => handleDropDownMenu("agentCountMenu", 1)}>
-                    1X
+                    1 x Agent
                   </div>
                   <div className="hover:bg-gray-200 cursor-pointer p-1  flex items-center border-b-[1px]" onClick={() => handleDropDownMenu("agentCountMenu", 2)}>
-                    2X
+                    2 x Agent
                   </div>
                   <div className="hover:bg-gray-200 cursor-pointer p-1  flex items-center border-b-[1px]" onClick={() => handleDropDownMenu("agentCountMenu", 4)}>
-                    4X
+                    4 x Agent
                   </div>
                 </div>
               </div>
