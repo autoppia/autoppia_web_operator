@@ -43,16 +43,19 @@ class AutoppiaOperator:
                 return
 
             agent = AGENT_CLASS(task, url)
+            await self.sio.emit('socket-id', {'sid': sid}, to=sid)
+            await self.sio.emit('action', {'action': 'Initializing browser...'}, to=sid)   
             await agent.init_agent()
 
             self.sessions[sid] = {
                 'agent': agent,
+                'current_action': None,
                 'state': 'idle',
             }
 
-            screenshot_task = asyncio.create_task(self.send_screenshot(sid))
+            send_screenshot_task = asyncio.create_task(self._send_screenshot(sid))
             await self._perform_task(sid)
-            screenshot_task.cancel()
+            send_screenshot_task.cancel()
 
         @self.sio.on('continue-task')
         async def continue_task(sid, data):
@@ -71,9 +74,9 @@ class AutoppiaOperator:
             agent = session_info['agent']
             agent.add_new_task(task)
 
-            screenshot_task = asyncio.create_task(self.send_screenshot(sid))
+            send_screenshot_task = asyncio.create_task(self._send_screenshot(sid))
             await self._perform_task(sid)
-            screenshot_task.cancel()
+            send_screenshot_task.cancel()
 
         @self.sio.on('disconnect')
         async def disconnect(sid):
@@ -100,16 +103,18 @@ class AutoppiaOperator:
 
         self.sessions[sid]['state'] = 'idle'
 
-    async def send_screenshot(self, sid):
+    async def _send_screenshot(self, sid):
         while True:
             await asyncio.sleep(0.5)
             session_info = self.sessions.get(sid)
             if not session_info:
                 continue
             agent = session_info['agent']
+
             screenshot = await agent.take_screenshot()
             if screenshot:
                 await self.sio.emit('screenshot', {'screenshot': screenshot}, to=sid)
+
 
     def run(self, host='0.0.0.0', port=5000):
         web.run_app(self.app, host=host, port=port)

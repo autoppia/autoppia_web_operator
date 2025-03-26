@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-import { addSocket, addSocketId, removeSocketId } from '../../redux/socketSlice';
+import { addSocket, addSocketId } from '../../redux/socketSlice';
 import { addAction, addResult } from '../../redux/chatSlice';
 import { AppDispatch } from '../../redux/store';
 
@@ -9,13 +9,10 @@ export const initializeSocket = (dispatch: AppDispatch, agentEndpoint: string) =
 
     socket.on('connect', () => {
         console.log(`Connected to the server: ${socket.id}`);
-        dispatch(addSocketId(socket.id));
-        dispatch(addAction({ socketId: socket.id, action: 'Initialize browser.' }));
     });
 
     socket.on('disconnect', () => {
         console.log(`Disconnected from the server: ${socket.id}`);
-        dispatch(removeSocketId(socket.id));
     });
 
     socket.on('error', ({ error }) => {
@@ -29,6 +26,10 @@ export const initializeSocket = (dispatch: AppDispatch, agentEndpoint: string) =
             screenElement.src = base64Prefix + screenshot;
         }
     });
+    
+    socket.on('socket-id', ({ sid }) => {
+        dispatch(addSocketId(sid));
+    });   
 
     socket.on('action', ({ action }) => {
         dispatch(addAction({ socketId: socket.id, action }));

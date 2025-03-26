@@ -37,6 +37,7 @@ const chatSlice = createSlice({
       if (lastIndex >= 0 && state.chats[lastIndex].state === "thinking") {
         state.chats[lastIndex] = {
           ...state.chats[lastIndex],
+          thinking: action.payload.action,
           actions: [
             ...state.chats[lastIndex].actions!,
             { name: action.payload.action, icon: null },
@@ -66,7 +67,7 @@ const chatSlice = createSlice({
       if (lastIndex >= 0 && state.chats[lastIndex].state === "thinking") {
         state.chats[lastIndex] = {
           ...state.chats[lastIndex],
-          content: action.payload.result,
+          content: action.payload.content,
           state: action.payload.success ? "success" : "error",
         };
         state.completed += 1;
@@ -76,7 +77,7 @@ const chatSlice = createSlice({
           {
             role: "assistant",
             socketId: action.payload.socketId,
-            content: action.payload.result,
+            content: action.payload.content,
             state: action.payload.success ? "success" : "error",
           },
         ];
