@@ -8,11 +8,11 @@ export const initializeSocket = (dispatch: AppDispatch, agentEndpoint: string) =
     const socket = io(agentEndpoint);
 
     socket.on('connect', () => {
-        console.log(`Connected to the server: ${socket.id}`);
+        console.log(`Connected to the agent: ${agentEndpoint}`);
     });
 
     socket.on('disconnect', () => {
-        console.log(`Disconnected from the server: ${socket.id}`);
+        console.log(`Disconnected from the agent: ${agentEndpoint}`);
     });
 
     socket.on('error', ({ error }) => {
@@ -20,6 +20,7 @@ export const initializeSocket = (dispatch: AppDispatch, agentEndpoint: string) =
     })
 
     socket.on('screenshot', ({ screenshot }) => {
+        console.log("Received screenshot", screenshot.length)
         const screenElement = document.getElementById(`${socket.id}_screenshot_main`) as HTMLImageElement;
         if (screenElement) {
             const base64Prefix = 'data:image/png;base64,';

@@ -7,7 +7,15 @@ const app = express();
 app.use(cors())
 app.use(express.json());
 
-const automataEndpoint = "http://54.195.214.72:5000";
+const automataEndpoint = "http://107.189.20.116:5000";
+
+const bittensorEndpoints = [
+  "http://107.189.20.116:5001",
+  "http://107.189.20.116:5002",
+  "http://107.189.20.116:5003",
+  "http://107.189.20.116:5004",
+  "http://107.189.20.116:5005"
+]
 
 app.post("/operator", async (req, res) => {
   const { targetAgent, agentCount } = req.body;
@@ -19,7 +27,8 @@ app.post("/operator", async (req, res) => {
       }
       break;
     case "Bittensor":
-      const minerList = await axios.get("https://api.bittensor.com/v1/miners");
+      // const minerList = await axios.get("https://api.bittensor.com/v1/miners");
+      const minerList = bittensorEndpoints;
       for (let i = 0; i < agentCount; i++) {
         endpoints.push(minerList[Math.floor(Math.random() * minerList.length)]);
       }
@@ -27,7 +36,6 @@ app.post("/operator", async (req, res) => {
     default:
       break;
   }
-  console.log("Endpoints sent:", endpoints);
   res.json({ endpoints: endpoints })
 });
 

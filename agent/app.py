@@ -1,6 +1,7 @@
 import socketio
 import asyncio
 import logging
+import argparse
 from aiohttp import web
 
 from browser_use_agent import BrowserUseAgent
@@ -10,7 +11,7 @@ AGENT_CLASS = BrowserUseAgent
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-class AutoppiaOperator:
+class AutomataOperator:
     def __init__(self):
         self.sio = socketio.AsyncServer(
             async_mode='aiohttp', 
@@ -121,5 +122,15 @@ class AutoppiaOperator:
 
 
 if __name__ == '__main__':
-    operator = AutoppiaOperator()
-    operator.run()
+    parser = argparse.ArgumentParser(description='Arguments for Operator.')  
+
+    parser.add_argument('-p', '--port', type=int, required=False, help='Port for operator')
+
+    args = parser.parse_args()
+
+    operator = AutomataOperator()
+
+    if args.port:
+        operator.run(args.port)
+    else:
+        operator.run()
