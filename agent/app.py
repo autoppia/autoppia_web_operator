@@ -131,6 +131,6 @@ if __name__ == '__main__':
     operator = AutomataOperator()
 
     if args.port:
-        operator.run(args.port)
+        operator.run(port=args.port)
     else:
         operator.run()

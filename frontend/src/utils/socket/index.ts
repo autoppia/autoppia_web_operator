@@ -20,7 +20,6 @@ export const initializeSocket = (dispatch: AppDispatch, agentEndpoint: string) =
     })
 
     socket.on('screenshot', ({ screenshot }) => {
-        console.log("Received screenshot", screenshot.length)
         const screenElement = document.getElementById(`${socket.id}_screenshot_main`) as HTMLImageElement;
         if (screenElement) {
             const base64Prefix = 'data:image/png;base64,';
