@@ -5,9 +5,12 @@ import {
   faHome,
   faPaperPlane,
   faSortDesc,
+  faChartColumn,
+  faBrain,
+  faChartLine,
+  faMap
 } from "@fortawesome/free-solid-svg-icons";
 
-import { faComments } from "@fortawesome/free-regular-svg-icons";
 import SideBar from "../components/sideBar";
 import ToggleTheme from "../components/toggleTheme";
 import WebsiteItem from "../components/websiteItem";
@@ -16,7 +19,7 @@ import { useDispatch } from "react-redux";
 import { initializeSocket } from "../utils/socket";
 import { websites } from "../utils/mock/mockDB";
 import { I_WebSiteUrl } from "../utils/types";
-import { resetChat, addTask, addAction } from "../redux/chatSlice";
+import { resetChat, addTask } from "../redux/chatSlice";
 import { resetSocket } from "../redux/socketSlice";
 import { BACKEND_URL } from "../config";
 
@@ -188,7 +191,7 @@ function Landing(): React.ReactElement {
           <div className="flex ">
             <ToggleTheme />
             <div
-              className="px-3 flex dark:text-white hover:bg-white hover:text-black hover:shadow-lg hover:border-transparent rounded-full  justify-center items-center  cursor-pointer transition-all duration-300 text-gray-500"
+              className="px-3 ms-3 flex dark:text-white hover:bg-white hover:text-black hover:shadow-lg hover:border-transparent rounded-full justify-center items-center cursor-pointer transition-all duration-300 text-gray-500"
               onClick={returnHome}
             >
               <FontAwesomeIcon icon={faHome} />
@@ -219,6 +222,7 @@ function Landing(): React.ReactElement {
                   placeholder="WebSite URL..."
                   value={webURL}
                   onChange={handleChangeWebURL}
+                  onKeyDown={handleKeyDown}
                 // onBlur={handleUnfocusedWebURL}
                 />
                 <FontAwesomeIcon
@@ -281,54 +285,34 @@ function Landing(): React.ReactElement {
               </div>
             </div>
           </div>
-          {/* <div className="flex flex-col p-5  bg-white rounded-xl w-[80%] md:w-[60%] self-center shadow-md">
-            <input
-              className="border-none outline-none"
-              placeholder="You can upload the video, images or other files"
-            ></input>
-            <div className="flex justify-between mt-5">
-              <div className="flex">
-                <div className=" hover:bg-gray-100 rounded-full w-[50px] h-[50px] flex justify-center items-center transition-all duration-200 cursor-pointer">
-                  <FontAwesomeIcon icon={faPaperclip} color="333333" />
-                </div>
-
-                <div className=" hover:bg-gray-100 rounded-full w-[50px] h-[50px] flex justify-center items-center transition-all duration-200 cursor-pointer">
-                  <FontAwesomeIcon icon={faMicrophone} />
-                </div>
-              </div>
-              <div className=" hover:bg-gray-100 rounded-full w-[50px] h-[50px] flex justify-center items-center transition-all duration-200 cursor-pointer">
-                <FontAwesomeIcon icon={faPaperPlane} />
-              </div>
-            </div>
-          </div> */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full xl:w-[80%] self-center mt-10 gap-8">
             <div className="border-[1px] border-gray-400 border-dashed shadow-sm p-10 rounded-md cursor-pointer hover:-translate-y-2 hover:shadow-lg transition-all duration-200 dark:text-white">
               <FontAwesomeIcon
-                icon={faComments}
-                className="p-1"
+                icon={faChartColumn}
+                className="me-2"
               ></FontAwesomeIcon>
-              Find the Best Solution for Using AI Operator.
+              Check Autoppia on Taomarketcap
             </div>
             <div className="border-[1px] border-gray-400 border-dashed shadow-sm p-10 rounded-md cursor-pointer hover:-translate-y-2 hover:shadow-lg transition-all duration-200 dark:text-white">
               <FontAwesomeIcon
-                icon={faComments}
-                className="p-1"
+                icon={faBrain}
+                className="me-2"
               ></FontAwesomeIcon>
-              Find the Best Solution for Using AI Operator.
+              Summarize TAO Market on tao.app
             </div>
             <div className="border-[1px] border-gray-400 border-dashed shadow-sm p-10 rounded-md cursor-pointer hover:-translate-y-2 hover:shadow-lg transition-all duration-200 dark:text-white">
               <FontAwesomeIcon
-                icon={faComments}
-                className="p-1"
+                icon={faChartLine}
+                className="me-2"
               ></FontAwesomeIcon>
-              Find the Best Solution for Using AI Operator.
+              Compare TAO Yields
             </div>
             <div className="border-[1px] border-gray-400 border-dashed shadow-sm p-10 rounded-md cursor-pointer hover:-translate-y-2 hover:shadow-lg transition-all duration-200 dark:text-white">
               <FontAwesomeIcon
-                icon={faComments}
-                className="p-1"
+                icon={faMap}
+                className="me-2"
               ></FontAwesomeIcon>
-              Find the Best Solution for Using AI Operator.
+              Explore New Subnets
             </div>
           </div>
         </div>

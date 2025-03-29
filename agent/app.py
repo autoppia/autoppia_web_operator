@@ -1,3 +1,4 @@
+import time
 import socketio
 import asyncio
 import logging
@@ -32,6 +33,7 @@ class AutomataOperator:
         @self.sio.on('connect')
         async def connect(sid, environ):
             logger.info(f'Client connected: {sid}')
+            await self._clean_session()
 
         @self.sio.on('new-task')
         async def new_task(sid, data):
@@ -50,8 +52,8 @@ class AutomataOperator:
 
             self.sessions[sid] = {
                 'agent': agent,
-                'current_action': None,
                 'state': 'idle',
+                'updated_at': time.time()
             }
 
             send_screenshot_task = asyncio.create_task(self._send_screenshot(sid))
@@ -82,9 +84,6 @@ class AutomataOperator:
         @self.sio.on('disconnect')
         async def disconnect(sid):
             logger.info(f'Client disconnected: {sid}')
-            if sid in self.sessions:
-                await self.sessions[sid]['agent'].close()
-                del self.sessions[sid]
 
     async def _perform_task(self, sid, max_steps=100):
         self.sessions[sid]['state'] = 'busy'
@@ -103,18 +102,26 @@ class AutomataOperator:
         await self.sio.emit('result', result, to=sid)
 
         self.sessions[sid]['state'] = 'idle'
+        self.sessions[sid]['updated_at'] = time.time()
 
     async def _send_screenshot(self, sid):
         while True:
             await asyncio.sleep(0.5)
-            session_info = self.sessions.get(sid)
-            if not session_info:
+            session = self.sessions.get(sid)
+            if not session:
                 continue
-            agent = session_info['agent']
+            agent = session['agent']
 
             screenshot = await agent.take_screenshot()
             if screenshot:
                 await self.sio.emit('screenshot', {'screenshot': screenshot}, to=sid)
+
+    async def _clean_session(self):  
+        for sid, session in list(self.sessions.items()):  
+            unused_time = time.time() - session['updated_at']  
+            if unused_time > 30 * 60:  
+                await session['agent'].close()  
+                del self.sessions[sid]          
 
 
     def run(self, host='0.0.0.0', port=5000):

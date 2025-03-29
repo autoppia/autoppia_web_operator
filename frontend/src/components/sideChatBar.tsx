@@ -2,7 +2,6 @@ import {
   faBars,
   faEdit,
   faPaperPlane,
-  faSignOut,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
@@ -27,7 +26,7 @@ function SideChatBar(props: I_SideBar) {
   const sockets = useSelector((state: any) => state.socket.sockets);
   const socketIds = useSelector((state: any) => state.socket.socketIds);
   const completed = useSelector((state: any) => state.chat.completed);
-  const handleClickMenueBar = () => {
+  const handleClickMenuBar = () => {
     onClick();
   };
 
@@ -40,8 +39,8 @@ function SideChatBar(props: I_SideBar) {
     dispatch(addTask(task))
     setTask("");
   };
-  const handleChangeTask = (even: React.ChangeEvent<HTMLInputElement>) => {
-    setTask(even.target.value);
+  const handleChangeTask = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTask(event.target.value);
   };
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -66,35 +65,33 @@ function SideChatBar(props: I_SideBar) {
     <div
       className={`${open
         ? "fixed w-[100vw] h-[100vh] px-1 md:relative md:w-[45vw] xl:w-[35vw] z-10"
-        : "fixed w-[100vw] h-[100vh] md:w-0  px-1 md:px-0 md:relative z-10"
+        : "fixed w-[100vw] h-[100vh] md:w-0 px-1 md:px-0 md:relative z-10"
         }  transition-all duration-300 h-full bg-white pt-1 pb-1 flex flex-col overflow-hidden dark:bg-transparent dark:shadow-sm dark:shadow-gray-100`}
     >
-      <div className="flex justify-between">
-        <div className="flex justify-start w-full">
-          <div
-            className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 text-gray-500 dark:text-white"
-            onClick={handleClickMenueBar}
-          >
-            <FontAwesomeIcon icon={faBars} />
-          </div>
-          <div
-            className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 text-gray-500 dark:text-white ms-2"
-            onClick={handleNew}
-          >
-            <FontAwesomeIcon icon={faEdit} />
-          </div>
+      <div className="flex items-center p-4">
+        <div
+          className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 text-gray-500 dark:text-white me-3"
+          onClick={handleClickMenuBar}
+        >
+          <FontAwesomeIcon icon={faBars} />
+        </div>
+        <div className="flex-grow">
+          <img
+            src="./assets/images/logos/main_dark.png"
+            className="h-[18px] dark:block hidden"
+          />
+          <img
+            src="./assets/images/logos/main.png"
+            className="h-[18px] dark:hidden block"
+          />
+        </div>        
+        <div
+          className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 text-gray-500 dark:text-white me-2"
+          onClick={handleNew}
+        >
+          <FontAwesomeIcon icon={faEdit} />
         </div>
         <ToggleTheme />
-      </div>
-      <div className="flex justify-center mt-1 m1-2 mb-2">
-        <img
-          src="./assets/images/logos/main_dark.png"
-          className="h-[25px] dark:block hidden"
-        />
-        <img
-          src="./assets/images/logos/main.png"
-          className="h-[25px] dark:hidden block"
-        />
       </div>
       <div
         className="w-full px-5 flex flex-col mt-2 justify-between flex-grow overflow-auto mb-5 

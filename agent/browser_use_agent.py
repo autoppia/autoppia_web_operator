@@ -6,6 +6,7 @@ from langchain_openai import ChatOpenAI
 from browser_use import Agent
 from browser_use.agent.views import AgentState
 from browser_use.browser.browser import Browser, BrowserConfig
+from browser_use.browser.context import BrowserContext, BrowserContextConfig
 
 from base_agent import BaseAgent
 
@@ -25,10 +26,15 @@ class BrowserUseAgent(BaseAgent):
     async def init_agent(self) -> None:
         self.browser = Browser(
             config=BrowserConfig(
-                headless=True
+                headless=True,
             )
         )
-        self.browser_context = await self.browser.new_context()
+        self.browser_context = BrowserContext(
+            browser=self.browser,
+            config=BrowserContextConfig(
+                highlight_elements=False,
+            )
+        )
         self.agent_state = AgentState()
 
         if self.initial_url:

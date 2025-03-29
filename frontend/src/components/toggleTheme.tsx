@@ -7,7 +7,7 @@ function ToggleTheme() {
   };
   return (
     <div
-      className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 mr-3 text-gray-500 dark:text-white"
+      className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 text-gray-500 dark:text-white"
       onClick={darkThemeHandler}
     >
       <FontAwesomeIcon icon={faCircleHalfStroke} />
