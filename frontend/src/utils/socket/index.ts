@@ -11,8 +11,9 @@ export const initializeSocket = (dispatch: AppDispatch, agentEndpoint: string) =
         console.log(`Connected to the agent: ${agentEndpoint}`);
     });
 
-    socket.on('disconnect', () => {
+    socket.on('disconnect', (reason) => {
         console.log(`Disconnected from the agent: ${agentEndpoint}`);
+        console.log(reason);
     });
 
     socket.on('error', ({ error }) => {
@@ -26,10 +27,10 @@ export const initializeSocket = (dispatch: AppDispatch, agentEndpoint: string) =
             screenElement.src = base64Prefix + screenshot;
         }
     });
-    
+
     socket.on('socket-id', ({ sid }) => {
         dispatch(addSocketId(sid));
-    });   
+    });
 
     socket.on('action', ({ action }) => {
         dispatch(addAction({ socketId: socket.id, action }));
