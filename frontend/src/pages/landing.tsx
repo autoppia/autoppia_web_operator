@@ -11,7 +11,6 @@ import {
   faMap,
 } from "@fortawesome/free-solid-svg-icons";
 
-import SideBar from "../components/sideBar";
 import ToggleTheme from "../components/toggleTheme";
 import WebsiteItem from "../components/websiteItem";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +23,6 @@ import { resetSocket } from "../redux/socketSlice";
 import { BACKEND_URL } from "../config";
 
 function Landing(): React.ReactElement {
-  const [showSideBar, setShowSideBar] = React.useState(false);
   const [webURL, setWebURL] = useState("");
   const [showDropDown, setShowDropDown] = useState(false);
   const [selectedURL, setSelectedURL] = useState("");
@@ -37,10 +35,6 @@ function Landing(): React.ReactElement {
   const dispatch = useDispatch();
 
   //===========================================Handlers========================================
-  //Collapse Sidebar
-  const sideBarHandler = () => {
-    setShowSideBar(!showSideBar);
-  };
 
   //On change the input (prompt)
   const handleChangePrompt = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,6 +76,7 @@ function Landing(): React.ReactElement {
   //Navigate to next page
   const handleSubmit = async () => {
     try {
+      console.log(`${BACKEND_URL}/operator`)
       const res = await fetch(`${BACKEND_URL}/operator`, {
         method: "POST",
         headers: {
@@ -175,22 +170,22 @@ function Landing(): React.ReactElement {
       <div className="fixed w-full h-full hidden dark:block">
         <img
           src="./assets/images/bg/dark-bg.png"
+          alt="dark background"
           className="w-full h-full"
         ></img>
       </div>
-      <SideBar open={showSideBar} onClick={sideBarHandler}></SideBar>
       <div
-        className={`flex flex-col px-10 lg:px-10 xl:px-20 flex-grow h-full relative ${
-          showSideBar ? "md:w-[70vw] xl:w-[75vw]" : "w-[100vw]"
-        }`}
+        className={"flex flex-col px-10 lg:px-10 xl:px-20 flex-grow h-full relative w-[100vw]"}
       >
         <div className="relative flex justify-between items-center mt-10 mb-10">
           <img
             src="./assets/images/logos/main_dark.png"
+            alt="dark logo"
             className="h-[20px] md:h-[25px] dark:block hidden"
           />
           <img
             src="./assets/images/logos/main.png"
+            alt="main logo"
             className="h-[20px] md:h-[25px] dark:hidden block"
           />
           <div className="flex ms-2 md:ms-0">
@@ -267,7 +262,7 @@ function Landing(): React.ReactElement {
                   onClick={() => handleDropDown("networkMenu")}
                 >
                   <span className="me-2">
-                    {network == "Autoppia"
+                    {network === "Autoppia"
                       ? "Autoppia Server"
                       : "Bittensor s36 Miners"}
                   </span>

@@ -7,19 +7,19 @@ const app = express();
 app.use(cors())
 app.use(express.json());
 
-const automataEndpoint = "http://107.189.20.116:5000";
+const autoppiaEndpoint = "https://operator.autoppia.com";
 
 const bittensorEndpoints = [
-  "http://107.189.20.116:5001",
-  "http://107.189.20.116:5002",
-  "http://107.189.20.116:5003",
-  "http://107.189.20.116:5004",
-  "http://107.189.20.116:5005",
-  "http://107.189.20.116:5006",
-  "http://107.189.20.116:5007",
-  "http://107.189.20.116:5008",
-  "http://107.189.20.116:5009",
-  "http://107.189.20.116:5010"
+  "http://107.189.17.202:5001",
+  "http://107.189.17.202:5002",
+  "http://107.189.17.202:5003",
+  "http://107.189.17.202:5004",
+  "http://107.189.17.202:5005",
+  "http://107.189.17.202:5006",
+  "http://107.189.17.202:5007",
+  "http://107.189.17.202:5008",
+  "http://107.189.17.202:5009",
+  "http://107.189.17.202:5010"
 ]
 
 app.post("/operator", async (req, res) => {
@@ -28,7 +28,7 @@ app.post("/operator", async (req, res) => {
   switch (targetAgent) {
     case "Autoppia":
       for (let i = 0; i < agentCount; i++) {
-        endpoints.push(automataEndpoint);
+        endpoints.push(autoppiaEndpoint);
       }
       break;
     case "Bittensor":
