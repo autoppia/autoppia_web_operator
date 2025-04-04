@@ -1,31 +1,21 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faAnglesRight,
   faBars,
-  faCompress,
   faCompressAlt,
-  faCompressArrowsAlt,
-  faMaximize,
   faSave,
-  faShare,
-  faSignOut,
 } from "@fortawesome/free-solid-svg-icons";
 import { faShareFromSquare } from "@fortawesome/free-regular-svg-icons";
-import ToggleTheme from "../components/toggleTheme";
 import SideChatBar from "../components/sideChatBar";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 function Operator(): React.ReactElement {
   const imageRef = useRef<HTMLImageElement | null>(null);
-  const navigate = useNavigate();
-  const [showSideBar, setShowSideBar] = React.useState(
+  
+  const [imageLoading, setImageLoading] = useState(true);
+  const [showSideBar, setShowSideBar] = useState(
     window.screen.width > 1000
   );
-  const [url, setUrl] = useState<string | null>("");
-
-  const [imageLoading, setImageLoading] = useState(true);
 
   const socketIds = useSelector((state: any) => state.socket.socketIds);
 
@@ -75,6 +65,7 @@ function Operator(): React.ReactElement {
       <div className="fixed w-full h-full hidden dark:block">
         <img
           src="./assets/images/bg/dark-bg.png"
+          alt="dark-bg"
           className="w-full h-full"
         ></img>
       </div>
@@ -99,9 +90,6 @@ function Operator(): React.ReactElement {
             >
               <FontAwesomeIcon icon={faCompressAlt} />
             </div>
-            <div className="font-semibold ms-2 rounded-full text-gray-700 dark:text-white">
-              {url}
-            </div>
           </div>
           <div className=" flex ">
             <div className="flex  rounded-full justify-center items-center px-3 me-3 cursor-not-allowed transition-all duration-300 font-semibold text-gray-600 dark:text-white">
@@ -120,6 +108,7 @@ function Operator(): React.ReactElement {
               <img
                 ref={imageRef}
                 id={`${socketId}_screenshot_main`}
+                alt="screenshot_main"
                 className="w-full screenshot"
                 onError={handleError}
                 onLoad={handleLoad}

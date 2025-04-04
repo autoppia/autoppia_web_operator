@@ -1,4 +1,4 @@
-import { faCircleHalfStroke, faSun } from "@fortawesome/free-solid-svg-icons";
+import { faCircleHalfStroke } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function ToggleTheme() {

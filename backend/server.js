@@ -33,9 +33,12 @@ app.post("/operator", async (req, res) => {
       break;
     case "Bittensor":
       // const minerList = await axios.get("https://api.bittensor.com/v1/miners");
-      const minerList = bittensorEndpoints;
+      // const minerList = bittensorEndpoints;
+      // for (let i = 0; i < agentCount; i++) {
+      //   endpoints.push(minerList[Math.floor(Math.random() * minerList.length)]);
+      // }
       for (let i = 0; i < agentCount; i++) {
-        endpoints.push(minerList[Math.floor(Math.random() * minerList.length)]);
+        endpoints.push(autoppiaEndpoint);
       }
       break;
     default:

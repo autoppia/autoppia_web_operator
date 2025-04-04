@@ -1,26 +1,23 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faExternalLink,
   faHome,
   faPaperPlane,
   faSortDesc,
-  faChartColumn,
-  faBrain,
-  faChartLine,
-  faMap,
 } from "@fortawesome/free-solid-svg-icons";
 
 import ToggleTheme from "../components/toggleTheme";
 import WebsiteItem from "../components/websiteItem";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { initializeSocket } from "../utils/socket";
-import { websites } from "../utils/mock/mockDB";
+import { websites, examplePrompts } from "../utils/mock/mockDB";
 import { I_WebSiteUrl } from "../utils/types";
 import { resetChat, addTask } from "../redux/chatSlice";
 import { resetSocket } from "../redux/socketSlice";
-import { BACKEND_URL } from "../config";
+
+const apiUrl = process.env.REACT_APP_API_URL;
 
 function Landing(): React.ReactElement {
   const [webURL, setWebURL] = useState("");
@@ -76,8 +73,7 @@ function Landing(): React.ReactElement {
   //Navigate to next page
   const handleSubmit = async () => {
     try {
-      console.log(`${BACKEND_URL}/operator`)
-      const res = await fetch(`${BACKEND_URL}/operator`, {
+      const res = await fetch(`${apiUrl}/operator`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -188,13 +184,16 @@ function Landing(): React.ReactElement {
             alt="main logo"
             className="h-[20px] md:h-[25px] dark:hidden block"
           />
-          <div className="flex ms-2 md:ms-0">
+          <div className="flex items-center ms-2 md:ms-0">
             <ToggleTheme />
             <div
-              className="px-3 ms-1 md:ms-3 flex dark:text-white hover:bg-white hover:text-black hover:shadow-lg hover:border-transparent rounded-full justify-center items-center cursor-pointer transition-all duration-300 text-gray-500"
+              className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 text-gray-500 dark:text-white ms-4"
               onClick={returnHome}
             >
               <FontAwesomeIcon icon={faHome} />
+            </div>
+            <div className="flex rounded-full justify-center items-center w-[40px] h-[40px] border-2 border-gray-500 cursor-pointer text-gray-500 dark:text-white ms-4">
+              <p className="text-2xl">U</p>
             </div>
           </div>
         </div>
@@ -211,7 +210,7 @@ function Landing(): React.ReactElement {
                 value={prompt}
                 onChange={handleChangePrompt}
                 onKeyDown={handleKeyDown}
-                // onFocus={handleUnfocusedWebURL}
+              // onFocus={handleUnfocusedWebURL}
               ></input>
               <div
                 className=" hover:bg-gray-100 rounded-full w-[50px] h-[50px] flex md:hidden justify-center items-center transition-all duration-200 cursor-pointer"
@@ -233,17 +232,13 @@ function Landing(): React.ReactElement {
                   value={webURL}
                   onChange={handleChangeWebURL}
                   onKeyDown={handleKeyDown}
-                  // onBlur={handleUnfocusedWebURL}
+                // onBlur={handleUnfocusedWebURL}
                 />
                 <FontAwesomeIcon
                   icon={faSortDesc}
                   className="ms-2 me-2 cursor-pointer"
                 />
-                <div
-                  className={`overflow-hidden mt-2 absolute top-full left-0 bg-gray-50 shadow-xl w-full rounded-lg ${
-                    showDropDown ? "h-auto p-5 max-[500px]:p-1 " : "h-0 p-0"
-                  }`}
-                >
+                <div className={`overflow-hidden mt-2 absolute top-full left-0 bg-gray-50 shadow-xl w-full rounded-lg ${showDropDown ? "h-auto p-5 max-[500px]:p-1 " : "h-0 p-0"}`}>
                   {filteredWebSites.map((item: I_WebSiteUrl, index: number) => (
                     <WebsiteItem
                       key={item.title + index}
@@ -332,31 +327,19 @@ function Landing(): React.ReactElement {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full xl:w-[80%] self-center mt-10 gap-8">
-            <div className="border-[1px] border-gray-400 border-dashed shadow-sm p-10 rounded-md cursor-pointer hover:-translate-y-2 hover:shadow-lg transition-all duration-200 dark:text-white">
-              <FontAwesomeIcon
-                icon={faChartColumn}
-                className="me-2"
-              ></FontAwesomeIcon>
-              Check Autoppia on Taomarketcap
-            </div>
-            <div className="border-[1px] border-gray-400 border-dashed shadow-sm p-10 rounded-md cursor-pointer hover:-translate-y-2 hover:shadow-lg transition-all duration-200 dark:text-white">
-              <FontAwesomeIcon
-                icon={faBrain}
-                className="me-2"
-              ></FontAwesomeIcon>
-              Summarize TAO Market on tao.app
-            </div>
-            <div className="border-[1px] border-gray-400 border-dashed shadow-sm p-10 rounded-md cursor-pointer hover:-translate-y-2 hover:shadow-lg transition-all duration-200 dark:text-white">
-              <FontAwesomeIcon
-                icon={faChartLine}
-                className="me-2"
-              ></FontAwesomeIcon>
-              Compare TAO Yields
-            </div>
-            <div className="border-[1px] border-gray-400 border-dashed shadow-sm p-10 rounded-md cursor-pointer hover:-translate-y-2 hover:shadow-lg transition-all duration-200 dark:text-white">
-              <FontAwesomeIcon icon={faMap} className="me-2"></FontAwesomeIcon>
-              Explore New Subnets
-            </div>
+            {examplePrompts.map((item, index) => (
+              <div
+                className="border-[1px] border-gray-400 border-dashed shadow-sm p-10 rounded-md cursor-pointer hover:-translate-y-2 hover:shadow-lg transition-all duration-200 dark:text-white"
+                key={`example_prompt_${index}`}
+                onClick={() => setPrompt(item.prompt)}
+              >
+                <FontAwesomeIcon
+                  icon={item.icon}
+                  className="me-2"
+                ></FontAwesomeIcon>
+                {item.title}
+              </div>
+            ))}
           </div>
         </div>
       </div>

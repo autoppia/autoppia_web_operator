@@ -7,19 +7,18 @@ import "./App.css";
 import Landing from "./pages/landing";
 import Operator from "./pages/operator";
 
-try {
-  const accessToken = Cookies.get('access_token');
-  if (!accessToken) {
-    const currentURL = window.location.href;
-    const url = new URL("https://app.autoppia.com/auth/sign-in")
-    url.searchParams.append("redirectURL", currentURL);
-    window.location.href = url.href;
-  }
-  const decodedToken = jwtDecode(accessToken!)
-  console.log(decodedToken)
-} catch (error) {
-  console.error(error)
-}
+// try {
+//   const accessToken = Cookies.get('access_token');
+//   if (!accessToken) {
+//     const currentURL = window.location.href;
+//     const url = new URL("https://app.autoppia.com/auth/sign-in")
+//     url.searchParams.append("redirectURL", currentURL);
+//     window.location.href = url.href;
+//   }
+//   const decodedToken = jwtDecode(accessToken!)
+// } catch (error) {
+//   console.error(error)
+// }
 
 function App() {
   return (

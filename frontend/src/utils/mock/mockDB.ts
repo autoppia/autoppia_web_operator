@@ -1,35 +1,11 @@
 import { faAws, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import {
   faGlobe,
-  faICursor,
   faMap,
-  faMousePointer,
-  faNavicon,
-  faSignIn,
+  faChartColumn,
+  faBrain,
+  faChartLine
 } from "@fortawesome/free-solid-svg-icons";
-
-export const DB = {
-  messages: [
-    {
-      role: "user",
-      content: "Hey, can you check the server status?",
-    },
-    {
-      role: "assistant",
-      thinking: "Selecting dates for weekend stay",
-      content:
-        "Sure! I just checked the server, and everything is running smoothly. No downtime or performance issues detected. Let me know if you need a more detailed report on server logs or resource usage.",
-      action: [
-        { name: "Navigating to Hipcamp for campsite", icon: faNavicon },
-        { name: 'Entering "Joshua Tree" for search', icon: faSignIn },
-        { name: "Selecting broader area, Joshua Tree", icon: faMousePointer },
-        { name: "Entering dates for Joshua Tree trip", icon: faSignIn },
-        { name: "Selecting dates for weekend stay", icon: faMousePointer },
-      ],
-      status: "success",
-    },
-  ],
-};
 
 export const websites = [
   {
@@ -53,3 +29,26 @@ export const websites = [
     icon: faGlobe,
   },
 ];
+
+export const examplePrompts = [
+  {
+    title: "Check Autoppia on Taomarketcap",
+    prompt: "Go to taomarketcap.com, find the Autoppia subnet section. Tell me the current price and summarize info from their GitHub.",
+    icon: faChartColumn,
+  },
+  {
+    title: "Summarize TAO Market on tao.app",
+    prompt: "Go to tao.app and summarize the current state of the Bittensor financial market.",
+    icon: faBrain,
+  },
+  {
+    title: "Compare TAO Yields",
+    prompt: "Go to taoyield.com and compare yields for Root 0 and Subnet 36.",
+    icon: faChartLine,
+  },
+  {
+    title: "Explore New Subnets",
+    prompt: "Find recently launched Bittensor subnets and summarize their purpose and performance.",
+    icon: faMap,
+  }
+]

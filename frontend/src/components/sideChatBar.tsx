@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import OperatorResponse from "./operatorResponse";
 import UserMsg from "./userMsg";
 import { I_SideBar } from "../utils/types";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ToggleTheme from "./toggleTheme";
 import { useNavigate } from "react-router-dom";
 import { addTask } from "../redux/chatSlice";
@@ -78,13 +78,15 @@ function SideChatBar(props: I_SideBar) {
         <div className="flex-grow">
           <img
             src="./assets/images/logos/main_dark.png"
+            alt="main_dark.png"
             className="h-[18px] dark:block hidden"
           />
           <img
             src="./assets/images/logos/main.png"
+            alt="main.png"
             className="h-[18px] dark:hidden block"
           />
-        </div>        
+        </div>
         <div
           className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 text-gray-500 dark:text-white me-2"
           onClick={handleNew}
@@ -105,7 +107,7 @@ function SideChatBar(props: I_SideBar) {
       >
         <div className="flex flex-col">
           {chats.map((message: any, index: number) => {
-            if (message.role == "assistant")
+            if (message.role === "assistant")
               return (
                 <OperatorResponse key={"OperationRES" + index} {...message} />
               );
@@ -129,6 +131,7 @@ function SideChatBar(props: I_SideBar) {
           >
             <img
               id={`${socketId}_screenshot_side`}
+              alt="screenshot_side"
               className="w-full screenshot"
               onError={handleError}
               onLoad={handleLoad}
@@ -162,8 +165,11 @@ function SideChatBar(props: I_SideBar) {
           </div>))
         }
       </div>
-      <div className="flex flex-col px-1 mb-4">
-        <div className="px-3 flex  bg-gray-200 rounded-lg relative">
+      <div className="flex items-center px-1 mb-4">
+        <div className="flex rounded-full justify-center items-center w-[40px] h-[40px] border-2 border-gray-500 cursor-pointer text-gray-500 dark:text-white ms-2">
+          <p className="text-2xl">U</p>
+        </div>
+        <div className="px-3 flex flex-grow bg-gray-200 rounded-lg relative ms-2">
           <input
             className="border-none outline-none bg-gray-200 flex-grow"
             placeholder="Type here ..."
@@ -172,9 +178,8 @@ function SideChatBar(props: I_SideBar) {
             onChange={handleChangeTask}
             onKeyDown={handleKeyDown}
           ></input>
-
           <div
-            className=" hover:bg-gray-100 rounded-full w-[40px] h-[40px] flex justify-center items-center transition-all duration-200 cursor-pointer"
+            className="hover:bg-gray-100 rounded-full w-[40px] h-[40px] flex justify-center items-center transition-all duration-200 cursor-pointer"
             onClick={handleSubmit}
           >
             <FontAwesomeIcon icon={faPaperPlane} color="gray" />

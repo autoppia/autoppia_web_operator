@@ -22,14 +22,14 @@ function OperatorResponse(props: I_Chat) {
         <div className="text-gray-500">Worked for {period} seconds</div>
       )}
       {thinking && (<div className="flex justify-between items-center w-full p-3 py-2 rounded-lg border-2 ">
-        {state == "thinking" && (<div className="animate-pulse text-gray-600 flex items-center dark:text-gray-100">
+        {state === "thinking" && (<div className="animate-pulse text-gray-600 flex items-center dark:text-gray-100">
           <FontAwesomeIcon
             icon={faCircleNotch}
             className="animate-spin me-2"
           />
           {thinking}
         </div>)}
-        {state == "success" && (<div className="text-gray-600 flex items-center dark:text-gray-100">
+        {state === "success" && (<div className="text-gray-600 flex items-center dark:text-gray-100">
           <FontAwesomeIcon
             icon={faCheck}
             color="green"
@@ -37,7 +37,7 @@ function OperatorResponse(props: I_Chat) {
           />
           {"Task completed successfully."}
         </div>)}
-        {state == "error" && (<div className="text-gray-600 flex items-center dark:text-gray-100">
+        {state === "error" && (<div className="text-gray-600 flex items-center dark:text-gray-100">
           <FontAwesomeIcon
             icon={faCircleExclamation}
             color="red"

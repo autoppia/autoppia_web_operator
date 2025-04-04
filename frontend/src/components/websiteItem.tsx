@@ -1,4 +1,3 @@
-import { faGoogleDrive } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { I_WebsiteItem } from "../utils/types";
 
