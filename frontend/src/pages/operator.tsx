@@ -108,7 +108,6 @@ function Operator(): React.ReactElement {
               <img
                 ref={imageRef}
                 id={`${socketId}_screenshot_main`}
-                alt="screenshot_main"
                 className="w-full screenshot"
                 onError={handleError}
                 onLoad={handleLoad}

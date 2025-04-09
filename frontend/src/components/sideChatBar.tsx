@@ -131,7 +131,6 @@ function SideChatBar(props: I_SideBar) {
           >
             <img
               id={`${socketId}_screenshot_side`}
-              alt="screenshot_side"
               className="w-full screenshot"
               onError={handleError}
               onLoad={handleLoad}

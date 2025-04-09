@@ -10,16 +10,16 @@ app.use(express.json());
 const autoppiaEndpoint = "https://operator.autoppia.com";
 
 const bittensorEndpoints = [
-  "http://107.189.17.202:5001",
-  "http://107.189.17.202:5002",
-  "http://107.189.17.202:5003",
-  "http://107.189.17.202:5004",
-  "http://107.189.17.202:5005",
-  "http://107.189.17.202:5006",
-  "http://107.189.17.202:5007",
-  "http://107.189.17.202:5008",
-  "http://107.189.17.202:5009",
-  "http://107.189.17.202:5010"
+  "https://validator.autoppia.com/miner_5001",
+  "https://validator.autoppia.com/miner_5002",
+  "https://validator.autoppia.com/miner_5003",
+  "https://validator.autoppia.com/miner_5004",
+  "https://validator.autoppia.com/miner_5005",
+  "https://validator.autoppia.com/miner_5006",
+  "https://validator.autoppia.com/miner_5007",
+  "https://validator.autoppia.com/miner_5008",
+  "https://validator.autoppia.com/miner_5009",
+  "https://validator.autoppia.com/miner_5010",
 ]
 
 app.post("/operator", async (req, res) => {
@@ -33,12 +33,9 @@ app.post("/operator", async (req, res) => {
       break;
     case "Bittensor":
       // const minerList = await axios.get("https://api.bittensor.com/v1/miners");
-      // const minerList = bittensorEndpoints;
-      // for (let i = 0; i < agentCount; i++) {
-      //   endpoints.push(minerList[Math.floor(Math.random() * minerList.length)]);
-      // }
+      const minerList = bittensorEndpoints;
       for (let i = 0; i < agentCount; i++) {
-        endpoints.push(autoppiaEndpoint);
+        endpoints.push(minerList[Math.floor(Math.random() * minerList.length)]);
       }
       break;
     default:
