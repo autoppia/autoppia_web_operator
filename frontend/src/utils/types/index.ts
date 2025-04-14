@@ -1,34 +1,35 @@
-export interface I_Action {
-  name: string;
-  icon: any;
-}
-
 export interface I_Chat {
   role: string;
   content?: string;
   socketId?: string;
-  period?: number;
-  actions?: I_Action[];
+  actions?: string[];
   thinking?: string;
   state?: string;
 }
 
 export interface I_SideBar {
   open: boolean;
-  onClick: () => void;
+  toggleSideBar: () => void;
 }
 
 export interface I_WebsiteItem {
   icon: any;
   title: string;
   url: string;
-  onClick?: (url: string, name: string) => void;
+  onClick?: (url: string) => void;
 }
 
 export interface I_WebSiteUrl {
   icon: any;
   title: string;
   url: string;
+}
+
+export interface I_IconButton {
+  icon: any;
+  className?: string;
+  onClick?: () => void;
+  disabled?: boolean;
 }
 
 export interface I_Task {

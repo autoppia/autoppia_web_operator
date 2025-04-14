@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
@@ -6,16 +7,15 @@ import {
   faSave,
 } from "@fortawesome/free-solid-svg-icons";
 import { faShareFromSquare } from "@fortawesome/free-regular-svg-icons";
+
 import SideChatBar from "../components/sideChatBar";
-import { useSelector } from "react-redux";
+import IconButton from "../components/iconButton";
 
 function Operator(): React.ReactElement {
   const imageRef = useRef<HTMLImageElement | null>(null);
-  
+
   const [imageLoading, setImageLoading] = useState(true);
-  const [showSideBar, setShowSideBar] = useState(
-    window.screen.width > 1000
-  );
+  const [showSideBar, setShowSideBar] = useState(window.screen.width > 1000);
 
   const socketIds = useSelector((state: any) => state.socket.socketIds);
 
@@ -32,36 +32,29 @@ function Operator(): React.ReactElement {
   const handleLoad = () => {
     setImageLoading(false);
   };
-  const sideBarHandler = () => {
+  const toggleSideBar = () => {
     setShowSideBar(!showSideBar);
   };
 
   const generateClassName = (parent: boolean) => {
-
     if (parent) {
       if (socketIds.length > 1) {
-        return "grid grid-cols-1 lg:grid-cols-2 gap-4 w-full h-full relative overflow-auto p-5"
+        return "grid grid-cols-1 xl:grid-cols-2 gap-4 w-full h-full relative overflow-auto p-5";
       } else {
-        return "flex flex-col w-full h-full relative overflow-auto p-5"
+        return "flex flex-col w-full h-full relative overflow-auto p-5";
       }
     }
-    let className = `flex flex-col relative justify-center bg-white rounded-xl w-full h-full self-center shadow-md flex-grow mt-5 overflow-auto dark:border-2 dark:border-gray-100
-          [&::-webkit-scrollbar]:w-2
-          [&::-webkit-scrollbar-track]:rounded-full
-          [&::-webkit-scrollbar-track]:bg-gray-100
-          [&::-webkit-scrollbar-thumb]:rounded-full
-          [&::-webkit-scrollbar-thumb]:bg-gray-300
-          dark:[&::-webkit-scrollbar-track]:bg-neutral-700/50
-          dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500/50`
+    let className =
+      "flex flex-col relative justify-center bg-white rounded-2xl w-full h-full self-center shadow-md flex-grow mt-5 overflow-y-scroll dark:border-2 dark:border-gray-100";
 
     if (socketIds.length > 1) {
-      return className + "  max-h-[50vh] min-h-[35vh]";
+      return className + " max-h-[50vh] min-h-[35vh]";
     } else {
-      return className
+      return className;
     }
-  }
+  };
   return (
-    <div className="dark:bg-[#050608] bg-[#f1f5f9] w-[100%] h-[100vh] flex z-0">
+    <div className="bg-gray-100 w-[100%] h-[100vh] flex z-0">
       <div className="fixed w-full h-full hidden dark:block">
         <img
           src="./assets/images/bg/dark-bg.png"
@@ -69,34 +62,33 @@ function Operator(): React.ReactElement {
           className="w-full h-full"
         ></img>
       </div>
-      <SideChatBar open={showSideBar} onClick={sideBarHandler}></SideChatBar>
+      <SideChatBar
+        open={showSideBar}
+        toggleSideBar={toggleSideBar}
+      ></SideChatBar>
       <div
-        className={`hidden md:flex flex-col px-5 py-5 h-full relative justify-between  items-center ${showSideBar ? "md:w-[55vw] xl:w-[65vw]" : "w-[100vw]"
-          }`}
+        className={`hidden md:flex flex-col px-5 py-5 h-full relative justify-between items-center ${
+          showSideBar ? "md:w-[55vw] xl:w-[65vw]" : "w-[100vw]"
+        }`}
       >
         <div className="flex justify-between w-full">
           <div className="flex items-center">
             {!showSideBar && (
-              <div
-                className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 text-gray-500 dark:text-white"
-                onClick={() => sideBarHandler()}
-              >
-                <FontAwesomeIcon icon={faBars} />
-              </div>
+              <IconButton icon={faBars} onClick={toggleSideBar} />
             )}
             <div
-              className=" ms-2 flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 text-gray-500 dark:text-white"
+              className="ms-2 flex hover:bg-gray-300 rounded-full justify-center items-center p-3 cursor-pointer transition-all duration-300 text-gray-500 dark:text-white"
               onClick={handleFullScreen}
             >
               <FontAwesomeIcon icon={faCompressAlt} />
             </div>
           </div>
-          <div className=" flex ">
-            <div className="flex  rounded-full justify-center items-center px-3 me-3 cursor-not-allowed transition-all duration-300 font-semibold text-gray-600 dark:text-white">
+          <div className="flex">
+            <div className="flex rounded-full justify-center items-center px-3 me-3 cursor-not-allowed transition-all duration-300 font-semibold text-gray-600 dark:text-white">
               <FontAwesomeIcon icon={faShareFromSquare} />
               <span className="ms-2">Share</span>
             </div>
-            <div className="flex  rounded-full justify-center items-center px-3 border-[1px] border-gray-400 cursor-not-allowed transition-all duration-300 font-semibold text-gray-600 dark:text-white">
+            <div className="flex rounded-full justify-center items-center px-3 border-[1px] border-gray-400 cursor-not-allowed transition-all duration-300 font-semibold text-gray-600 dark:text-white">
               <FontAwesomeIcon icon={faSave} />
               <span className="ms-2">Save Task</span>
             </div>
@@ -104,7 +96,14 @@ function Operator(): React.ReactElement {
         </div>
         <div className={generateClassName(true)}>
           {socketIds.map((socketId: string, index: Number) => (
-            <div className={generateClassName(false)} key={`${index}_screenshot_main`}>
+            <div
+              key={`${index}_screenshot_main`}
+              className={generateClassName(false)}
+              style={{
+                scrollbarWidth: "none",
+                msOverflowStyle: "none",
+              }}
+            >
               <img
                 ref={imageRef}
                 id={`${socketId}_screenshot_main`}
@@ -138,8 +137,8 @@ function Operator(): React.ReactElement {
                   <span className="sr-only">Loading...</span>
                 </div>
               )}
-            </div>)
-          )}
+            </div>
+          ))}
         </div>
       </div>
     </div>

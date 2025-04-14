@@ -20,10 +20,13 @@ const chatSlice = createSlice({
       state.completed = 0;
     },
     addTask: (state, action) => {
-      state.chats = [...state.chats, {
-        role: "user",
-        content: action.payload,
-      }];
+      state.chats = [
+        ...state.chats,
+        {
+          role: "user",
+          content: action.payload,
+        },
+      ];
       state.completed = 0;
     },
     addAction: (state, action) => {
@@ -33,15 +36,12 @@ const chatSlice = createSlice({
           indexes.push(index);
         }
       });
-      const lastIndex = indexes.length > 0 ? indexes[indexes.length - 1] : -1
+      const lastIndex = indexes.length > 0 ? indexes[indexes.length - 1] : -1;
       if (lastIndex >= 0 && state.chats[lastIndex].state === "thinking") {
         state.chats[lastIndex] = {
           ...state.chats[lastIndex],
           thinking: action.payload.action,
-          actions: [
-            ...state.chats[lastIndex].actions!,
-            { name: action.payload.action, icon: null },
-          ],
+          actions: [...state.chats[lastIndex].actions!, action.payload.action],
         };
       } else {
         state.chats = [
@@ -51,7 +51,7 @@ const chatSlice = createSlice({
             socketId: action.payload.socketId,
             thinking: action.payload.action,
             state: "thinking",
-            actions: [{ name: action.payload.action, icon: null }],
+            actions: [action.payload.action],
           },
         ];
       }
@@ -63,7 +63,7 @@ const chatSlice = createSlice({
           indexes.push(index);
         }
       });
-      const lastIndex = indexes.length > 0 ? indexes[indexes.length - 1] : -1
+      const lastIndex = indexes.length > 0 ? indexes[indexes.length - 1] : -1;
       if (lastIndex >= 0 && state.chats[lastIndex].state === "thinking") {
         state.chats[lastIndex] = {
           ...state.chats[lastIndex],
@@ -83,7 +83,7 @@ const chatSlice = createSlice({
         ];
         state.completed += 1;
       }
-    }
+    },
   },
 });
 

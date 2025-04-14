@@ -15,7 +15,7 @@ export const websites = [
   },
   {
     title: "Amazon Web Service",
-    url: "https://aws.amazon.com/",
+    url: "https://aws.amazon.com",
     icon: faAws,
   },
   {

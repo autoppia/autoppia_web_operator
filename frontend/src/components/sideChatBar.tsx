@@ -1,20 +1,23 @@
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
   faEdit,
+  faUser,
   faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useSelector, useDispatch } from "react-redux";
+
+import ToggleTheme from "./toggleTheme";
+import IconButton from "./iconButton";
 import OperatorResponse from "./operatorResponse";
 import UserMsg from "./userMsg";
 import { I_SideBar } from "../utils/types";
-import React, { useState } from "react";
-import ToggleTheme from "./toggleTheme";
 import { useNavigate } from "react-router-dom";
 import { addTask } from "../redux/chatSlice";
 
 function SideChatBar(props: I_SideBar) {
-  const { open, onClick } = props;
+  const { open, toggleSideBar } = props;
 
   const [imageLoading, setImageLoading] = useState(true);
   const [task, setTask] = useState("");
@@ -26,9 +29,6 @@ function SideChatBar(props: I_SideBar) {
   const sockets = useSelector((state: any) => state.socket.sockets);
   const socketIds = useSelector((state: any) => state.socket.socketIds);
   const completed = useSelector((state: any) => state.chat.completed);
-  const handleClickMenuBar = () => {
-    onClick();
-  };
 
   const handleSubmit = () => {
     sockets.forEach((socket: any) => {
@@ -36,7 +36,7 @@ function SideChatBar(props: I_SideBar) {
         task: task,
       });
     });
-    dispatch(addTask(task))
+    dispatch(addTask(task));
     setTask("");
   };
   const handleChangeTask = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,26 +56,26 @@ function SideChatBar(props: I_SideBar) {
   };
   const handleNew = () => {
     setDlgOpen(true);
-  }
+  };
   const handleYes = () => {
     navigate("/");
-  }
+  };
 
   return (
     <div
-      className={`${open
-        ? "fixed w-[100vw] h-[100vh] px-1 md:relative md:w-[45vw] xl:w-[35vw] z-10"
-        : "fixed w-[100vw] h-[100vh] md:w-0 px-1 md:px-0 md:relative z-10"
-        }  transition-all duration-300 h-full bg-white pt-1 pb-1 flex flex-col overflow-hidden dark:bg-transparent dark:shadow-sm dark:shadow-gray-100`}
+      className={`${
+        open
+          ? "fixed w-[100vw] h-[100vh] px-4 md:relative md:w-[45vw] xl:w-[35vw] z-10"
+          : "fixed w-[100vw] h-[100vh] md:w-0 px-1 md:px-0 md:relative z-10"
+      } transition-all duration-300 h-full pt-1 pb-1 flex flex-col overflow-hidden bg-[#FFFCF2] shadow-md dark:bg-transparent dark:shadow-gray-100`}
     >
-      <div className="flex items-center p-4">
-        <div
-          className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 text-gray-500 dark:text-white me-3"
-          onClick={handleClickMenuBar}
-        >
-          <FontAwesomeIcon icon={faBars} />
-        </div>
-        <div className="flex-grow">
+      <div className="flex items-center py-4">
+        <IconButton
+          icon={faBars}
+          onClick={toggleSideBar}
+          className="dark:text-white"
+        />
+        <div className="flex-grow ms-4">
           <img
             src="./assets/images/logos/main_dark.png"
             alt="main_dark.png"
@@ -87,23 +87,22 @@ function SideChatBar(props: I_SideBar) {
             className="h-[18px] dark:hidden block"
           />
         </div>
-        <div
-          className="flex hover:bg-gray-300 rounded-full justify-center items-center w-[30px] h-[30px] cursor-pointer transition-all duration-300 text-gray-500 dark:text-white me-2"
+        <IconButton
+          icon={faEdit}
           onClick={handleNew}
-        >
-          <FontAwesomeIcon icon={faEdit} />
-        </div>
+          className="dark:text-white"
+        />
         <ToggleTheme />
       </div>
       <div
-        className="w-full px-5 flex flex-col mt-2 justify-between flex-grow overflow-auto mb-5 
-  [&::-webkit-scrollbar]:w-2
-  [&::-webkit-scrollbar-track]:rounded-full
-  [&::-webkit-scrollbar-track]:bg-gray-100/20
-  [&::-webkit-scrollbar-thumb]:rounded-full
-  [&::-webkit-scrollbar-thumb]:bg-gray-300/40
-  dark:[&::-webkit-scrollbar-track]:bg-neutral-700
-  dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
+        className="w-full px-2 flex flex-col mt-2 justify-between flex-grow overflow-auto mb-5 
+                  [&::-webkit-scrollbar]:w-2
+                  [&::-webkit-scrollbar-track]:rounded-full
+                  [&::-webkit-scrollbar-track]:bg-gray-100/20
+                  [&::-webkit-scrollbar-thumb]:rounded-full
+                  [&::-webkit-scrollbar-thumb]:bg-gray-300/40
+                  dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+                  dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
       >
         <div className="flex flex-col">
           {chats.map((message: any, index: number) => {
@@ -111,13 +110,10 @@ function SideChatBar(props: I_SideBar) {
               return (
                 <OperatorResponse key={"OperationRES" + index} {...message} />
               );
-            else
-              return (
-                <UserMsg key={"UserRES" + index} {...message} />
-              );
+            else return <UserMsg key={"UserRES" + index} {...message} />;
           })}
         </div>
-        {socketIds.map((socketId: any, index: Number) => (
+        {socketIds.map((socketId: any) => (
           <div
             className="relative flex flex-col p-5 justify-center bg-white rounded-xl w-full self-center flex-grow min-h-[300px] max-h-[500px] mt-5 overflow-auto md:hidden shadow-lg border-2 border-gray-300 
                       [&::-webkit-scrollbar]:w-2
@@ -161,16 +157,20 @@ function SideChatBar(props: I_SideBar) {
                 <span className="sr-only">Loading...</span>
               </div>
             )}
-          </div>))
-        }
+          </div>
+        ))}
       </div>
       <div className="flex items-center px-1 mb-4">
-        <div className="flex rounded-full justify-center items-center w-[40px] h-[40px] border-2 border-gray-500 cursor-pointer text-gray-500 dark:text-white ms-2">
-          <p className="text-2xl">U</p>
+        <div
+          className={`flex justify-center items-center p-3 rounded-full
+                      transition-all duration-200 cursor-pointer text-gray-700 text-white
+                      bg-primary`}
+        >
+          <FontAwesomeIcon icon={faUser} />
         </div>
-        <div className="px-3 flex flex-grow bg-gray-200 rounded-lg relative ms-2">
+        <div className="ps-4 pe-1 flex flex-grow bg-white rounded-full relative ms-2 border border-gray-300">
           <input
-            className="border-none outline-none bg-gray-200 flex-grow"
+            className="border-none outline-none flex-grow"
             placeholder="Type here ..."
             value={task}
             disabled={completed < socketIds.length}
@@ -178,31 +178,38 @@ function SideChatBar(props: I_SideBar) {
             onKeyDown={handleKeyDown}
           ></input>
           <div
-            className="hover:bg-gray-100 rounded-full w-[40px] h-[40px] flex justify-center items-center transition-all duration-200 cursor-pointer"
+            className="hover:bg-gray-100 text-gray-700 rounded-full w-[35px] h-[35px] flex justify-center items-center transition-all duration-200 cursor-pointer"
             onClick={handleSubmit}
           >
-            <FontAwesomeIcon icon={faPaperPlane} color="gray" />
+            <FontAwesomeIcon icon={faPaperPlane} />
           </div>
         </div>
       </div>
-      {
-        dlgOpen &&
-        <div id="alertDialog" className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-            <h2 className="text-lg font-bold mb-4">Are you sure?</h2>
-            <p className="mb-4">Do you want to start new task?</p>
-            <div className="flex justify-end">
-              <button id="noButton" className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2" onClick={() => setDlgOpen(false)}>
+      {dlgOpen && (
+        <div
+          id="alertDialog"
+          className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50"
+        >
+          <div className="bg-white rounded-2xl shadow-lg p-6 w-[360px]">
+            <h2 className="w-full text-center text-xl font-semibold mb-2">Are you sure?</h2>
+            <p className="w-full text-center mb-6">Do you want to start new task?</p>
+            <div className="flex justify-center">
+              <button
+                className="bg-white hover:bg-gray-100 border border-primary text-gray-800 px-4 py-1 rounded-full w-24"
+                onClick={() => setDlgOpen(false)}
+              >
                 No
               </button>
-              <button id="yesButton" className="bg-red-500 text-white px-4 py-2 rounded" onClick={handleYes}>
+              <button
+                className="bg-primary hover:opacity-90 border border-primary text-white px-4 py-1 rounded-full w-24 ms-4"
+                onClick={handleYes}
+              >
                 Yes
               </button>
             </div>
           </div>
         </div>
-      }
-
+      )}
     </div>
   );
 }
