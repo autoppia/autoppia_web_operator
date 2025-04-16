@@ -67,7 +67,7 @@ function SideChatBar(props: I_SideBar) {
         open
           ? "fixed w-[100vw] h-[100vh] px-4 md:relative md:w-[45vw] xl:w-[35vw] z-10"
           : "fixed w-[100vw] h-[100vh] md:w-0 px-1 md:px-0 md:relative z-10"
-      } transition-all duration-300 h-full pt-1 pb-1 flex flex-col overflow-hidden bg-[#FFFCF2] shadow-md dark:bg-transparent dark:shadow-gray-100`}
+      } transition-all duration-300 h-full pt-1 pb-1 flex flex-col overflow-hidden bg-secondary shadow-md dark:bg-transparent dark:shadow-gray-100`}
     >
       <div className="flex items-center py-4">
         <IconButton

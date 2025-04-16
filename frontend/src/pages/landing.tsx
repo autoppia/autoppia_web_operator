@@ -92,7 +92,7 @@ function Landing(): React.ReactElement {
   };
 
   return (
-    <div className="w-[100vw] h-[100vh] flex relative overflow-auto">
+    <div className="w-[100vw] h-[100vh] flex relative overflow-auto bg-secondary">
       {openedDropdown !== null && (
         <div
           className="fixed top-0 left-0 w-full h-full bg-transparent z-10"
