@@ -39,17 +39,17 @@ function Operator(): React.ReactElement {
   const generateClassName = (parent: boolean) => {
     if (parent) {
       if (socketIds.length > 1) {
-        return "grid grid-cols-1 xl:grid-cols-2 gap-4 w-full flex-grow relative overflow-auto p-5 mt-5";
+        return "flex flex-col xl:grid xl:grid-cols-2 gap-4 w-full flex-grow relative overflow-auto p-5 mt-5";
       } else {
         return "flex w-full flex-grow relative overflow-auto p-5 mt-5";
       }
     }
     
     let className =
-      "flex items-center relative bg-white rounded-2xl w-full self-center shadow-md flex-grow overflow-y-scroll dark:border-2 dark:border-gray-100";
+      "flex flex-shrink-0 items-start relative bg-white rounded-2xl w-full self-center shadow-md flex-grow overflow-y-scroll dark:border-2 dark:border-gray-100";
 
     if (socketIds.length > 1) {
-      return className + " h-[400px] xl:h-full";
+      return className + " h-auto xl:h-full";
     } else {
       return className + " max-h-full";
     }
@@ -108,9 +108,9 @@ function Operator(): React.ReactElement {
               <img
                 ref={imageRef}
                 id={`${socketId}_screenshot_main`}
-                className="w-full screenshot"
+                className="w-full h-auto screenshot my-auto object-contain max-h-none"
                 onError={handleError}
-                onLoad={handleLoad}
+                onLoad={handleLoad}                
               />
               {!imageLoading ? (
                 <></>
