@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { I_Chat } from "../utils/types";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleNotch,
@@ -8,6 +9,9 @@ import {
   faCheck,
   faCircleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
+
+import { I_Chat } from "../utils/types";
+
 function OperatorResponse(props: I_Chat) {
   const { content, actions, thinking, state } = props;
   const [collapse, setCollapse] = useState(false);
@@ -60,9 +64,8 @@ function OperatorResponse(props: I_Chat) {
         )}
 
         <div
-          className={`flex flex-col w-full items-end px-2 pb-4 ${
-            collapse ? "block" : "hidden"
-          }`}
+          className={`flex flex-col w-full items-end px-2 pb-4 ${collapse ? "block" : "hidden"
+            }`}
         >
           {actions &&
             actions.map((action, index) => (
@@ -79,7 +82,11 @@ function OperatorResponse(props: I_Chat) {
 
       {content && (
         <div className="w-full text-gray-700 mt-2 dark:text-white">
-          {content}
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+          >
+            {content}
+          </ReactMarkdown>
         </div>
       )}
     </div>

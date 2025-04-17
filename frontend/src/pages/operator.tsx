@@ -39,18 +39,19 @@ function Operator(): React.ReactElement {
   const generateClassName = (parent: boolean) => {
     if (parent) {
       if (socketIds.length > 1) {
-        return "grid grid-cols-1 xl:grid-cols-2 gap-4 w-full h-full relative overflow-auto p-5";
+        return "grid grid-cols-1 xl:grid-cols-2 gap-4 w-full flex-grow relative overflow-auto p-5 mt-5";
       } else {
-        return "flex flex-col w-full h-full relative overflow-auto p-5";
+        return "flex w-full flex-grow relative overflow-auto p-5 mt-5";
       }
     }
+    
     let className =
-      "flex flex-col relative justify-center bg-white rounded-2xl w-full h-full self-center shadow-md flex-grow mt-5 overflow-y-scroll dark:border-2 dark:border-gray-100";
+      "relative justify-center bg-white rounded-2xl w-full self-center shadow-md flex-grow overflow-y-scroll dark:border-2 dark:border-gray-100";
 
     if (socketIds.length > 1) {
-      return className + " max-h-[50vh] min-h-[35vh]";
+      return className + " h-[400px] xl:h-full";
     } else {
-      return className;
+      return className + " max-h-full";
     }
   };
   return (
@@ -60,15 +61,15 @@ function Operator(): React.ReactElement {
           src="./assets/images/bg/dark-bg.png"
           alt="dark-bg"
           className="w-full h-full"
-        ></img>
+        />
       </div>
       <SideChatBar
         open={showSideBar}
         toggleSideBar={toggleSideBar}
       ></SideChatBar>
       <div
-        className={`hidden md:flex flex-col px-5 py-5 h-full relative justify-between items-center ${
-          showSideBar ? "md:w-[55vw] xl:w-[65vw]" : "w-[100vw]"
+        className={`hidden lg:flex flex-col px-5 py-5 h-full hidden relative items-center ${
+          showSideBar ? "lg:w-[calc(100%-500px)]" : "w-[100vw]"
         }`}
       >
         <div className="flex justify-between w-full">

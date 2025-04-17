@@ -33,7 +33,7 @@ export const websites = [
 export const examplePrompts = [
   {
     title: "Check Autoppia on Taomarketcap",
-    prompt: "Go to taomarketcap.com, find the Autoppia subnet section. Tell me the current price and summarize info from their GitHub.",
+    prompt: "Go to taomarketcap.com, find the web-agents subnet in subnet section. Tell me the current price and summarize info from their GitHub.",
     icon: faChartColumn,
   },
   {
@@ -48,7 +48,7 @@ export const examplePrompts = [
   },
   {
     title: "Explore New Subnets",
-    prompt: "Find recently launched Bittensor subnets and summarize their purpose and performance.",
+    prompt: "Go to taostats.io, find recently launched Bittensor subnets and summarize their purpose and performance.",
     icon: faMap,
   }
 ]

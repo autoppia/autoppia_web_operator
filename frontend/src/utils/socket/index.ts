@@ -21,10 +21,16 @@ export const initializeSocket = (dispatch: AppDispatch, agentEndpoint: string) =
     })
 
     socket.on('screenshot', ({ screenshot }) => {
-        const screenElement = document.getElementById(`${socket.id}_screenshot_main`) as HTMLImageElement;
-        if (screenElement) {
-            const base64Prefix = 'data:image/png;base64,';
-            screenElement.src = base64Prefix + screenshot;
+        const base64Prefix = 'data:image/png;base64,';
+
+        const mainScreen = document.getElementById(`${socket.id}_screenshot_main`) as HTMLImageElement;
+        if (mainScreen) {            
+            mainScreen.src = base64Prefix + screenshot;
+        }
+
+        const sideScreen = document.getElementById(`${socket.id}_screenshot_side`) as HTMLImageElement;
+        if (sideScreen) {
+            sideScreen.src = base64Prefix + screenshot;
         }
     });
 

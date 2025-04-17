@@ -106,17 +106,17 @@ function Landing(): React.ReactElement {
           className="w-full h-full"
         ></img>
       </div>
-      <div className="flex flex-col px-8 md:px-12 xl:px-16 flex-grow h-full relative w-[100vw]">
+      <div className="flex flex-col px-6 md:px-12 xl:px-16 flex-grow h-full relative w-[100vw]">
         <div className="relative flex justify-between items-center mt-8 mb-8">
           <img
             src="./assets/images/logos/main_dark.png"
             alt="dark logo"
-            className="h-[20px] dark:block hidden"
+            className="h-[16px] sm:h-[20px] dark:block hidden"
           />
           <img
             src="./assets/images/logos/main.png"
             alt="main logo"
-            className="h-[20px] dark:hidden block"
+            className="h-[16px] sm:h-[20px] dark:hidden block"
           />
           <div className="flex items-center ms-2 md:ms-0">
             <IconButton
@@ -127,7 +127,7 @@ function Landing(): React.ReactElement {
             <ToggleTheme />
             <div className="mx-1 sm:mx-4 w-1 h-[20px] border-l-2 border-gray-300 box-border"></div>
             <div
-              className={`flex justify-center items-center p-3 rounded-full
+              className={`flex justify-center items-center p-2 sm:p-3 rounded-full
                   transition-all duration-200 cursor-pointer text-gray-700 text-white
                   bg-primary`}
             >
@@ -136,11 +136,11 @@ function Landing(): React.ReactElement {
           </div>
         </div>
         <div className="flex flex-col justify-center items-center flex-grow">
-          <h2 className="w-full text-center mb-4 text-3xl md:text-4xl font-bold text-gray-700 dark:text-white tracking-wide">
+          <h2 className="w-full text-center mb-4 text-2xl md:text-4xl font-bold text-gray-700 dark:text-white tracking-wide">
             The First Permissionless{" "}
             <span className="text-primary">Web&nbsp;Operator</span>
           </h2>
-          <h2 className="w-full text-center mb-4 text-2xl md:text-3xl font-semibold text-gray-700 dark:text-white tracking-wide">
+          <h2 className="w-full text-center mb-4 text-xl md:text-3xl font-semibold text-gray-700 dark:text-white tracking-wide">
             Powered by&nbsp;
             <a
               href="https://bittensor.com"
@@ -153,12 +153,12 @@ function Landing(): React.ReactElement {
             What can I help you with?
           </p>
 
-          <div className="flex justify-end w-[100%] lg:w-[1000px] mb-4 me-2 mt-12">
+          <div className="flex justify-end w-[100%] xl:w-[1000px] mb-4 me-2 mt-12">
             <label className="ms-2">
               <div className="relative w-full text-sm">
                 <button
                   type="button"
-                  className="w-[175px] text-left rounded-full shadow-sm py-1 ps-3 pe-8 border border-gray-300 bg-gray-100 hover:bg-gray-300 outline-none appearance-none -webkit-appearance-none -moz-appearance-none"
+                  className="w-[170px] text-left rounded-full shadow-sm py-1 ps-3 border border-gray-300 bg-gray-100 hover:bg-gray-300 outline-none appearance-none -webkit-appearance-none -moz-appearance-none"
                   onClick={() => setOpenedDropdown("network")}
                 >
                   {network === "Autoppia"
@@ -201,7 +201,7 @@ function Landing(): React.ReactElement {
               <div className="relative w-full text-sm">
                 <button
                   type="button"
-                  className="w-full rounded-full shadow-sm py-1 ps-3 pe-8 border border-gray-300 bg-gray-100 hover:bg-gray-300 outline-none appearance-none -webkit-appearance-none -moz-appearance-none"
+                  className="w-full rounded-full shadow-sm py-1 ps-3 pe-7 border border-gray-300 bg-gray-100 hover:bg-gray-300 outline-none appearance-none -webkit-appearance-none -moz-appearance-none"
                   onClick={() => setOpenedDropdown("agentCount")}
                 >
                   {`${agentCount} x Agent`}
@@ -233,7 +233,7 @@ function Landing(): React.ReactElement {
               </div>
             </label>
           </div>
-          <div className="flex flex-col p-3 bg-white rounded-2xl w-[100%] lg:w-[1000px] self-center shadow-md border border-gray-300 group focus-within:shadow-lg focus-within:border-gray-500">
+          <div className="flex flex-col p-3 bg-white rounded-2xl w-[100%] xl:w-[1000px] self-center shadow-md border border-gray-300 group focus-within:shadow-lg focus-within:border-gray-500">
             <div className="flex items-start flex-grow">
               {" "}
               <input
@@ -284,6 +284,7 @@ function Landing(): React.ReactElement {
                   <div className="p-1">
                     {filteredWebsites.map((website) => (
                       <div
+                        key={website.url}
                         className="cursor-pointer p-2 rounded-lg flex items-center hover:bg-primary hover:text-white"
                         onClick={() => {
                           setInitialUrl(website.url);
@@ -301,7 +302,7 @@ function Landing(): React.ReactElement {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full w-[100%] lg:w-[1000px] self-center mt-6 mb-10 gap-2 md:gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full w-[100%] xl:w-[1000px] self-center mt-6 mb-10 gap-2 md:gap-4">
             {examplePrompts.map((item, index) => (
               <div
                 className="border border-gray-400 border-dashed shadow-sm px-4 py-4 rounded-2xl cursor-pointer 

@@ -65,8 +65,8 @@ function SideChatBar(props: I_SideBar) {
     <div
       className={`${
         open
-          ? "fixed w-[100vw] h-[100vh] px-4 md:relative md:w-[45vw] xl:w-[35vw] z-10"
-          : "fixed w-[100vw] h-[100vh] md:w-0 px-1 md:px-0 md:relative z-10"
+          ? "fixed w-[100vw] h-[100vh] px-2 sm:px-4 md:px-8 md:relative lg:w-[500px] z-10"
+          : "fixed w-[100vw] h-[100vh] px-2 sm:px-4 md:px-8 lg:px-0 md:relative lg:w-0 z-10"
       } transition-all duration-300 h-full pt-1 pb-1 flex flex-col overflow-hidden bg-secondary shadow-md dark:bg-transparent dark:shadow-gray-100`}
     >
       <div className="flex items-center py-4">
@@ -115,15 +115,12 @@ function SideChatBar(props: I_SideBar) {
         </div>
         {socketIds.map((socketId: any) => (
           <div
-            className="relative flex flex-col p-5 justify-center bg-white rounded-xl w-full self-center flex-grow min-h-[300px] max-h-[500px] mt-5 overflow-auto md:hidden shadow-lg border-2 border-gray-300 
-                      [&::-webkit-scrollbar]:w-2
-                      [&::-webkit-scrollbar-track]:rounded-full
-                      [&::-webkit-scrollbar-track]:bg-gray-100
-                      [&::-webkit-scrollbar-thumb]:rounded-full
-                      [&::-webkit-scrollbar-thumb]:bg-gray-300
-                      dark:[&::-webkit-scrollbar-track]:bg-neutral-700
-                      dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
+            className="relative flex flex-col p-5 justify-center bg-white rounded-xl w-full self-center flex-grow min-h-[300px] max-h-[600px] mt-5 overflow-auto lg:hidden shadow-lg border-2 border-gray-300"
             key={`${socketId}_screenshot_side`}
+            style={{
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
           >
             <img
               id={`${socketId}_screenshot_side`}
