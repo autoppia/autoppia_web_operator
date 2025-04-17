@@ -46,7 +46,7 @@ function Operator(): React.ReactElement {
     }
     
     let className =
-      "relative justify-center bg-white rounded-2xl w-full self-center shadow-md flex-grow overflow-y-scroll dark:border-2 dark:border-gray-100";
+      "flex items-center relative bg-white rounded-2xl w-full self-center shadow-md flex-grow overflow-y-scroll dark:border-2 dark:border-gray-100";
 
     if (socketIds.length > 1) {
       return className + " h-[400px] xl:h-full";

@@ -95,7 +95,7 @@ function SideChatBar(props: I_SideBar) {
         <ToggleTheme />
       </div>
       <div
-        className="w-full px-2 flex flex-col mt-2 justify-between flex-grow overflow-auto mb-5 
+        className="w-full px-2 flex flex-col mt-2 flex-grow overflow-auto mb-5 
                   [&::-webkit-scrollbar]:w-2
                   [&::-webkit-scrollbar-track]:rounded-full
                   [&::-webkit-scrollbar-track]:bg-gray-100/20
@@ -104,7 +104,7 @@ function SideChatBar(props: I_SideBar) {
                   dark:[&::-webkit-scrollbar-track]:bg-neutral-700
                   dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
       >
-        <div className="flex flex-col">
+        <div className="flex flex-col flex-grow">
           {chats.map((message: any, index: number) => {
             if (message.role === "assistant")
               return (
@@ -115,7 +115,7 @@ function SideChatBar(props: I_SideBar) {
         </div>
         {socketIds.map((socketId: any) => (
           <div
-            className="relative flex flex-col p-5 justify-center bg-white rounded-xl w-full self-center flex-grow min-h-[300px] max-h-[600px] mt-5 overflow-auto lg:hidden shadow-lg border-2 border-gray-300"
+            className="flex flex-col relative bg-white rounded-xl w-full self-center flex-shrink-0 h-auto mt-2 overflow-auto lg:hidden shadow-lg border-2 border-gray-300"
             key={`${socketId}_screenshot_side`}
             style={{
               scrollbarWidth: "none",
@@ -124,9 +124,10 @@ function SideChatBar(props: I_SideBar) {
           >
             <img
               id={`${socketId}_screenshot_side`}
-              className="w-full screenshot"
+              className="w-full h-auto screenshot"
               onError={handleError}
               onLoad={handleLoad}
+              style={{ objectFit: "cover", objectPosition: "top" }}
             />
             {!imageLoading ? (
               <></>
