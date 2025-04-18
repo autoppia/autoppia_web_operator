@@ -129,7 +129,7 @@ function Landing(): React.ReactElement {
             <div
               className={`flex justify-center items-center p-2 sm:p-3 rounded-full
                   transition-all duration-200 cursor-pointer text-gray-700 text-white
-                  bg-primary`}
+                  bg-gradient-primary`}
             >
               <FontAwesomeIcon icon={faUser} />
             </div>
@@ -138,7 +138,7 @@ function Landing(): React.ReactElement {
         <div className="flex flex-col justify-center items-center flex-grow">
           <h2 className="w-full text-center mb-4 text-2xl md:text-4xl font-bold text-gray-700 dark:text-white tracking-wide">
             The First Permissionless{" "}
-            <span className="text-primary">Web&nbsp;Operator</span>
+            <span className="bg-gradient-primary bg-clip-text text-transparent">Web&nbsp;Operator</span>
           </h2>
           <h2 className="w-full text-center mb-4 text-xl md:text-3xl font-semibold text-gray-700 dark:text-white tracking-wide">
             Powered by&nbsp;
@@ -155,10 +155,10 @@ function Landing(): React.ReactElement {
 
           <div className="flex justify-end w-[100%] xl:w-[1000px] mb-4 me-2 mt-12">
             <label className="ms-2">
-              <div className="relative w-full text-sm">
+              <div className="relative w-full text-sm font-medium">
                 <button
                   type="button"
-                  className="w-[170px] text-left rounded-full shadow-sm py-1 ps-3 border border-gray-300 bg-gray-100 hover:bg-gray-300 outline-none appearance-none -webkit-appearance-none -moz-appearance-none"
+                  className="w-[170px] text-left rounded-full shadow-sm py-1 ps-3 text-white bg-gradient-primary hover:bg-gray-300 outline-none appearance-none -webkit-appearance-none -moz-appearance-none"
                   onClick={() => setOpenedDropdown("network")}
                 >
                   {network === "Autoppia"
@@ -176,7 +176,7 @@ function Landing(): React.ReactElement {
                 >
                   <div className="p-1">
                     <button
-                      className="block p-2 text-sm rounded-lg text-gray-700 hover:bg-primary hover:text-white w-full text-left"
+                      className="block p-2 text-sm rounded-lg text-gray-700 hover:bg-gradient-primary hover:text-white w-full text-left"
                       onClick={() => {
                         setNetwork("Autoppia");
                         setOpenedDropdown(null);
@@ -185,7 +185,7 @@ function Landing(): React.ReactElement {
                       Autoppia Server
                     </button>
                     <button
-                      className="block p-2 text-sm rounded-lg text-gray-700 hover:bg-primary hover:text-white w-full text-left"
+                      className="block p-2 text-sm rounded-lg text-gray-700 hover:bg-gradient-primary hover:text-white w-full text-left"
                       onClick={() => {
                         setNetwork("Bittensor");
                         setOpenedDropdown(null);
@@ -198,10 +198,10 @@ function Landing(): React.ReactElement {
               </div>
             </label>
             <label className="ms-2">
-              <div className="relative w-full text-sm">
+              <div className="relative w-full text-sm font-medium">
                 <button
                   type="button"
-                  className="w-full rounded-full shadow-sm py-1 ps-3 pe-7 border border-gray-300 bg-gray-100 hover:bg-gray-300 outline-none appearance-none -webkit-appearance-none -moz-appearance-none"
+                  className="w-[105px] text-left rounded-full shadow-sm py-1 ps-3 pe-7 text-white bg-gradient-primary hover:bg-gray-300 outline-none appearance-none -webkit-appearance-none -moz-appearance-none"
                   onClick={() => setOpenedDropdown("agentCount")}
                 >
                   {`${agentCount} x Agent`}
@@ -219,7 +219,7 @@ function Landing(): React.ReactElement {
                     {[1, 2, 4].map((option) => (
                       <button
                         key={option}
-                        className="block p-2 text-sm rounded-lg text-gray-700 hover:bg-primary hover:text-white w-full text-left"
+                        className="block p-2 text-sm rounded-lg text-gray-700 hover:bg-gradient-primary hover:text-white w-full text-left"
                         onClick={() => {
                           setAgentCount(option);
                           setOpenedDropdown(null);
@@ -285,7 +285,7 @@ function Landing(): React.ReactElement {
                     {filteredWebsites.map((website) => (
                       <div
                         key={website.url}
-                        className="cursor-pointer p-2 rounded-lg flex items-center hover:bg-primary hover:text-white"
+                        className="cursor-pointer p-2 rounded-lg flex items-center hover:bg-gradient-primary hover:text-white"
                         onClick={() => {
                           setInitialUrl(website.url);
                           setFilteredWebsites([]);
@@ -314,7 +314,7 @@ function Landing(): React.ReactElement {
                   setInitialUrl("");
                 }}
               >
-                <div className="flex items-center justify-center bg-primary p-3 rounded-full me-1">
+                <div className="flex items-center justify-center bg-gradient-primary p-3 rounded-full me-1">
                   <FontAwesomeIcon
                     icon={item.icon}
                     className="text-white"

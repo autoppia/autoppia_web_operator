@@ -162,7 +162,7 @@ function SideChatBar(props: I_SideBar) {
         <div
           className={`flex justify-center items-center p-3 rounded-full
                       transition-all duration-200 cursor-pointer text-gray-700 text-white
-                      bg-primary`}
+                      bg-gradient-primary`}
         >
           <FontAwesomeIcon icon={faUser} />
         </div>
