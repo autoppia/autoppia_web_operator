@@ -58,8 +58,8 @@ function Operator(): React.ReactElement {
     <div className="bg-gray-100 w-[100%] h-[100vh] flex z-0">
       <div className="fixed w-full h-full hidden dark:block">
         <img
-          src="./assets/images/bg/dark-bg.png"
-          alt="dark-bg"
+          src="./assets/images/bg/dark-bg.webp"
+          alt=""
           className="w-full h-full"
         />
       </div>
@@ -107,6 +107,7 @@ function Operator(): React.ReactElement {
             >
               <img
                 ref={imageRef}
+                alt=""
                 id={`${socketId}_screenshot_main`}
                 className="w-full h-auto screenshot my-auto object-contain max-h-none"
                 onError={handleError}

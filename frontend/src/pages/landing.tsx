@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Slider from "react-slick";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,7 +13,7 @@ import {
 
 import ToggleTheme from "../components/toggleTheme";
 import { initializeSocket } from "../utils/socket";
-import { websites, examplePrompts } from "../utils/mock/mockDB";
+import { websites, bittensorPrompts, generalPrompts } from "../utils/mock/mockDB";
 import { resetChat, addTask } from "../redux/chatSlice";
 import { resetSocket } from "../redux/socketSlice";
 import IconButton from "../components/iconButton";
@@ -29,6 +30,16 @@ function Landing(): React.ReactElement {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const settings = {
+    infinite: true,
+    arrows: false,
+    speed: 500,
+    autoplay: true,            
+    autoplaySpeed: 5000,   
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
 
   const returnHome = () => {
     window.location.href = "https://autoppia.com/";
@@ -101,21 +112,21 @@ function Landing(): React.ReactElement {
       )}
       <div className="fixed w-full h-full hidden dark:block">
         <img
-          src="./assets/images/bg/dark-bg.png"
-          alt="dark background"
+          src="./assets/images/bg/dark-bg.webp"
+          alt=""
           className="w-full h-full"
         ></img>
       </div>
       <div className="flex flex-col px-6 md:px-12 xl:px-16 flex-grow h-full relative w-[100vw]">
         <div className="relative flex justify-between items-center mt-8 mb-8">
           <img
-            src="./assets/images/logos/main_dark.png"
-            alt="dark logo"
+            src="./assets/images/logos/main_dark.webp"
+            alt=""
             className="h-[16px] sm:h-[20px] dark:block hidden"
           />
           <img
-            src="./assets/images/logos/main.png"
-            alt="main logo"
+            src="./assets/images/logos/main.webp"
+            alt=""
             className="h-[16px] sm:h-[20px] dark:hidden block"
           />
           <div className="flex items-center ms-2 md:ms-0">
@@ -302,27 +313,52 @@ function Landing(): React.ReactElement {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full w-[100%] xl:w-[1000px] self-center mt-6 mb-10 gap-2 md:gap-4">
-            {examplePrompts.map((item, index) => (
-              <div
-                className="border border-gray-400 border-dashed shadow-sm px-4 py-4 rounded-2xl cursor-pointer 
-                hover:-translate-y-1 hover:shadow-lg transition-all duration-200 dark:text-white flex items-center 
-                justify-start gap-2"
-                key={`example_prompt_${index}`}
-                onClick={() => {
-                  setPrompt(item.prompt);
-                  setInitialUrl("");
-                }}
-              >
-                <div className="flex items-center justify-center bg-gradient-primary p-3 rounded-full me-1">
-                  <FontAwesomeIcon
-                    icon={item.icon}
-                    className="text-white"
-                  ></FontAwesomeIcon>
+          <div className="w-full xl:w-[1000px] mx-auto my-4">
+            <Slider {...settings}>
+
+              <div className="py-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {bittensorPrompts.map((item, index) => (
+                    <div
+                      className="border border-gray-400 border-dashed shadow-sm px-4 py-4 rounded-2xl cursor-pointer   
+                           hover:-translate-y-1 hover:shadow-lg transition-transform duration-200 dark:text-white flex items-center gap-2"
+                      key={`group-one-prompt-${index}`}
+                      onClick={() => {
+                        setPrompt(item.prompt);
+                        setInitialUrl("");
+                      }}
+                    >
+                      <div className="flex items-center justify-center bg-gradient-primary p-3 rounded-full">
+                        <FontAwesomeIcon icon={item.icon} className="text-white" />
+                      </div>
+                      <div>{item.title}</div>
+                    </div>
+                  ))}
                 </div>
-                <div>{item.title}</div>
               </div>
-            ))}
+
+              <div className="py-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {generalPrompts.map((item, index) => (
+                    <div
+                      className="border border-gray-400 border-dashed shadow-sm px-4 py-4 rounded-2xl cursor-pointer   
+                           hover:-translate-y-1 hover:shadow-lg transition-transform duration-200 dark:text-white flex items-center gap-2"
+                      key={`group-two-prompt-${index}`}
+                      onClick={() => {
+                        setPrompt(item.prompt);
+                        setInitialUrl("");
+                      }}
+                    >
+                      <div className="flex items-center justify-center bg-gradient-primary p-3 rounded-full">
+                        <FontAwesomeIcon icon={item.icon} className="text-white" />
+                      </div>
+                      <div>{item.title}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </Slider>
           </div>
         </div>
       </div>

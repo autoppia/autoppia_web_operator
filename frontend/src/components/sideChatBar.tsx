@@ -77,13 +77,13 @@ function SideChatBar(props: I_SideBar) {
         />
         <div className="flex-grow ms-4">
           <img
-            src="./assets/images/logos/main_dark.png"
-            alt="main_dark.png"
+            src="./assets/images/logos/main_dark.webp"
+            alt=""
             className="h-[18px] dark:block hidden"
           />
           <img
-            src="./assets/images/logos/main.png"
-            alt="main.png"
+            src="./assets/images/logos/main.webp"
+            alt=""
             className="h-[18px] dark:hidden block"
           />
         </div>
@@ -124,6 +124,7 @@ function SideChatBar(props: I_SideBar) {
           >
             <img
               id={`${socketId}_screenshot_side`}
+              alt=""
               className="w-full h-auto screenshot"
               onError={handleError}
               onLoad={handleLoad}
