@@ -75,7 +75,7 @@ function Operator(): React.ReactElement {
         <div className="flex justify-between w-full">
           <div className="flex items-center">
             {!showSideBar && (
-              <IconButton icon={faBars} onClick={toggleSideBar} />
+              <IconButton icon={faBars} onClick={toggleSideBar} className="dark:text-white"/>
             )}
             <div
               className="ms-2 flex hover:bg-gray-300 rounded-full justify-center items-center p-3 cursor-pointer transition-all duration-300 text-gray-500 dark:text-white"
