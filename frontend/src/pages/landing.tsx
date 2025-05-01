@@ -147,11 +147,11 @@ function Landing(): React.ReactElement {
           </div>
         </div>
         <div className="flex flex-col justify-center items-center flex-grow">
-          <h2 className="w-full text-center mb-4 text-2xl md:text-4xl font-bold text-gray-700 dark:text-white tracking-wide">
+          <h2 className="w-full text-center mb-4 text-3xl md:text-[2.5rem] leading-normal font-bold text-gray-700 dark:text-white tracking-wide">
             The First Permissionless{" "}
             <span className="bg-gradient-primary bg-clip-text text-transparent">Web&nbsp;Operator</span>
           </h2>
-          <h2 className="w-full text-center mb-4 text-xl md:text-3xl font-semibold text-gray-700 dark:text-white tracking-wide">
+          <h2 className="w-full text-center mb-4 text-2xl md:text-[2rem] font-semibold text-gray-700 dark:text-white tracking-wide">
             Powered by&nbsp;
             <a
               href="https://bittensor.com"
@@ -160,7 +160,7 @@ function Landing(): React.ReactElement {
               Bittensor
             </a>
           </h2>
-          <p className="w-full text-center mb-8 text-md md:text-lg font-semibold text-gray-600 dark:text-gray-300">
+          <p className="w-full text-center mb-8 text-lg md:text-xl font-semibold text-gray-600 dark:text-gray-300">
             What can I help you with?
           </p>
 
