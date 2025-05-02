@@ -200,7 +200,7 @@ function SideChatBar(props: I_SideBar) {
                 No
               </button>
               <button
-                className="bg-gradient-primary hover:opacity-90 border border-primary text-white px-4 py-1 rounded-full w-24 ms-4"
+                className="bg-gradient-primary hover:opacity-90 text-white px-4 py-1 rounded-full w-24 ms-4"
                 onClick={handleYes}
               >
                 Yes

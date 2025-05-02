@@ -147,7 +147,7 @@ function Landing(): React.ReactElement {
           </div>
         </div>
         <div className="flex flex-col justify-center items-center flex-grow">
-          <h2 className="w-full text-center mb-4 text-3xl md:text-[2.5rem] leading-snug font-bold text-gray-700 dark:text-white tracking-wide">
+          <h2 className="w-full text-center mb-4 text-3xl md:text-[2.5rem] leading-tight font-bold text-gray-700 dark:text-white tracking-wide">
             The First Permissionless{" "}
             <span className="bg-gradient-primary bg-clip-text text-transparent">Web&nbsp;Operator</span>
           </h2>
