@@ -194,13 +194,13 @@ function SideChatBar(props: I_SideBar) {
             <p className="w-full text-center mb-6">Do you want to start new task?</p>
             <div className="flex justify-center">
               <button
-                className="bg-white hover:bg-gray-100 border border-primary text-gray-800 px-4 py-1 rounded-full w-24"
+                className="bg-white hover:bg-gray-100 border border-[#FF7E5F] text-gray-800 px-4 py-1 rounded-full w-24"
                 onClick={() => setDlgOpen(false)}
               >
                 No
               </button>
               <button
-                className="bg-primary hover:opacity-90 border border-primary text-white px-4 py-1 rounded-full w-24 ms-4"
+                className="bg-gradient-primary hover:opacity-90 border border-primary text-white px-4 py-1 rounded-full w-24 ms-4"
                 onClick={handleYes}
               >
                 Yes
