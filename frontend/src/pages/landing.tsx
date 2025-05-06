@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Slider from "react-slick";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -27,6 +27,8 @@ function Landing(): React.ReactElement {
   const [openedDropdown, setOpenedDropdown] = useState<string | null>(null);
   const [initialUrl, setInitialUrl] = useState("");
   const [filteredWebsites, setFilteredWebsites] = useState(websites);
+  const [slideIndex, setSlideIndex] = useState<number>(0);
+  let sliderRef = useRef<Slider | null>(null);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -35,10 +37,14 @@ function Landing(): React.ReactElement {
     infinite: true,
     arrows: false,
     speed: 500,
-    autoplay: true,            
-    autoplaySpeed: 5000,   
+    autoplay: true,
+    autoplaySpeed: 5000,
     slidesToShow: 1,
     slidesToScroll: 1,
+    beforeChange: (current: number, next: number) => {
+      setSlideIndex(next)
+      console.log(slideIndex)
+    }
   };
 
   const returnHome = () => {
@@ -147,17 +153,17 @@ function Landing(): React.ReactElement {
           </div>
         </div>
         <div className="flex flex-col justify-center items-center flex-grow">
-          <h2 className="w-full text-center mb-4 text-3xl md:text-[2.5rem] leading-tight font-bold text-gray-700 dark:text-white tracking-wide">
-            The First Permissionless{" "}
+          <h2 className="w-full text-center mb-4 text-3xl md:text-4xl leading-tight font-bold text-gray-700 dark:text-white tracking-wide">
+            The First Permissionless and Incentivized{" "}
             <span className="bg-gradient-primary bg-clip-text text-transparent">Web&nbsp;Operator</span>
           </h2>
           <h2 className="w-full text-center mb-4 text-2xl md:text-[2rem] font-semibold text-gray-700 dark:text-white tracking-wide">
             Powered by&nbsp;
             <a
               href="https://bittensor.com"
-              className="font-extrabold underline decoration-3 decoration-gray-700 dark:decoration-white"
+              className="font-bold text-gradient-secondary border-b-2 border-gray-700 dark:border-white"
             >
-              Bittensor
+              <span className="bg-gradient-secondary bg-clip-text text-transparent">Bittensor</span>
             </a>
           </h2>
           <p className="w-full text-center mb-8 text-lg md:text-xl font-semibold text-gray-600 dark:text-gray-300">
@@ -169,7 +175,7 @@ function Landing(): React.ReactElement {
               <div className="relative w-full text-sm font-medium">
                 <button
                   type="button"
-                  className="w-[170px] text-left rounded-full shadow-sm py-1 ps-3 text-white bg-gradient-primary hover:bg-gray-300 outline-none appearance-none -webkit-appearance-none -moz-appearance-none"
+                  className="w-[170px] text-left rounded-full shadow-sm py-1 ps-3 text-white bg-gradient-primary outline-none appearance-none -webkit-appearance-none -moz-appearance-none"
                   onClick={() => setOpenedDropdown("network")}
                 >
                   {network === "Autoppia"
@@ -212,7 +218,7 @@ function Landing(): React.ReactElement {
               <div className="relative w-full text-sm font-medium">
                 <button
                   type="button"
-                  className="w-[105px] text-left rounded-full shadow-sm py-1 ps-3 pe-7 text-white bg-gradient-primary hover:bg-gray-300 outline-none appearance-none -webkit-appearance-none -moz-appearance-none"
+                  className="w-[105px] text-left rounded-full shadow-sm py-1 ps-3 pe-7 text-white bg-gradient-primary outline-none appearance-none -webkit-appearance-none -moz-appearance-none"
                   onClick={() => setOpenedDropdown("agentCount")}
                 >
                   {`${agentCount} x Agent`}
@@ -314,7 +320,12 @@ function Landing(): React.ReactElement {
           </div>
 
           <div className="w-full xl:w-[1000px] mx-auto my-4">
-            <Slider {...settings}>
+            <Slider
+              ref={slider => {
+                sliderRef.current = slider;
+              }}
+              {...settings}
+            >
 
               <div className="py-2">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -359,6 +370,24 @@ function Landing(): React.ReactElement {
               </div>
 
             </Slider>
+            <div className="flex justify-center mt-1 mb-1 w-full">
+              <div className="flex justify-around w-20">
+                <div
+                  className={
+                    "w-8 h-1 rounded-full hover:bg-gray-600 dark:hover:bg-gray-400 " +
+                    (slideIndex === 0 ? "bg-gray-700 dark:bg-white" : "bg-gray-400 dark:bg-gray-600")
+                  }
+                  onClick={() => sliderRef.current?.slickGoTo(0)}
+                />
+                <div
+                  className={
+                    "w-8 h-1 rounded-full hover:bg-gray-600 dark:hover:bg-gray-400 " +
+                    (slideIndex === 1 ? "bg-gray-700 dark:bg-white" : "bg-gray-400 dark:bg-gray-600")
+                  }
+                  onClick={() => sliderRef.current?.slickGoTo(1)}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
