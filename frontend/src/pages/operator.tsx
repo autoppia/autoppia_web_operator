@@ -20,7 +20,6 @@ function Operator(): React.ReactElement {
   const socketIds = useSelector((state: any) => state.socket.socketIds);
 
   const handleFullScreen = () => {
-    console.log(imageRef.current);
     if (imageRef.current) {
       imageRef.current.requestFullscreen?.();
     }

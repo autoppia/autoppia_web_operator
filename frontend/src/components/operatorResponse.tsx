@@ -7,13 +7,14 @@ import {
   faChevronDown,
   faChevronUp,
   faCheck,
-  faCircleExclamation,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
+import { faCircleCheck, faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 
 import { I_Chat } from "../utils/types";
 
 function OperatorResponse(props: I_Chat) {
-  const { content, actions, thinking, state } = props;
+  const { content, actions, actionResults, thinking, state } = props;
   const [collapse, setCollapse] = useState(false);
 
   const handleCollapse = () => {
@@ -29,7 +30,7 @@ function OperatorResponse(props: I_Chat) {
               <div className="animate-pulse text-gray-600 flex items-center dark:text-gray-100">
                 <FontAwesomeIcon
                   icon={faCircleNotch}
-                  className="animate-spin me-2"
+                  className="animate-spin me-2 text-xl"
                 />
                 {thinking}
               </div>
@@ -37,9 +38,9 @@ function OperatorResponse(props: I_Chat) {
             {state === "success" && (
               <div className="text-gray-600 flex items-center dark:text-gray-100">
                 <FontAwesomeIcon
-                  icon={faCheck}
+                  icon={faCircleCheck}
                   color="green"
-                  className="me-2"
+                  className="me-2 text-xl"
                 />
                 {"Task completed successfully."}
               </div>
@@ -47,9 +48,9 @@ function OperatorResponse(props: I_Chat) {
             {state === "error" && (
               <div className="text-gray-600 flex items-center dark:text-gray-100">
                 <FontAwesomeIcon
-                  icon={faCircleExclamation}
+                  icon={faCircleXmark}
                   color="red"
-                  className="me-2"
+                  className="me-2 text-xl"
                 />
                 {"Task failed."}
               </div>
@@ -73,7 +74,26 @@ function OperatorResponse(props: I_Chat) {
                 key={action + index}
                 className="w-full text-gray-700 rounded-md shadow-sm p-1 text-sm cursor-pointer transition-all duration-200 dark:text-gray-100"
               >
-                <span className="mx-2">&bull;</span>
+                {actionResults && actionResults[index] === true && (
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    color="green"
+                    className="me-2"
+                  />
+                )}
+                {actionResults && actionResults[index] === false && (
+                  <FontAwesomeIcon
+                    icon={faXmark}
+                    color="red"
+                    className="me-2"
+                  />
+                )}
+                {(actionResults === undefined || (actionResults && actionResults[index] === undefined)) && (
+                  <FontAwesomeIcon
+                    icon={faCircleNotch}
+                    className="animate-spin me-2"
+                  />
+                )}
                 <span>{action}</span>
               </div>
             ))}

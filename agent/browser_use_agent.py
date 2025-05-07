@@ -27,28 +27,35 @@ class BrowserUseAgent(BaseAgent):
         self.browser = Browser(
             config=BrowserConfig(
                 headless=True,
+                disable_security=False,
+                keep_alive=True,
+                new_context_config=BrowserContextConfig(
+                    keep_alive=True,
+                    disable_security=False,
+                ),
             )
         )
         self.browser_context = BrowserContext(
             browser=self.browser,
             config=BrowserContextConfig(
                 highlight_elements=False,
+                keep_alive=True,
+                disable_security=False,
             )
         )
         self.agent_state = AgentState()
 
         if self.initial_url:
-            initial_actions = [{'open_tab': {'url': self.initial_url}}]
+            task = F"Go to {self.initial_url}, {self.task}"
         else:
-            initial_actions = []
+            task = self.task
 
         self.agent = Agent(
-            task=self.task,
+            task=task,
             llm=ChatOpenAI(model='gpt-4o'),
             browser=self.browser,
             browser_context=self.browser_context,
-            injected_agent_state=self.agent_state,
-            initial_actions=initial_actions,
+            injected_agent_state=self.agent_state
         )
 
     async def take_step(self) -> Tuple[bool, bool]:
@@ -74,12 +81,16 @@ class BrowserUseAgent(BaseAgent):
         if self.agent is not None:
             self.agent.add_new_task(new_task)
 
-    def get_next_goal(self) -> str:
+    def get_model_thought(self) -> dict:
         model_thoughts = self.agent_state.history.model_thoughts()
         next_goal = model_thoughts[-1].next_goal
-        return next_goal
+        previous_success = False if 'Failed' in model_thoughts[-1].evaluation_previous_goal else True
+        return {
+            'next_goal': next_goal,
+            'previous_success': previous_success
+        }
     
-    def get_result(self) -> str:
+    def get_result(self) -> dict:
         final_result = self.agent_state.history.final_result()
         is_successful = self.agent_state.history.is_successful()
         return {

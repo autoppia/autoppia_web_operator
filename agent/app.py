@@ -47,7 +47,7 @@ class AutomataOperator:
 
             agent = AGENT_CLASS(task, url)
             await self.sio.emit('socket-id', {'sid': sid}, to=sid)
-            await self.sio.emit('action', {'action': 'Initializing browser...'}, to=sid)   
+            await self.sio.emit('action', {'action': 'Initialize browser'}, to=sid)   
             await agent.init_agent()
 
             self.sessions[sid] = {
@@ -62,7 +62,7 @@ class AutomataOperator:
 
         @self.sio.on('continue-task')
         async def continue_task(sid, data):
-            print(f'Continuing task received from {sid}: {data}')
+            logger.info(f'Continuing task received from {sid}: {data}')
 
             task = data.get('task')
             if not task:
@@ -85,15 +85,17 @@ class AutomataOperator:
         async def disconnect(sid):
             logger.info(f'Client disconnected: {sid}')
 
-    async def _perform_task(self, sid, max_steps=100):
+    async def _perform_task(self, sid, max_steps=25):
         self.sessions[sid]['state'] = 'busy'
         agent = self.sessions[sid]['agent']
 
         for _ in range(max_steps):
             done, valid = await agent.take_step()
-
-            next_goal = agent.get_next_goal()
-            await self.sio.emit('action', {'action': next_goal}, to=sid)            
+            
+            model_thought = agent.get_model_thought()
+            next_goal = model_thought['next_goal']
+            previous_success = model_thought['previous_success']
+            await self.sio.emit('action', {'action': next_goal, 'previous_success': previous_success}, to=sid)            
 
             if done and valid:
                 break

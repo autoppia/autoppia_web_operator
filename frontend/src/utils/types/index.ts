@@ -3,6 +3,7 @@ export interface I_Chat {
   content?: string;
   socketId?: string;
   actions?: string[];
+  actionResults?: boolean[];
   thinking?: string;
   state?: string;
 }

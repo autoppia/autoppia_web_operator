@@ -28,9 +28,9 @@ class BaseAgent(ABC):
         pass
 
     @abstractmethod
-    def get_next_goal(self) -> str:
+    def get_model_thought(self) -> dict:
         pass
     
     @abstractmethod
-    def get_result(self) -> str:
+    def get_result(self) -> dict:
         pass

@@ -22,7 +22,6 @@ const apiUrl = process.env.REACT_APP_API_URL;
 
 function Landing(): React.ReactElement {
   const [prompt, setPrompt] = useState("");
-  const [network, setNetwork] = useState("Autoppia");
   const [agentCount, setAgentCount] = useState(1);
   const [openedDropdown, setOpenedDropdown] = useState<string | null>(null);
   const [initialUrl, setInitialUrl] = useState("");
@@ -43,7 +42,6 @@ function Landing(): React.ReactElement {
     slidesToScroll: 1,
     beforeChange: (current: number, next: number) => {
       setSlideIndex(next)
-      console.log(slideIndex)
     }
   };
 
@@ -82,7 +80,6 @@ function Landing(): React.ReactElement {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          targetAgent: network,
           agentCount: agentCount,
         }),
       });
@@ -178,9 +175,7 @@ function Landing(): React.ReactElement {
                   className="w-[170px] text-left rounded-full shadow-sm py-1 ps-3 text-white bg-gradient-primary outline-none appearance-none -webkit-appearance-none -moz-appearance-none"
                   onClick={() => setOpenedDropdown("network")}
                 >
-                  {network === "Autoppia"
-                    ? "Autoppia Server"
-                    : "Bittensor s36 Miners"}
+                  Autoppia Validator
                   <span className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
                     <FontAwesomeIcon icon={faAngleDown} />
                   </span>
@@ -194,21 +189,9 @@ function Landing(): React.ReactElement {
                   <div className="p-1">
                     <button
                       className="block p-2 text-sm rounded-lg text-gray-700 hover:bg-gradient-primary hover:text-white w-full text-left"
-                      onClick={() => {
-                        setNetwork("Autoppia");
-                        setOpenedDropdown(null);
-                      }}
+                      onClick={() => setOpenedDropdown(null)}
                     >
-                      Autoppia Server
-                    </button>
-                    <button
-                      className="block p-2 text-sm rounded-lg text-gray-700 hover:bg-gradient-primary hover:text-white w-full text-left"
-                      onClick={() => {
-                        setNetwork("Bittensor");
-                        setOpenedDropdown(null);
-                      }}
-                    >
-                      Bittensor s36 Miners
+                      Autoppia Validator
                     </button>
                   </div>
                 </div>

@@ -7,7 +7,7 @@ const app = express();
 app.use(cors())
 app.use(express.json());
 
-const autoppiaEndpoint = "https://operator.autoppia.com";
+const localEndpoint = "http://localhost:5000"
 
 const bittensorEndpoints = [
   "https://validator.autoppia.com/miner_5001",
@@ -23,23 +23,12 @@ const bittensorEndpoints = [
 ]
 
 app.post("/operator", async (req, res) => {
-  const { targetAgent, agentCount } = req.body;
+  const { agentCount } = req.body;
   const endpoints = []
-  switch (targetAgent) {
-    case "Autoppia":
-      for (let i = 0; i < agentCount; i++) {
-        endpoints.push(autoppiaEndpoint);
-      }
-      break;
-    case "Bittensor":
-      // const minerList = await axios.get("https://api.bittensor.com/v1/miners");
-      const minerList = bittensorEndpoints;
-      for (let i = 0; i < agentCount; i++) {
-        endpoints.push(minerList[Math.floor(Math.random() * minerList.length)]);
-      }
-      break;
-    default:
-      break;
+  // const minerList = await axios.get("https://api.bittensor.com/v1/miners");
+  const minerList = bittensorEndpoints;
+  for (let i = 0; i < agentCount; i++) {
+    endpoints.push(minerList[Math.floor(Math.random() * minerList.length)]);
   }
   res.json({ endpoints: endpoints })
 });

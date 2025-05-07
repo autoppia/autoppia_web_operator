@@ -38,8 +38,8 @@ export const initializeSocket = (dispatch: AppDispatch, agentEndpoint: string) =
         dispatch(addSocketId(sid));
     });
 
-    socket.on('action', ({ action }) => {
-        dispatch(addAction({ socketId: socket.id, action }));
+    socket.on('action', (action) => {
+        dispatch(addAction({ socketId: socket.id, ...action }));
     });
 
     socket.on('result', (result) => {
