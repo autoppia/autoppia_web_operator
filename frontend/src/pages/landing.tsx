@@ -33,6 +33,7 @@ function Landing(): React.ReactElement {
   const dispatch = useDispatch();
 
   const settings = {
+    accessibility: false,
     infinite: true,
     arrows: false,
     speed: 500,
@@ -88,8 +89,8 @@ function Landing(): React.ReactElement {
         dispatch(resetSocket());
         dispatch(resetChat());
         dispatch(addTask(prompt));
-        data.endpoints.forEach((endpoint: string) => {
-          const socket = initializeSocket(dispatch, endpoint);
+        data.socketioPaths.forEach((socketioPath: string) => {
+          const socket = initializeSocket(dispatch, socketioPath);
           socket.emit("new-task", {
             task: prompt,
             url: initialUrl,
@@ -151,7 +152,7 @@ function Landing(): React.ReactElement {
         </div>
         <div className="flex flex-col justify-center items-center flex-grow">
           <h2 className="w-full text-center mb-4 text-3xl md:text-4xl leading-tight font-bold text-gray-700 dark:text-white tracking-wide">
-            The First Permissionless and Incentivized{" "}
+            Fully Permissionless and Incentivized{" "}
             <span className="bg-gradient-primary bg-clip-text text-transparent">Web&nbsp;Operator</span>
           </h2>
           <h2 className="w-full text-center mb-4 text-2xl md:text-[2rem] font-semibold text-gray-700 dark:text-white tracking-wide">
@@ -322,7 +323,7 @@ function Landing(): React.ReactElement {
                         setInitialUrl("");
                       }}
                     >
-                      <div className="flex items-center justify-center bg-gradient-primary p-3 rounded-full">
+                      <div className="flex items-center justify-center bg-gradient-primary p-3 rounded-full me-2">
                         <FontAwesomeIcon icon={item.icon} className="text-white" />
                       </div>
                       <div>{item.title}</div>
@@ -343,7 +344,7 @@ function Landing(): React.ReactElement {
                         setInitialUrl("");
                       }}
                     >
-                      <div className="flex items-center justify-center bg-gradient-primary p-3 rounded-full">
+                      <div className="flex items-center justify-center bg-gradient-primary p-3 rounded-full me-2">
                         <FontAwesomeIcon icon={item.icon} className="text-white" />
                       </div>
                       <div>{item.title}</div>

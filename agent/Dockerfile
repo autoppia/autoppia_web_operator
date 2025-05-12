@@ -5,8 +5,8 @@ WORKDIR /usr/local/app
 COPY . .
 
 RUN pip install --no-cache-dir -r requirements.txt
-RUN playwright install-deps
-RUN playwright install chromium
+RUN patchright install-deps
+RUN patchright install chromium
 
 EXPOSE 5000
 

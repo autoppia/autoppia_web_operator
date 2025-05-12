@@ -13,10 +13,10 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 class AutomataOperator:
-    def __init__(self):
+    def __init__(self, miner_uid):
         self.sio = socketio.AsyncServer(
             async_mode='aiohttp', 
-            cors_allowed_origins='*'
+            cors_allowed_origins='*',
         )
         self.app = web.Application()
         self.sio.attach(self.app)
@@ -133,13 +133,12 @@ class AutomataOperator:
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Arguments for Operator.')  
 
-    parser.add_argument('-p', '--port', type=int, required=False, help='Port for operator')
+    parser.add_argument('-m', '--miner-uid', type=int, required=True, help='Miner UID')
 
     args = parser.parse_args()
+    miner_uid = args.miner_uid
+    port = 5000 + miner_uid
 
-    operator = AutomataOperator()
+    operator = AutomataOperator(miner_uid)
+    operator.run(port=port)
 
-    if args.port:
-        operator.run(port=args.port)
-    else:
-        operator.run()

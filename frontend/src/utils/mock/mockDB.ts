@@ -36,26 +36,26 @@ export const websites = [
 
 export const bittensorPrompts = [
   {
-    title: "Check Autoppia on Taomarketcap",
-    prompt: "Go to taomarketcap.com, find the web-agents subnet in subnet section. Tell me the current price and summarize info from their GitHub.",
+    title: "Review Autoppia",
+    prompt: "Go to taostats.com and open autoppia web-agents subnet page. Analyze liquidity and price and then go to their github and summarize it a bit.",
     icon: faChartColumn,
   },
   {
-    title: "Summarize TAO Market on tao.app",
-    prompt: "Go to tao.app and summarize the current state of the Bittensor financial market.",
+    title: "Summarize top-3 subnets’ GitHub",
+    prompt: "Go to taomarketcap.com and for the top 3 subnets in terms of price go to their githubs and summarize what the subnet does.",
     icon: faBrain,
   },
   {
-    title: "Compare TAO Yields",
-    prompt: "Go to taoyield.com and compare yields for Root 0 and Subnet 36.",
+    title: "Snapshot dTao market metrics",
+    prompt: "Go to tao.app metrics section and summarize the state of dtao market",
     icon: faChartLine,
   },
   {
-    title: "Explore New Subnets",
-    prompt: "Go to taostats.io, find recently launched Bittensor subnets and summarize their purpose and performance.",
+    title: "Analyze subnet 36 APR and validators",
+    prompt: "Go to taoyield.com and tell me for subnet 36 web agents which is apr for 30d and which are the best validators to stake with. ",
     icon: faMap,
   }
-]
+];
 
 export const generalPrompts = [
   {
@@ -78,4 +78,4 @@ export const generalPrompts = [
     prompt: "Show me the top trending news in AI and tech from today.",
     icon: faNewspaper,
   }
-]
+];
