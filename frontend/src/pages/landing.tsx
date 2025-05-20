@@ -320,7 +320,7 @@ function Landing(): React.ReactElement {
                       key={`group-one-prompt-${index}`}
                       onClick={() => {
                         setPrompt(item.prompt);
-                        setInitialUrl("");
+                        setInitialUrl(item.url);
                       }}
                     >
                       <div className="flex items-center justify-center bg-gradient-primary p-3 rounded-full me-2">
@@ -341,7 +341,7 @@ function Landing(): React.ReactElement {
                       key={`group-two-prompt-${index}`}
                       onClick={() => {
                         setPrompt(item.prompt);
-                        setInitialUrl("");
+                        setInitialUrl(item.url);
                       }}
                     >
                       <div className="flex items-center justify-center bg-gradient-primary p-3 rounded-full me-2">
