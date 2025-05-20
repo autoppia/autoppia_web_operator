@@ -26,7 +26,7 @@ class BrowserUseAgent(BaseAgent):
     async def init_agent(self) -> None:
         self.browser = Browser(
             config=BrowserConfig(
-                headless=False,
+                headless=True,
                 disable_security=False,
                 keep_alive=True,
                 new_context_config=BrowserContextConfig(
