@@ -21,8 +21,8 @@ app.post("/operator", async (req, res) => {
   const { agentCount } = req.body;
   const socketioPaths = []
   for (let i = 0; i < agentCount; i++) {
-    socketioPaths.push(minerPaths[Math.floor(Math.random() * minerPaths.length)]);
-    // socketioPaths.push(localPath);
+    // socketioPaths.push(minerPaths[Math.floor(Math.random() * minerPaths.length)]);
+    socketioPaths.push(localPath);
   }
   res.json({ socketioPaths: socketioPaths });
 });

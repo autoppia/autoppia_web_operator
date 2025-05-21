@@ -37,8 +37,8 @@ export const websites = [
 export const bittensorPrompts = [
   {
     title: "Review Autoppia",
-    prompt: "Open autoppia web-agents subnet page. Analyze liquidity and price and then go to their github and summarize it a bit.",
-    url: "https://taostats.com",
+    prompt: "Open web-agents subnet page. Analyze liquidity and price and then go to their github and summarize it a bit.",
+    url: "https://taostats.io",
     icon: faChartColumn,
   },
   {
@@ -63,27 +63,27 @@ export const bittensorPrompts = [
 
 export const generalPrompts = [
   {
-    title: "Compare Prices Across Online Stores",
-    prompt: "Search for the cheapest price for a product, including shipping and stock availability.",
-    url: "https://google.com",
+    title: "Solve Captcha",
+    prompt: "Solve the captcha",
+    url: "https://captcha.com/demos/features/captcha-demo.aspx",
     icon: faCartShopping,
   },
   {
-    title: "Track a Product on Amazon & eBay",
-    prompt: "Tell me if this product is in stock and how much it costs on Amazon and eBay.",
-    url: "https://google.com",
+    title: "Find the Cheapest Flight",
+    prompt: "Find the cheapest flight from New York to London for next week",
+    url: "https://kayak.com",
     icon: faBox,
   },
   {
-    title: "Quick Competitor Scan",
-    prompt: "Find top 3 competitors for a product or company and summarize their features or offers.",
-    url: "https://google.com",
+    title: "Get Me the Top Rated Laptop",
+    prompt: "Search for laptop, sort by best rating, and give me the price of the first result",
+    url: "https://amazon.com",
     icon: faMagnifyingGlass,
   },
   {
-    title: "Get Trending Tech News",
-    prompt: "Show me the top trending news in AI and tech from today.",
-    url: "https://google.com",
+    title: "Explore Top Tech News",
+    prompt: "Summarize the main points from the top 3 research articles on AI ethics published this year.",
+    url: "https://arxiv.org",
     icon: faNewspaper,
   }
 ];

@@ -28,19 +28,15 @@ class BrowserUseAgent(BaseAgent):
             config=BrowserConfig(
                 headless=False,
                 disable_security=False,
-                keep_alive=True,
-                new_context_config=BrowserContextConfig(
-                    keep_alive=True,
-                    disable_security=False,
-                ),
             )
         )
         self.browser_context = BrowserContext(
             browser=self.browser,
             config=BrowserContextConfig(
                 highlight_elements=False,
-                keep_alive=True,
                 disable_security=False,
+                no_viewport=False,
+                locale='en-US',
             )
         )
         self.agent_state = AgentState()
@@ -53,6 +49,8 @@ class BrowserUseAgent(BaseAgent):
         self.agent = Agent(
             task=task,
             llm=ChatOpenAI(model='gpt-4.1'),
+            planner_llm=ChatOpenAI('o4-mini'),
+            use_vision_for_planner=False, 
             browser=self.browser,
             browser_context=self.browser_context,
             injected_agent_state=self.agent_state
@@ -71,10 +69,7 @@ class BrowserUseAgent(BaseAgent):
             return None
         
     async def close(self) -> None:
-        if self.browser_context:
-            await self.browser_context.close()
-        if self.browser:
-            await self.browser.close()
+        await self.agent.close()
         
     def add_new_task(self, new_task: str) -> None:
         self.task = new_task

@@ -160,14 +160,7 @@ function SideChatBar(props: I_SideBar) {
         ))}
       </div>
       <div className="flex items-center px-1 mb-4">
-        <div
-          className={`flex justify-center items-center p-3 rounded-full
-                      transition-all duration-200 cursor-pointer text-gray-700 text-white
-                      bg-gradient-primary`}
-        >
-          <FontAwesomeIcon icon={faUser} />
-        </div>
-        <div className="ps-4 pe-1 flex flex-grow bg-white rounded-full relative ms-2 border border-gray-300">
+        <div className="ps-4 pe-1 flex flex-grow bg-white rounded-full relative border border-gray-300">
           <input
             className="border-none outline-none flex-grow"
             placeholder="Type here ..."
