@@ -5,8 +5,7 @@ WORKDIR /usr/local/app
 COPY . .
 
 RUN pip install --no-cache-dir -r requirements.txt
-RUN patchright install-deps
-RUN patchright install chromium
+RUN patchright install chromium --with-deps
 
 EXPOSE 5000
 

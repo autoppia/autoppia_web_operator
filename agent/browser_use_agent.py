@@ -26,7 +26,7 @@ class BrowserUseAgent(BaseAgent):
     async def init_agent(self) -> None:
         self.browser = Browser(
             config=BrowserConfig(
-                headless=True,
+                headless=False,
                 disable_security=False,
                 keep_alive=True,
                 new_context_config=BrowserContextConfig(
@@ -52,7 +52,7 @@ class BrowserUseAgent(BaseAgent):
 
         self.agent = Agent(
             task=task,
-            llm=ChatOpenAI(model='o4-mini'),
+            llm=ChatOpenAI(model='gpt-4.1'),
             browser=self.browser,
             browser_context=self.browser_context,
             injected_agent_state=self.agent_state

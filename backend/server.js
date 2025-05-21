@@ -7,7 +7,7 @@ const app = express();
 app.use(cors())
 app.use(express.json());
 
-const localEndpoint = "http://localhost:5000"
+const localPath = "/socket.io";
 
 const minerPaths = [
   "/miner_1/socket.io",
@@ -22,6 +22,7 @@ app.post("/operator", async (req, res) => {
   const socketioPaths = []
   for (let i = 0; i < agentCount; i++) {
     socketioPaths.push(minerPaths[Math.floor(Math.random() * minerPaths.length)]);
+    // socketioPaths.push(localPath);
   }
   res.json({ socketioPaths: socketioPaths });
 });
