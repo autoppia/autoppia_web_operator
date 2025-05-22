@@ -49,7 +49,7 @@ class BrowserUseAgent(BaseAgent):
         self.agent = Agent(
             task=task,
             llm=ChatOpenAI(model='gpt-4.1'),
-            planner_llm=ChatOpenAI('o4-mini'),
+            planner_llm=ChatOpenAI(model='o4-mini'),
             use_vision_for_planner=False, 
             browser=self.browser,
             browser_context=self.browser_context,
