@@ -1,7 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { I_IconButton } from "../utils/types";
 
-export default function IconButton(props: I_IconButton) {
+interface IconButtonProps {
+  icon: any;
+  className?: string;
+  onClick?: () => void;
+  disabled?: boolean;
+}
+
+export default function IconButton(props: IconButtonProps) {
   const { icon, className, onClick, disabled } = props;
   return (
     <div

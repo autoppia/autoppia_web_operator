@@ -1,6 +1,8 @@
-import { I_Chat } from "../utils/types";
+interface UserMessageProps {
+  content?: string;
+}
 
-function UserMsg(props: I_Chat) {
+export default function UserMessage(props: UserMessageProps) {
   const { content } = props;
   return (
     <div className="w-full flex justify-end mb-3">
@@ -10,5 +12,3 @@ function UserMsg(props: I_Chat) {
     </div>
   );
 }
-
-export default UserMsg;

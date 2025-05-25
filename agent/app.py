@@ -1,3 +1,4 @@
+import uuid
 import time
 import socketio
 import asyncio
@@ -33,7 +34,6 @@ class AutomataOperator:
         @self.sio.on('connect')
         async def connect(sid, environ):
             logger.info(f'Client connected: {sid}')
-            await self._clean_session()
 
         @self.sio.on('new-task')
         async def new_task(sid, data):
@@ -50,14 +50,20 @@ class AutomataOperator:
             await self.sio.emit('action', {'action': 'Initialize browser'}, to=sid)   
             await agent.init_agent()
 
-            self.sessions[sid] = {
-                'agent': agent,
-                'state': 'idle',
-                'updated_at': time.time()
-            }
+            self.sessions[sid] = agent
 
             send_screenshot_task = asyncio.create_task(self._send_screenshot(sid))
-            await self._perform_task(sid)
+
+            history = await agent.run(max_steps=25)
+
+            history_path = uuid.uuid1()
+            history.save_to_file(f"./history/{history_path}")
+            await self.sio.emit('history', {
+                'prompt': task,
+                'initialUrl': url,
+                'historyPath': history_path
+            }, to=sid)
+
             send_screenshot_task.cancel()
 
         @self.sio.on('continue-task')
@@ -69,42 +75,23 @@ class AutomataOperator:
                 await self.sio.emit('error', {'message': 'No task provided'}, to=sid)
                 return
 
-            session_info = self.sessions.get(sid)
-            if not session_info:
+            agent = self.sessions.get(sid)
+            if not agent:
                 await self.sio.emit('error', {'message': 'No existing session for this sid'}, to=sid)
                 return
 
-            agent = session_info['agent']
             agent.add_new_task(task)
 
             send_screenshot_task = asyncio.create_task(self._send_screenshot(sid))
-            await self._perform_task(sid)
+            await agent.run(max_steps=25)
             send_screenshot_task.cancel()
 
         @self.sio.on('disconnect')
         async def disconnect(sid):
             logger.info(f'Client disconnected: {sid}')
-
-    async def _perform_task(self, sid, max_steps=25):
-        self.sessions[sid]['state'] = 'busy'
-        agent = self.sessions[sid]['agent']
-
-        for _ in range(max_steps):
-            done, valid = await agent.take_step()
-            
-            model_thought = agent.get_model_thought()
-            next_goal = model_thought['next_goal']
-            previous_success = model_thought['previous_success']
-            await self.sio.emit('action', {'action': next_goal, 'previous_success': previous_success}, to=sid)            
-
-            if done and valid:
-                break
-
-        result = agent.get_result()
-        await self.sio.emit('result', result, to=sid)
-
-        self.sessions[sid]['state'] = 'idle'
-        self.sessions[sid]['updated_at'] = time.time()
+            agent = self.sessions.get(sid)
+            if agent:
+                await agent.close()
 
     async def _send_screenshot(self, sid):
         while True:
@@ -116,15 +103,7 @@ class AutomataOperator:
 
             screenshot = await agent.take_screenshot()
             if screenshot:
-                await self.sio.emit('screenshot', {'screenshot': screenshot}, to=sid)
-
-    async def _clean_session(self):  
-        for sid, session in list(self.sessions.items()):  
-            unused_time = time.time() - session['updated_at']  
-            if unused_time > 30 * 60:  
-                await session['agent'].close()  
-                del self.sessions[sid]          
-
+                await self.sio.emit('screenshot', {'screenshot': screenshot}, to=sid) 
 
     def run(self, host='0.0.0.0', port=5000):
         web.run_app(self.app, host=host, port=port)

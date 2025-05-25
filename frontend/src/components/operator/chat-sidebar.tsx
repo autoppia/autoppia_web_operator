@@ -1,22 +1,25 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
   faEdit,
-  faUser,
   faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 
-import ToggleTheme from "./toggleTheme";
-import IconButton from "./iconButton";
-import OperatorResponse from "./operatorResponse";
-import UserMsg from "./userMsg";
-import { I_SideBar } from "../utils/types";
-import { useNavigate } from "react-router-dom";
-import { addTask } from "../redux/chatSlice";
+import ToggleTheme from "../common/toggle-theme";
+import IconButton from "../common/icon-button";
+import OperatorResponse from "./operator-response";
+import UserMessage from "./user-message";
+import { addTask } from "../../redux/chatSlice";
 
-function SideChatBar(props: I_SideBar) {
+interface ChatSidebarProps {
+  open: boolean;
+  toggleSideBar: () => void;
+}
+
+export default function ChatSidebar(props: ChatSidebarProps) {
   const { open, toggleSideBar } = props;
 
   const [imageLoading, setImageLoading] = useState(true);
@@ -63,11 +66,13 @@ function SideChatBar(props: I_SideBar) {
 
   return (
     <div
-      className={`${
-        open
-          ? "fixed w-[100vw] h-[100vh] px-2 sm:px-4 md:px-8 md:relative lg:w-[500px] z-10"
-          : "fixed w-[100vw] h-[100vh] px-2 sm:px-4 md:px-8 lg:px-0 md:relative lg:w-0 z-10"
-      } transition-all duration-300 h-full pt-1 pb-1 flex flex-col overflow-hidden bg-secondary shadow-md dark:bg-transparent dark:shadow-gray-100`}
+      className={`fixed left-0 w-full lg:w-[500px] px-2 sm:px-4 md:px-8 z-10 
+        transition-all duration-300 h-full pt-1 pb-1 flex flex-col overflow-hidden 
+        bg-secondary shadow-md dark:bg-transparent dark:shadow-gray-100
+        ${open
+          ? ""
+          : "lg:-left-[500px]"
+        }`}
     >
       <div className="flex items-center py-4">
         <IconButton
@@ -75,7 +80,7 @@ function SideChatBar(props: I_SideBar) {
           onClick={toggleSideBar}
           className="dark:text-white"
         />
-        <div className="flex-grow ms-4">
+        <div className="flex-grow ms-2 sm:ms-4">
           <img
             src="./assets/images/logos/main_dark.webp"
             alt=""
@@ -110,7 +115,7 @@ function SideChatBar(props: I_SideBar) {
               return (
                 <OperatorResponse key={"OperationRES" + index} {...message} />
               );
-            else return <UserMsg key={"UserRES" + index} {...message} />;
+            else return <UserMessage key={"UserRES" + index} {...message} />;
           })}
         </div>
         {socketIds.map((socketId: any) => (
@@ -179,10 +184,13 @@ function SideChatBar(props: I_SideBar) {
       </div>
       {dlgOpen && (
         <div
-          id="alertDialog"
           className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50"
+          onClick={() => setDlgOpen(false)}
         >
-          <div className="bg-white rounded-2xl shadow-lg p-6 w-[360px]">
+          <div
+            className="bg-white rounded-2xl shadow-lg p-6 w-[360px]"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2 className="w-full text-center text-xl font-semibold mb-2">Are you sure?</h2>
             <p className="w-full text-center mb-6">Do you want to start new task?</p>
             <div className="flex justify-center">
@@ -205,5 +213,3 @@ function SideChatBar(props: I_SideBar) {
     </div>
   );
 }
-
-export default SideChatBar;

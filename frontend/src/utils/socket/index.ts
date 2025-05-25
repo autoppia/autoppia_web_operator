@@ -6,7 +6,7 @@ import { AppDispatch } from '../../redux/store';
 
 const validatorUrl = process.env.REACT_APP_VALIDATOR_URL;
 
-export const initializeSocket = (dispatch: AppDispatch, socketioPath: string) => {
+export const initializeSocket = (dispatch: AppDispatch, socketioPath: string, email: string) => {
     const socket = io(validatorUrl, {
         path: socketioPath,
     });
@@ -28,7 +28,7 @@ export const initializeSocket = (dispatch: AppDispatch, socketioPath: string) =>
         const base64Prefix = 'data:image/png;base64,';
 
         const mainScreen = document.getElementById(`${socket.id}_screenshot_main`) as HTMLImageElement;
-        if (mainScreen) {            
+        if (mainScreen) {
             mainScreen.src = base64Prefix + screenshot;
         }
 
@@ -49,6 +49,24 @@ export const initializeSocket = (dispatch: AppDispatch, socketioPath: string) =>
     socket.on('result', (result) => {
         dispatch(addResult({ socketId: socket.id, ...result }));
     });
+
+    socket.on('history', async (history) => {
+        try {
+            await fetch(`${validatorUrl}/history/save`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ...history,
+                    email: email,
+                    socketioPath: socketioPath
+                })
+            })
+        } catch (err) {
+            console.error(err);
+        }
+    })
 
     dispatch(addSocket(socket));
 

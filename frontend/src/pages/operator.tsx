@@ -8,14 +8,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faShareFromSquare } from "@fortawesome/free-regular-svg-icons";
 
-import SideChatBar from "../components/sideChatBar";
-import IconButton from "../components/iconButton";
+import ChatSidebar from "../components/operator/chat-sidebar";
+import IconButton from "../components/common/icon-button";
 
 function Operator(): React.ReactElement {
   const imageRef = useRef<HTMLImageElement | null>(null);
 
   const [imageLoading, setImageLoading] = useState(true);
-  const [showSideBar, setShowSideBar] = useState(window.screen.width > 1000);
+  const [showSideBar, setShowSideBar] = useState(window.screen.width >= 1024);
 
   const socketIds = useSelector((state: any) => state.socket.socketIds);
 
@@ -43,7 +43,7 @@ function Operator(): React.ReactElement {
         return "flex w-full flex-grow relative overflow-auto p-5 mt-5";
       }
     }
-    
+
     let className =
       "flex flex-shrink-0 items-start relative bg-white rounded-2xl w-full self-center shadow-md flex-grow overflow-y-scroll dark:border-2 dark:border-gray-100";
 
@@ -62,19 +62,18 @@ function Operator(): React.ReactElement {
           className="w-full h-full"
         />
       </div>
-      <SideChatBar
+      <ChatSidebar
         open={showSideBar}
         toggleSideBar={toggleSideBar}
-      ></SideChatBar>
+      />
       <div
-        className={`hidden lg:flex flex-col px-5 py-5 h-full hidden relative items-center ${
-          showSideBar ? "lg:w-[calc(100%-500px)]" : "w-[100vw]"
-        }`}
+        className={`hidden lg:flex flex-col px-5 py-5 h-full hidden relative items-center ${showSideBar ? "lg:w-[calc(100%-500px)] lg:ms-[500px]" : "w-full"
+          }`}
       >
         <div className="flex justify-between w-full">
           <div className="flex items-center">
             {!showSideBar && (
-              <IconButton icon={faBars} onClick={toggleSideBar} className="dark:text-white"/>
+              <IconButton icon={faBars} onClick={toggleSideBar} className="dark:text-white" />
             )}
             <div
               className="ms-2 flex hover:bg-gray-300 rounded-full justify-center items-center p-3 cursor-pointer transition-all duration-300 text-gray-500 dark:text-white"
@@ -110,7 +109,7 @@ function Operator(): React.ReactElement {
                 id={`${socketId}_screenshot_main`}
                 className="w-full h-auto screenshot my-auto object-contain max-h-none"
                 onError={handleError}
-                onLoad={handleLoad}                
+                onLoad={handleLoad}
               />
               {!imageLoading ? (
                 <></>

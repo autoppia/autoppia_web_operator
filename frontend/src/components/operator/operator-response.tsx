@@ -11,9 +11,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faCircleCheck, faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 
-import { I_Chat } from "../utils/types";
+interface OperatorResponseProps {
+  role: string;
+  content?: string;
+  socketId?: string;
+  actions?: string[];
+  actionResults?: boolean[];
+  thinking?: string;
+  state?: string;
+}
 
-function OperatorResponse(props: I_Chat) {
+function OperatorResponse(props: OperatorResponseProps) {
   const { content, actions, actionResults, thinking, state } = props;
   const [collapse, setCollapse] = useState(false);
 
@@ -27,7 +35,7 @@ function OperatorResponse(props: I_Chat) {
         {thinking && (
           <div className="flex justify-between items-center w-full py-2">
             {state === "thinking" && (
-              <div className="animate-pulse text-gray-600 flex items-center dark:text-gray-100">
+              <div className="animate-pulse text-gray-600 flex items-center dark:text-gray-100 break-words">
                 <FontAwesomeIcon
                   icon={faCircleNotch}
                   className="animate-spin me-2 text-xl"

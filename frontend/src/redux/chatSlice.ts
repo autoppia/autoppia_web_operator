@@ -1,8 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { I_Chat } from "../utils/types";
+
+export interface ChatItem {
+  role: string;
+  content?: string;
+  socketId?: string;
+  actions?: string[];
+  actionResults?: boolean[];
+  thinking?: string;
+  state?: string;
+}
 
 interface ChatState {
-  chats: I_Chat[];
+  chats: ChatItem[];
   completed: number;
 }
 

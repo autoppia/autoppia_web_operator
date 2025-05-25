@@ -42,12 +42,13 @@ class BrowserUseAgent(BaseAgent):
         self.agent_state = AgentState()
 
         if self.initial_url:
-            task = F"Go to {self.initial_url}, {self.task}"
-        else:
-            task = self.task
+            initial_actions = [
+                {'open_tab': {'url': self.initial_url}}
+            ]
 
         self.agent = Agent(
-            task=task,
+            task=self.task,
+            initial_actions=initial_actions,
             llm=ChatOpenAI(model='gpt-4.1'),
             planner_llm=ChatOpenAI(model='o4-mini'),
             use_vision_for_planner=False, 
@@ -56,11 +57,11 @@ class BrowserUseAgent(BaseAgent):
             injected_agent_state=self.agent_state
         )
 
-    async def take_step(self) -> Tuple[bool, bool]:
+    async def run(self, max_steps=25):
         if self.agent is None:
             await self.init_agent()
 
-        return await self.agent.take_step()
+        return await self.agent.run(max_steps=max_steps)
     
     async def take_screenshot(self) -> str:
         if self.browser_context.session:
