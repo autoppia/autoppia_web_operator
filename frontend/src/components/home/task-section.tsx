@@ -61,7 +61,7 @@ export default function TaskSection(props: TaskSectionProps) {
 
   const handleSubmit = async () => {
     try {
-      const res = await fetch(`${apiUrl}/operator`, {
+      const response = await fetch(`${apiUrl}/operator`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,8 +70,8 @@ export default function TaskSection(props: TaskSectionProps) {
           agentCount: agentCount,
         }),
       });
-      if (res.status === 200) {
-        const data = await res.json();
+      if (response.ok) {
+        const data = await response.json();
         dispatch(resetSocket());
         dispatch(resetChat());
         dispatch(addTask(prompt));
@@ -84,7 +84,7 @@ export default function TaskSection(props: TaskSectionProps) {
         });
         navigate("/operator");
       } else {
-        const errorData = await res.json();
+        const errorData = await response.json();
         console.log(errorData);
       }
     } catch (error) {

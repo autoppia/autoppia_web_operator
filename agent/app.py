@@ -18,6 +18,7 @@ class AutomataOperator:
         self.sio = socketio.AsyncServer(
             async_mode='aiohttp', 
             cors_allowed_origins='*',
+            ping_timeout=60
         )
         self.app = web.Application()
         self.sio.attach(self.app)
@@ -53,17 +54,7 @@ class AutomataOperator:
             self.sessions[sid] = agent
 
             send_screenshot_task = asyncio.create_task(self._send_screenshot(sid))
-
-            history = await agent.run(max_steps=25)
-
-            history_path = uuid.uuid1()
-            history.save_to_file(f"./history/{history_path}")
-            await self.sio.emit('history', {
-                'prompt': task,
-                'initialUrl': url,
-                'historyPath': history_path
-            }, to=sid)
-
+            await self._perform_task(sid)
             send_screenshot_task.cancel()
 
         @self.sio.on('continue-task')
@@ -83,7 +74,7 @@ class AutomataOperator:
             agent.add_new_task(task)
 
             send_screenshot_task = asyncio.create_task(self._send_screenshot(sid))
-            await agent.run(max_steps=25)
+            await self._perform_task(sid)
             send_screenshot_task.cancel()
 
         @self.sio.on('disconnect')
@@ -93,13 +84,29 @@ class AutomataOperator:
             if agent:
                 await agent.close()
 
+    async def _perform_task(self, sid, max_steps=25):
+        agent = self.sessions[sid]
+
+        for _ in range(max_steps):
+            done, valid = await agent.take_step()
+            
+            model_thought = agent.get_model_thought()
+            next_goal = model_thought['next_goal']
+            previous_success = model_thought['previous_success']
+            await self.sio.emit('action', {'action': next_goal, 'previous_success': previous_success}, to=sid)            
+
+            if done and valid:
+                break
+
+        result = agent.get_result()
+        await self.sio.emit('result', result, to=sid)
+
     async def _send_screenshot(self, sid):
         while True:
             await asyncio.sleep(0.5)
-            session = self.sessions.get(sid)
-            if not session:
+            agent = self.sessions.get(sid)
+            if not agent:
                 continue
-            agent = session['agent']
 
             screenshot = await agent.take_screenshot()
             if screenshot:

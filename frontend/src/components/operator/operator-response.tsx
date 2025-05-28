@@ -35,12 +35,14 @@ function OperatorResponse(props: OperatorResponseProps) {
         {thinking && (
           <div className="flex justify-between items-center w-full py-2">
             {state === "thinking" && (
-              <div className="animate-pulse text-gray-600 flex items-center dark:text-gray-100 break-words">
+              <div className="animate-pulse text-gray-600 flex items-center dark:text-gray-100 w-full overflow-hidden">
                 <FontAwesomeIcon
                   icon={faCircleNotch}
                   className="animate-spin me-2 text-xl"
                 />
-                {thinking}
+                <span className="truncate w-full">
+                  {thinking}
+                </span>
               </div>
             )}
             {state === "success" && (
@@ -50,7 +52,9 @@ function OperatorResponse(props: OperatorResponseProps) {
                   color="green"
                   className="me-2 text-xl"
                 />
-                {"Task completed successfully."}
+                <span>
+                  {"Task completed successfully."}
+                </span>
               </div>
             )}
             {state === "error" && (
@@ -60,7 +64,9 @@ function OperatorResponse(props: OperatorResponseProps) {
                   color="red"
                   className="me-2 text-xl"
                 />
-                {"Task failed."}
+                <span>
+                  {"Task failed."}
+                </span>
               </div>
             )}
             <FontAwesomeIcon
@@ -102,7 +108,9 @@ function OperatorResponse(props: OperatorResponseProps) {
                     className="animate-spin me-2"
                   />
                 )}
-                <span>{action}</span>
+                <span className="w-full break-words">
+                  {action}
+                  </span>
               </div>
             ))}
         </div>

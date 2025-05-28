@@ -9,18 +9,11 @@ import {
     faPaperPlane
 } from "@fortawesome/free-solid-svg-icons";
 
+import { HistoryItem } from "../../utils/types";
+
 interface HistorySidebarProps {
     sidebarOpen: boolean;
     setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-interface HistoryItem {
-    email: string;
-    socketUrl: string;
-    prompt: string;
-    initialUrl: string;
-    historyJson: string;
-    createdAt: Date;
 }
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -113,7 +106,7 @@ export default function HistorySidebar(props: HistorySidebarProps) {
                 >
                     {filteredHistories.map((item, index) => {
                         const now = new Date();
-                        const past = new Date(item.createdAt);
+                        const past = new Date(item.createdAt!);
                         const relativeDays = (now.getTime() - past.getTime()) / (24 * 60 * 60 * 1000);
                         let dateString = "Today";
                         if (relativeDays > 1) {
