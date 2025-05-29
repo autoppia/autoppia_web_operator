@@ -53,9 +53,9 @@ class AutomataOperator:
 
             self.sessions[sid] = agent
 
-            send_screenshot_task = asyncio.create_task(self._send_screenshot(sid))
+            # send_screenshot_task = asyncio.create_task(self._send_screenshot(sid))
             await self._perform_task(sid)
-            send_screenshot_task.cancel()
+            # send_screenshot_task.cancel()
 
         @self.sio.on('continue-task')
         async def continue_task(sid, data):
@@ -73,9 +73,9 @@ class AutomataOperator:
 
             agent.add_new_task(task)
 
-            send_screenshot_task = asyncio.create_task(self._send_screenshot(sid))
+            # send_screenshot_task = asyncio.create_task(self._send_screenshot(sid))
             await self._perform_task(sid)
-            send_screenshot_task.cancel()
+            # send_screenshot_task.cancel()
 
         @self.sio.on('disconnect')
         async def disconnect(sid):
@@ -89,7 +89,11 @@ class AutomataOperator:
 
         for _ in range(max_steps):
             done, valid = await agent.take_step()
-            
+
+            screenshot = await agent.take_screenshot()
+            if screenshot:
+                await self.sio.emit('screenshot', {'screenshot': screenshot}, to=sid)
+
             model_thought = agent.get_model_thought()
             next_goal = model_thought['next_goal']
             previous_success = model_thought['previous_success']
@@ -98,19 +102,29 @@ class AutomataOperator:
             if done and valid:
                 break
 
+        screenshot = await agent.take_screenshot()
+        if screenshot:
+            await self.sio.emit('screenshot', {'screenshot': screenshot}, to=sid)
         result = agent.get_result()
         await self.sio.emit('result', result, to=sid)
 
-    async def _send_screenshot(self, sid):
-        while True:
-            await asyncio.sleep(0.5)
-            agent = self.sessions.get(sid)
-            if not agent:
-                continue
+    # async def _send_screenshot(self, sid):
+    #     while True:
+    #         await asyncio.sleep(0.5)
+    #         agent = self.sessions.get(sid)
+    #         if not agent:
+    #             print("No agent found for sid")
+    #             continue
 
-            screenshot = await agent.take_screenshot()
-            if screenshot:
-                await self.sio.emit('screenshot', {'screenshot': screenshot}, to=sid) 
+    #         try:
+    #             screenshot = await agent.take_screenshot()
+    #             if screenshot:
+    #                 await self.sio.emit('screenshot', {'screenshot': screenshot}, to=sid)
+    #         except Exception as e:
+    #             print(f"Screenshot error: {e}")
+    #             # Consider adding a longer sleep or break condition
+    #             await asyncio.sleep(2)
+
 
     def run(self, host='0.0.0.0', port=5000):
         web.run_app(self.app, host=host, port=port)

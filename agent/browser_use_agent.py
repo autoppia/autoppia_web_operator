@@ -5,8 +5,7 @@ from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from browser_use import Agent
 from browser_use.agent.views import AgentState
-from browser_use.browser.browser import Browser, BrowserConfig
-from browser_use.browser.context import BrowserContext, BrowserContextConfig
+from browser_use.browser import BrowserProfile, BrowserSession
 
 from base_agent import BaseAgent
 
@@ -18,27 +17,20 @@ class BrowserUseAgent(BaseAgent):
     def __init__(self, task: str, initial_url: str = None):
         super().__init__(task, initial_url)
 
-        self.browser = None
-        self.browser_context = None
+        self.browser_profile = None
+        self.browser_session = None
         self.agent_state = None
         self.agent = None
 
     async def init_agent(self) -> None:
-        self.browser = Browser(
-            config=BrowserConfig(
-                headless=False,
-                disable_security=False,
-            )
+        self.browser_profile = BrowserProfile(
+            disable_security=True,
+            headless=True,
+            highlight_elements=False,
+            viewport={"width": 1600, "height": 1200},
+            locale="en-US"
         )
-        self.browser_context = BrowserContext(
-            browser=self.browser,
-            config=BrowserContextConfig(
-                highlight_elements=False,
-                disable_security=False,
-                no_viewport=False,
-                locale='en-US',
-            )
-        )
+        self.browser_session = BrowserSession(browser_profile=self.browser_profile)
         self.agent_state = AgentState()
 
         if self.initial_url:
@@ -51,9 +43,9 @@ class BrowserUseAgent(BaseAgent):
             llm=ChatOpenAI(model='gpt-4.1'),
             planner_llm=ChatOpenAI(model='o4-mini'),
             use_vision_for_planner=False, 
-            browser=self.browser,
-            browser_context=self.browser_context,
-            injected_agent_state=self.agent_state
+            browser_session=self.browser_session,
+            injected_agent_state=self.agent_state,
+            max_actions_per_step=1
         )
 
     async def take_step(self) -> Tuple[bool, bool]:
@@ -63,14 +55,19 @@ class BrowserUseAgent(BaseAgent):
         return await self.agent.take_step()
     
     async def take_screenshot(self) -> str:
-        if self.browser_context.session:
-            return await self.browser_context.take_screenshot()
+        # if self.browser_session:
+        #     return await self.browser_session.take_screenshot()
+        # else:
+        #     return None
+        screenshots = self.agent_state.history.screenshots()
+        if screenshots:
+            return screenshots[-1]
         else:
             return None
         
     async def close(self) -> None:
         await self.agent.close()
-        await self.browser.close()
+        await self.browser_session.stop()
         
     def add_new_task(self, new_task: str) -> None:
         self.task = new_task

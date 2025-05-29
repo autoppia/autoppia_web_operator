@@ -3,11 +3,15 @@ import { createSlice } from '@reduxjs/toolkit';
 interface SocketState {
     sockets: any[];
     socketIds: string[];
+    screenshots: {
+        [key: string]: string | undefined;
+    };
 }
 
 const initialState: SocketState = {
     sockets: [],
     socketIds: [],
+    screenshots: {},
 };
 
 const socketSlice = createSlice({
@@ -27,8 +31,14 @@ const socketSlice = createSlice({
         addSocketId: (state, action) => {
             state.socketIds = [...state.socketIds, action.payload];
         },
+        setScreenshot: (state, action) => {
+            state.screenshots = {
+                ...state.screenshots,
+                [action.payload.socketId]: action.payload.screenshot
+            };
+        }
     },
 });
 
-export const { resetSocket, addSocket, addSocketId } = socketSlice.actions;
+export const { resetSocket, addSocket, addSocketId, setScreenshot } = socketSlice.actions;
 export default socketSlice.reducer;

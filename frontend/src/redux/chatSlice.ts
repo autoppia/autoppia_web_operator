@@ -1,14 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-export interface ChatItem {
-  role: string;
-  content?: string;
-  socketId?: string;
-  actions?: string[];
-  actionResults?: boolean[];
-  thinking?: string;
-  state?: string;
-}
+import { ChatItem } from "../utils/types";
 
 interface ChatState {
   chats: ChatItem[];
@@ -97,6 +88,9 @@ const chatSlice = createSlice({
         state.completed += 1;
       }
     },
+    addScreenshot: (state, action) => {
+      
+    }
   },
 });
 

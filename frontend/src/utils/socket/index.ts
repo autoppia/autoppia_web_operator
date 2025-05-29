@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-import { addSocket, addSocketId } from '../../redux/socketSlice';
+import { addSocket, addSocketId, setScreenshot } from '../../redux/socketSlice';
 import { addAction, addResult } from '../../redux/chatSlice';
 import { AppDispatch } from '../../redux/store';
 import { HistoryItem } from '../types';
@@ -30,16 +30,10 @@ export const initializeSocket = (dispatch: AppDispatch, socketioPath: string, em
 
     socket.on('screenshot', ({ screenshot }) => {
         const base64Prefix = 'data:image/png;base64,';
-
-        const mainScreen = document.getElementById(`${socket.id}_screenshot_main`) as HTMLImageElement;
-        if (mainScreen) {
-            mainScreen.src = base64Prefix + screenshot;
-        }
-
-        const sideScreen = document.getElementById(`${socket.id}_screenshot_side`) as HTMLImageElement;
-        if (sideScreen) {
-            sideScreen.src = base64Prefix + screenshot;
-        }
+        dispatch(setScreenshot({
+            socketId: socket.id,
+            screenshot: base64Prefix + screenshot
+        }))
     });
 
     socket.on('socket-id', ({ sid }) => {
