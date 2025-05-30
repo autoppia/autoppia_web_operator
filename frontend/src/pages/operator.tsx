@@ -1,5 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
@@ -16,8 +17,17 @@ function Operator(): React.ReactElement {
 
   const [showSideBar, setShowSideBar] = useState(window.screen.width >= 1024);
 
+  const navigate = useNavigate();
+
+  const chats = useSelector((state: any) => state.chat.chats);
   const socketIds = useSelector((state: any) => state.socket.socketIds);
   const screenshots = useSelector((state: any) => state.socket.screenshots);
+
+  useEffect(() => {
+    if (chats.length === 0) {
+      navigate("/")
+    }
+  }, [chats.length, navigate])
 
   const handleFullScreen = () => {
     if (imageRef.current) {
@@ -105,10 +115,16 @@ function Operator(): React.ReactElement {
                   src={screenshot ? screenshot : "/assets/images/screenshot/blank.webp"}
                   className="w-full h-auto screenshot my-auto object-contain max-h-none self-center"
                 />
-                {!screenshot && <div className="absolute w-full h-full flex justify-center items-center">
+                {!screenshot && <div className="absolute w-full h-full flex flex-col justify-center items-center">
+                  <img
+                    src="./assets/images/logos/main_dark.webp"
+                    alt=""
+                    className="h-6 mb-6"
+                  />
                   <img
                     alt=""
                     src="/assets/images/screenshot/loading.gif"
+                    className="h-12"
                   />
                 </div>}
               </div>

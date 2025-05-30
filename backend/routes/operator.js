@@ -17,8 +17,8 @@ router.post("/", async (req, res) => {
     try {
         const { agentCount } = req.body;
         const socketioPaths = Array(agentCount).fill().map(() => {
-            // return minerPaths[Math.floor(Math.random() * minerPaths.length)];
-            return localPath;
+            return minerPaths[Math.floor(Math.random() * minerPaths.length)];
+            // return localPath;
         });
 
         res.json({ socketioPaths: socketioPaths });

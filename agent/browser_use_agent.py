@@ -28,6 +28,7 @@ class BrowserUseAgent(BaseAgent):
             headless=True,
             highlight_elements=False,
             viewport={"width": 1600, "height": 1200},
+            user_data_dir=None,
             locale="en-US"
         )
         self.browser_session = BrowserSession(browser_profile=self.browser_profile)
@@ -60,7 +61,7 @@ class BrowserUseAgent(BaseAgent):
         # else:
         #     return None
         screenshots = self.agent_state.history.screenshots()
-        if screenshots:
+        if len(screenshots) > 1:
             return screenshots[-1]
         else:
             return None
@@ -76,6 +77,9 @@ class BrowserUseAgent(BaseAgent):
 
     def get_model_thought(self) -> dict:
         model_thoughts = self.agent_state.history.model_thoughts()
+        if not model_thoughts:
+            return None
+
         next_goal = model_thoughts[-1].next_goal
         previous_success = False if 'Failed' in model_thoughts[-1].evaluation_previous_goal else True
         return {

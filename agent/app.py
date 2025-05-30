@@ -47,8 +47,6 @@ class AutomataOperator:
                 return
 
             agent = AGENT_CLASS(task, url)
-            await self.sio.emit('socket-id', {'sid': sid}, to=sid)
-            await self.sio.emit('action', {'action': 'Initialize browser'}, to=sid)   
             await agent.init_agent()
 
             self.sessions[sid] = agent
@@ -95,6 +93,9 @@ class AutomataOperator:
                 await self.sio.emit('screenshot', {'screenshot': screenshot}, to=sid)
 
             model_thought = agent.get_model_thought()
+            if not model_thought:
+                continue
+
             next_goal = model_thought['next_goal']
             previous_success = model_thought['previous_success']
             await self.sio.emit('action', {'action': next_goal, 'previous_success': previous_success}, to=sid)            

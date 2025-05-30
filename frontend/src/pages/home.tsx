@@ -56,11 +56,10 @@ export default function Home(): React.ReactElement {
               className="dark:text-white"
             />
             <ToggleTheme />
-            <div className="mx-1 sm:mx-4 w-1 h-[20px] border-l-2 border-gray-300 box-border"></div>
             <div
-              className={`flex justify-center items-center p-2 sm:p-3 rounded-full
+              className="flex justify-center items-center p-2 sm:p-3 rounded-full
                   transition-all duration-200 cursor-pointer text-gray-700 text-white
-                  bg-gradient-primary`}
+                  bg-gradient-primary ms-1 sm:ms-3"
               onClick={() => setSidebarOpen(true)}
             >
               <FontAwesomeIcon icon={faUser} />

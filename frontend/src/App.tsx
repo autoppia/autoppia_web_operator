@@ -10,22 +10,27 @@ import Home from "./pages/home";
 import Operator from "./pages/operator";
 import { setEmail } from "./redux/userSlice";
 
+try {
+  const accessToken = Cookies.get('access_token');
+  if (!accessToken) {
+    const currentURL = window.location.href;
+    const url = new URL("https://app.autoppia.com/auth/sign-in")
+    url.searchParams.append("redirectURL", currentURL);
+    window.location.href = url.href;
+  }
+  const decodedToken = jwtDecode(accessToken!) as any;
+  localStorage.setItem("EMAIL", decodedToken.email)
+} catch (error) {
+  console.error(error)
+}
+
 function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    try {
-      const accessToken = Cookies.get('access_token');
-      // if (!accessToken) {
-      //   const currentURL = window.location.href;
-      //   const url = new URL("https://app.autoppia.com/auth/sign-in")
-      //   url.searchParams.append("redirectURL", currentURL);
-      //   window.location.href = url.href;
-      // }
-      // const decodedToken = jwtDecode(accessToken!)
-      dispatch(setEmail("johndoe@example.com"))
-    } catch (error) {
-      console.error(error)
+    const email = localStorage.getItem("EMAIL");
+    if (email) {
+      dispatch(setEmail(email))
     }
   }, [dispatch])
 

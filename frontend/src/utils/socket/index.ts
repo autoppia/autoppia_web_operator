@@ -17,6 +17,11 @@ export const initializeSocket = (dispatch: AppDispatch, socketioPath: string, em
 
     socket.on('connect', () => {
         console.log(`Connected to the agent: ${validatorUrl + socketioPath}`);
+        dispatch(addSocketId(socket.id));
+        dispatch(addAction({
+            socketId: socket.id,
+            action: "Initializing browser..."
+        }));
     });
 
     socket.on('disconnect', (reason) => {
@@ -34,10 +39,6 @@ export const initializeSocket = (dispatch: AppDispatch, socketioPath: string, em
             socketId: socket.id,
             screenshot: base64Prefix + screenshot
         }))
-    });
-
-    socket.on('socket-id', ({ sid }) => {
-        dispatch(addSocketId(sid));
     });
 
     socket.on('action', (action) => {

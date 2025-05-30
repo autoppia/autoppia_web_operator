@@ -28,7 +28,7 @@ export default function HistorySidebar(props: HistorySidebarProps) {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await fetch(`${apiUrl}/history?email=johndoe@example.com`);
+                const response = await fetch(`${apiUrl}/history?email=${email}`);
                 const data = await response.json();
                 setHistories(data.histories);
                 setFilteredHistories(data.histories);
@@ -37,7 +37,7 @@ export default function HistorySidebar(props: HistorySidebarProps) {
             }
         }
         fetchData();
-    }, []);
+    }, [email]);
 
     useEffect(() => {
         const filteredHistories = histories.filter((item) => {
@@ -50,7 +50,7 @@ export default function HistorySidebar(props: HistorySidebarProps) {
     return (
         <div>
             {sidebarOpen && <div
-                className="fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-transparent"
+                className="fixed inset-0 bg-gray-900 bg-opacity-50"
                 onClick={() => setSidebarOpen(false)}
             />}
             <div
