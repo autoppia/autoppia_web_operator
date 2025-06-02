@@ -80,6 +80,7 @@ export default function TaskSection(props: TaskSectionProps) {
           socket.emit("new-task", {
             task: prompt,
             url: initialUrl,
+            storageState: data.storageState
           });
         });
         navigate("/operator");
@@ -99,7 +100,7 @@ export default function TaskSection(props: TaskSectionProps) {
           <div className="relative w-full text-sm font-medium">
             <button
               type="button"
-              className="w-[160px] text-left rounded-full shadow-sm py-1 ps-3 text-white bg-gradient-primary outline-none appearance-none -webkit-appearance-none -moz-appearance-none"
+              className="w-[175px] text-left rounded-full shadow-sm py-1 ps-3 text-white bg-gradient-primary outline-none appearance-none -webkit-appearance-none -moz-appearance-none"
               onClick={() => setOpenedDropdown("network")}
             >
               Autoppia Validator
@@ -128,7 +129,7 @@ export default function TaskSection(props: TaskSectionProps) {
           <div className="relative w-full text-sm font-medium">
             <button
               type="button"
-              className="w-[105px] text-left rounded-full shadow-sm py-1 ps-3 pe-7 text-white bg-gradient-primary outline-none appearance-none -webkit-appearance-none -moz-appearance-none"
+              className="w-[105px] text-left rounded-full shadow-sm py-1 ps-3 text-white bg-gradient-primary outline-none appearance-none -webkit-appearance-none -moz-appearance-none"
               onClick={() => setOpenedDropdown("agentCount")}
             >
               {`${agentCount} x Agent`}

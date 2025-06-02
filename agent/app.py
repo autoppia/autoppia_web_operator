@@ -1,10 +1,12 @@
 import uuid
 import time
+import json
 import socketio
 import asyncio
 import logging
 import argparse
 from aiohttp import web
+from pathlib import Path
 
 from browser_use_agent import BrowserUseAgent
 
@@ -28,6 +30,9 @@ class AutomataOperator:
         self.app.router.add_get('/status', self.get_status)
         self._register_events()
 
+        self.storage_state_dir = Path('/tmp/automata/storage_states')
+        self.storage_state_dir.mkdir(parents=True, exist_ok=True)
+
     def get_status(self, request):
         return web.json_response({'handling_task_amount': len(self.sessions)})
 
@@ -42,11 +47,18 @@ class AutomataOperator:
 
             task = data.get('task')
             url = data.get('url')
+            storage_state = data.get('storageState')
             if not task:
                 await self.sio.emit('error', {'message': 'No task provided'}, to=sid)
                 return
 
-            agent = AGENT_CLASS(task, url)
+            storage_state_path = None
+            if storage_state:
+                storage_state_path = self.storage_state_dir / f'{sid}.json'
+                with open(storage_state_path, 'w') as storage_state_file:
+                    json.dump(storage_state, storage_state_file, indent=4)
+
+            agent = AGENT_CLASS(task, url, storage_state_path)
             await agent.init_agent()
 
             self.sessions[sid] = agent

@@ -1,6 +1,7 @@
 import logging
 from typing import Tuple
 from dotenv import load_dotenv
+from pathlib import Path
 
 from langchain_openai import ChatOpenAI
 from browser_use import Agent
@@ -14,8 +15,8 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 class BrowserUseAgent(BaseAgent):
-    def __init__(self, task: str, initial_url: str = None):
-        super().__init__(task, initial_url)
+    def __init__(self, task: str, initial_url: str = None, storage_state_path: Path = None):
+        super().__init__(task, initial_url, storage_state_path)
 
         self.browser_profile = None
         self.browser_session = None
@@ -29,7 +30,8 @@ class BrowserUseAgent(BaseAgent):
             highlight_elements=False,
             viewport={"width": 1600, "height": 1200},
             user_data_dir=None,
-            locale="en-US"
+            locale="en-US",
+            storage_state=self.storage_state_path
         )
         self.browser_session = BrowserSession(browser_profile=self.browser_profile)
         self.agent_state = AgentState()

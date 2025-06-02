@@ -1,0 +1,39 @@
+{
+  "cookies": [
+    {
+      "name": "refresh_token",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0OTkxNDUxMCwiaWF0IjoxNzQ4NjE4NTEwLCJqdGkiOiJiNTBiNTc2YzEzNDg0YjczOTkxYjA4ODc0YjY2YzJjMCIsInVzZXJJZCI6MSwiZW1haWwiOiJtYXVyaWNpby5tdW5vemxvcGV6QGdtYWlsLmNvbSJ9.vXKxdADO2yZfGQ8XBjOwtTMabf4rTkLolNsxb1emKSM",
+      "domain": ".autoppia.com",
+      "path": "/",
+      "expires": 1749914510.977195,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "access_token",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NzA0OTEwLCJpYXQiOjE3NDg2MTg1MTAsImp0aSI6ImU0MDU0MmNiNzdhMzQ0MzZiZjUxNmJkYjJiZDk4ZWZmIiwidXNlcklkIjoxLCJlbWFpbCI6Im1hdXJpY2lvLm11bm96bG9wZXpAZ21haWwuY29tIn0.mkJZrvvGnuGCsKCOTwsO8i4I75en2V0jSMo9KY1tVbo",
+      "domain": ".autoppia.com",
+      "path": "/",
+      "expires": 1748704910.977492,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://app.autoppia.com",
+      "localStorage": [
+        {
+          "name": "AUTOPPIA_USER",
+          "value": "{\"email\":\"mauricio.munozlopez@gmail.com\",\"id\":1,\"first_name\":\"mauricio\",\"last_name\":\"munoz\",\"avatar\":\"\",\"status\":\"\",\"is_allowed_in_dashboard\":true}"
+        },
+        {
+          "name": "access_token",
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NzA0OTEwLCJpYXQiOjE3NDg2MTg1MTAsImp0aSI6IjdhNTcxOTllMzQwYTQ0NWNiODU4MDJhODkwZTYwNDA0IiwidXNlcklkIjoxLCJlbWFpbCI6Im1hdXJpY2lvLm11bm96bG9wZXpAZ21haWwuY29tIn0.nmZS92t2xjJkhKTaeDWGBjwaSEadHjS-UD3NLiPrzlI"
+        }
+      ]
+    }
+  ]
+}

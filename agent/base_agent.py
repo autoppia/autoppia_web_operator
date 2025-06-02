@@ -1,11 +1,13 @@
 from abc import ABC, abstractmethod
 from typing import Tuple
+from pathlib import Path
 
 
 class BaseAgent(ABC):
-    def  __init__(self, task: str, initial_url: str = None):
+    def  __init__(self, task: str, initial_url: str = None, storage_state_path: Path = None):
         self.task = task
         self.initial_url = initial_url
+        self.storage_state_path = storage_state_path
 
     @abstractmethod
     async def init_agent(self) -> None:

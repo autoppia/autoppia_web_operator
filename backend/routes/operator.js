@@ -12,6 +12,8 @@ const minerPaths = [
     "/miner_5/socket.io",
 ];
 
+const storageState = require("../storage_state.json")
+
 // Operator route to generate socket.io paths
 router.post("/", async (req, res) => {
     try {
@@ -21,7 +23,10 @@ router.post("/", async (req, res) => {
             // return localPath;
         });
 
-        res.json({ socketioPaths: socketioPaths });
+        res.json({ 
+            socketioPaths: socketioPaths,
+            storageState: storageState
+        });
     } catch (error) {
         console.error("Error in operator route:", error);
         res.status(500).json({ error: "Internal server error" });
