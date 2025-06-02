@@ -26,7 +26,14 @@ interface TaskSectionProps {
 }
 
 export default function TaskSection(props: TaskSectionProps) {
-  const { prompt, setPrompt, initialUrl, setInitialUrl, openedDropdown, setOpenedDropdown } = props;
+  const {
+    prompt,
+    setPrompt,
+    initialUrl,
+    setInitialUrl,
+    openedDropdown,
+    setOpenedDropdown,
+  } = props;
 
   const [filteredWebsites, setFilteredWebsites] = useState(websites);
   const [agentCount, setAgentCount] = useState(1);
@@ -34,7 +41,7 @@ export default function TaskSection(props: TaskSectionProps) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const email = useSelector((state: any) => state.user.email);
+  const user = useSelector((state: any) => state.user);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -52,7 +59,7 @@ export default function TaskSection(props: TaskSectionProps) {
         website.url.toLowerCase().includes(value.toLowerCase())
       );
       setFilteredWebsites(filtered);
-      setOpenedDropdown("initialUrl")
+      setOpenedDropdown("initialUrl");
     } else {
       setFilteredWebsites([]);
       setOpenedDropdown(null);
@@ -76,11 +83,13 @@ export default function TaskSection(props: TaskSectionProps) {
         dispatch(resetChat());
         dispatch(addTask(prompt));
         data.socketioPaths.forEach((socketioPath: string) => {
-          const socket = initializeSocket(dispatch, socketioPath, email);
+          const socket = initializeSocket(dispatch, socketioPath, user.email);
+          const task = `${prompt}
+            \nADDITIONAL INFO: ${user.instructions}`;
           socket.emit("new-task", {
-            task: prompt,
+            task: task,
             url: initialUrl,
-            storageState: data.storageState
+            storageState: data.storageState,
           });
         });
         navigate("/operator");
@@ -176,10 +185,7 @@ export default function TaskSection(props: TaskSectionProps) {
         <div className="flex flex-col md:flex-row justify-between mt-3 items-center gap-2">
           <label className="relative w-full">
             <div className="flex items-center gap-2">
-              <IconButton
-                icon={faPaperclip}
-                className="dark:text-gray-700"
-              />
+              <IconButton icon={faPaperclip} className="dark:text-gray-700" />
               <div className="flex flex-grow px-4 py-2 grow items-center rounded-full border-gray-300 border-[1px] shadow-sm">
                 {" "}
                 <input
@@ -230,5 +236,5 @@ export default function TaskSection(props: TaskSectionProps) {
         </div>
       </div>
     </>
-  )
+  );
 }

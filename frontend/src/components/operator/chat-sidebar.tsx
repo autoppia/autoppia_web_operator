@@ -63,10 +63,7 @@ export default function ChatSidebar(props: ChatSidebarProps) {
       className={`fixed left-0 w-full lg:w-[500px] px-2 sm:px-4 md:px-8 z-10 
         transition-all duration-300 h-full pt-1 pb-1 flex flex-col overflow-hidden 
         bg-secondary shadow-md dark:bg-transparent dark:shadow-gray-100
-        ${open
-          ? ""
-          : "lg:-left-[500px]"
-        }`}
+        ${open ? "" : "lg:-left-[500px]"}`}
     >
       <div className="flex items-center py-4">
         <IconButton
@@ -113,7 +110,7 @@ export default function ChatSidebar(props: ChatSidebarProps) {
           })}
         </div>
         {socketIds.map((socketId: any) => {
-          const screenshot = screenshots[socketId]
+          const screenshot = screenshots[socketId];
           return (
             <div
               className="flex flex-col relative bg-white rounded-xl w-full self-center flex-shrink-0 h-auto mt-2 overflow-auto lg:hidden shadow-lg border-2 border-gray-300"
@@ -125,24 +122,30 @@ export default function ChatSidebar(props: ChatSidebarProps) {
             >
               <img
                 alt=""
-                src={screenshot ? screenshot : "/assets/images/screenshot/blank.webp"}
+                src={
+                  screenshot
+                    ? screenshot
+                    : "/assets/images/screenshot/blank.webp"
+                }
                 className="w-full h-auto screenshot"
                 style={{ objectFit: "cover", objectPosition: "top" }}
               />
-              {!screenshot && <div className="absolute w-full h-full flex flex-col justify-center items-center">
-                <img
-                  src="./assets/images/logos/main_dark.webp"
-                  alt=""
-                  className="h-6 mb-6"
-                />
-                <img
-                  alt=""
-                  src="/assets/images/screenshot/loading.gif"
-                  className="h-12"
-                />
-              </div>}
+              {!screenshot && (
+                <div className="absolute w-full h-full flex flex-col justify-center items-center">
+                  <img
+                    src="./assets/images/logos/main_dark.webp"
+                    alt=""
+                    className="h-6 mb-6"
+                  />
+                  <img
+                    alt=""
+                    src="/assets/images/screenshot/loading.gif"
+                    className="h-12"
+                  />
+                </div>
+              )}
             </div>
-          )
+          );
         })}
       </div>
       <div className="flex items-center px-1 mb-4">
@@ -172,8 +175,12 @@ export default function ChatSidebar(props: ChatSidebarProps) {
             className="bg-white rounded-2xl shadow-lg p-6 w-[360px]"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="w-full text-center text-xl font-semibold mb-2">Are you sure?</h2>
-            <p className="w-full text-center mb-6">Do you want to start new task?</p>
+            <h2 className="w-full text-center text-xl font-semibold mb-2">
+              Are you sure?
+            </h2>
+            <p className="w-full text-center mb-6">
+              Do you want to start new task?
+            </p>
             <div className="flex justify-center">
               <button
                 className="bg-white hover:bg-gray-100 border border-primary text-gray-800 px-4 py-1 rounded-full w-24"

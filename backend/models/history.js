@@ -4,8 +4,7 @@ const Schema = mongoose.Schema;
 const historySchema = new Schema({
     email: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     socketioPath: {
         type: String,

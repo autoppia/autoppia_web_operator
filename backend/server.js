@@ -6,23 +6,27 @@ const app = express();
 
 const operatorRoutes = require("./routes/operator");
 const historyRoutes = require("./routes/history");
+const userRoutes = require("./routes/user");
 
 // Connect to Database
 require("dotenv").config();
 
-const MONGO_CONNECTION_URI = process.env.MONGO_CONNECTION_URI || "mongodb://localhost:27017/automata";
+const MONGO_CONNECTION_URI =
+  process.env.MONGO_CONNECTION_URI || "mongodb://localhost:27017/automata";
 
-mongoose.connect(MONGO_CONNECTION_URI)
+mongoose
+  .connect(MONGO_CONNECTION_URI)
   .then(() => console.log("MongoDB connected successfully"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
 // Middleware
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 
 // Routes
 app.use("/operator", operatorRoutes);
 app.use("/history", historyRoutes);
+app.use("/user", userRoutes);
 
 // Start Server
 const port = 4000;

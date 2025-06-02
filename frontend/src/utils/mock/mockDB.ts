@@ -18,8 +18,8 @@ export const websites = [
     icon: faGoogle,
   },
   {
-    title: "Amazon Web Service",
-    url: "https://aws.amazon.com",
+    title: "Amazon",
+    url: "https://amazon.com",
     icon: faAws,
   },
   {

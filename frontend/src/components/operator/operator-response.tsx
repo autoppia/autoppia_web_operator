@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleNotch,
@@ -9,7 +9,10 @@ import {
   faCheck,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { faCircleCheck, faCircleXmark } from "@fortawesome/free-regular-svg-icons";
+import {
+  faCircleCheck,
+  faCircleXmark,
+} from "@fortawesome/free-regular-svg-icons";
 
 interface OperatorResponseProps {
   role: string;
@@ -40,9 +43,7 @@ function OperatorResponse(props: OperatorResponseProps) {
                   icon={faCircleNotch}
                   className="animate-spin me-2 text-xl"
                 />
-                <span className="truncate w-full">
-                  {thinking}
-                </span>
+                <span className="truncate w-full">{thinking}</span>
               </div>
             )}
             {state === "success" && (
@@ -52,9 +53,7 @@ function OperatorResponse(props: OperatorResponseProps) {
                   color="green"
                   className="me-2 text-xl"
                 />
-                <span>
-                  {"Task completed successfully."}
-                </span>
+                <span>{"Task completed successfully."}</span>
               </div>
             )}
             {state === "error" && (
@@ -64,9 +63,7 @@ function OperatorResponse(props: OperatorResponseProps) {
                   color="red"
                   className="me-2 text-xl"
                 />
-                <span>
-                  {"Task failed."}
-                </span>
+                <span>{"Task failed."}</span>
               </div>
             )}
             <FontAwesomeIcon
@@ -79,8 +76,9 @@ function OperatorResponse(props: OperatorResponseProps) {
         )}
 
         <div
-          className={`flex flex-col w-full items-end px-2 pb-4 ${collapse ? "block" : "hidden"
-            }`}
+          className={`flex flex-col w-full items-end px-2 pb-4 ${
+            collapse ? "block" : "hidden"
+          }`}
         >
           {actions &&
             actions.map((action, index) => (
@@ -102,15 +100,14 @@ function OperatorResponse(props: OperatorResponseProps) {
                     className="me-2"
                   />
                 )}
-                {(actionResults === undefined || (actionResults && actionResults[index] === undefined)) && (
+                {(actionResults === undefined ||
+                  (actionResults && actionResults[index] === undefined)) && (
                   <FontAwesomeIcon
                     icon={faCircleNotch}
                     className="animate-spin me-2"
                   />
                 )}
-                <span className="w-full break-words">
-                  {action}
-                  </span>
+                <span className="w-full break-words">{action}</span>
               </div>
             ))}
         </div>
@@ -118,11 +115,7 @@ function OperatorResponse(props: OperatorResponseProps) {
 
       {content && (
         <div className="w-full text-gray-700 mt-2 dark:text-white">
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-          >
-            {content}
-          </ReactMarkdown>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
         </div>
       )}
     </div>

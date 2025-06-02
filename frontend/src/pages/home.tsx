@@ -8,7 +8,7 @@ import {
 import TitleSection from "../components/home/title-section";
 import TaskSection from "../components/home/task-section";
 import SliderSection from "../components/home/slider-section";
-import HistorySidebar from "../components/home/history-sidebar";
+import ProfileSidebar from "../components/home/profile-sidebar";
 import ToggleTheme from "../components/common/toggle-theme";
 import IconButton from "../components/common/icon-button";
 
@@ -84,7 +84,7 @@ export default function Home(): React.ReactElement {
           />
         </div>
       </div>
-      <HistorySidebar
+      <ProfileSidebar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
       />
