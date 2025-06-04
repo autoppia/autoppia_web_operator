@@ -114,7 +114,7 @@ function OperatorResponse(props: OperatorResponseProps) {
       </div>
 
       {content && (
-        <div className="w-full text-gray-700 mt-2 dark:text-white">
+        <div className="w-full text-gray-700 mt-2 dark:text-white break-words">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
         </div>
       )}

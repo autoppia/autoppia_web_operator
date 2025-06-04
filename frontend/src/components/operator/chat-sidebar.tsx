@@ -12,7 +12,7 @@ import ToggleTheme from "../common/toggle-theme";
 import IconButton from "../common/icon-button";
 import OperatorResponse from "./operator-response";
 import UserMessage from "./user-message";
-import { addTask } from "../../redux/chatSlice";
+import { addAction, addTask, addResult } from "../../redux/chatSlice";
 
 interface ChatSidebarProps {
   open: boolean;
@@ -34,13 +34,29 @@ export default function ChatSidebar(props: ChatSidebarProps) {
   const screenshots = useSelector((state: any) => state.socket.screenshots);
 
   const handleSubmit = () => {
-    sockets.forEach((socket: any) => {
-      socket.emit("continue-task", {
-        task: task,
-      });
-    });
     dispatch(addTask(task));
     setTask("");
+    sockets.forEach((socket: any) => {
+      if (socket.connected) {
+        dispatch(
+          addAction({
+            socketId: socket.id,
+            action: "Continuing task...",
+          })
+        );
+        socket.emit("continue-task", {
+          task: task,
+        });
+      } else {
+        dispatch(
+          addResult({
+            socketId: socket.id,
+            content: "Disconnected from Operator.",
+            success: false,
+          })
+        );
+      }
+    });
   };
   const handleChangeTask = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTask(event.target.value);

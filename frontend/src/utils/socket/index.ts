@@ -3,12 +3,10 @@ import { io } from 'socket.io-client';
 import { addSocket, addSocketId, setScreenshot } from '../../redux/socketSlice';
 import { addAction, addResult } from '../../redux/chatSlice';
 import { AppDispatch } from '../../redux/store';
-import { HistoryItem } from '../types';
 
-const apiUrl = process.env.REACT_APP_API_URL;
 const validatorUrl = process.env.REACT_APP_VALIDATOR_URL;
 
-export const initializeSocket = (dispatch: AppDispatch, socketioPath: string, email: string) => {
+export const initializeSocket = (dispatch: AppDispatch, socketioPath: string) => {
     const socket = io(validatorUrl, {
         path: socketioPath,
         timeout: 60000,
@@ -49,29 +47,7 @@ export const initializeSocket = (dispatch: AppDispatch, socketioPath: string, em
         dispatch(addResult({ socketId: socket.id, ...result }));
     });
 
-    socket.on('history', async (history) => {
-        await saveHistory({
-            ...history,
-            email: email,
-            socketioPath: socketioPath
-        })
-    })
-
     dispatch(addSocket(socket));
 
     return socket;
 };
-
-const saveHistory = async (history: HistoryItem) => {
-    try {
-        await fetch(`${apiUrl}/history/save`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(history)
-        })
-    } catch (err) {
-        console.error(err);
-    }
-}

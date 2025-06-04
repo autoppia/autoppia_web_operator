@@ -83,9 +83,8 @@ export default function TaskSection(props: TaskSectionProps) {
         dispatch(resetChat());
         dispatch(addTask(prompt));
         data.socketioPaths.forEach((socketioPath: string) => {
-          const socket = initializeSocket(dispatch, socketioPath, user.email);
-          const task = `${prompt}
-            \nADDITIONAL INFO: ${user.instructions}`;
+          const socket = initializeSocket(dispatch, socketioPath);
+          const task = user.isAuthenticated ? `${prompt}\nADDITIONAL INFO: ${user.instructions}` : prompt;
           socket.emit("new-task", {
             task: task,
             url: initialUrl,

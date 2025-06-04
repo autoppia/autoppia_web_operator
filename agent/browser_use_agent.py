@@ -7,6 +7,7 @@ from langchain_openai import ChatOpenAI
 from browser_use import Agent
 from browser_use.agent.views import AgentState
 from browser_use.browser import BrowserProfile, BrowserSession
+from playwright.async_api import Browser
 
 from base_agent import BaseAgent
 
@@ -15,25 +16,40 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 class BrowserUseAgent(BaseAgent):
-    def __init__(self, task: str, initial_url: str = None, storage_state_path: Path = None):
-        super().__init__(task, initial_url, storage_state_path)
-
+    def __init__(self):
         self.browser_profile = None
         self.browser_session = None
         self.agent_state = None
         self.agent = None
 
-    async def init_agent(self) -> None:
+    async def init_agent(
+        self,
+        browser: Browser,
+        task: str, 
+        initial_url: str = None, 
+        storage_state_path: Path = None
+    ) -> None:
+        self.browser = browser
+        self.task = task
+        self.initial_url = initial_url
+        self.storage_state_path = storage_state_path
+
+        self.browser_context = await browser.new_context()
         self.browser_profile = BrowserProfile(
             disable_security=True,
-            headless=True,
+            headless=False,
+            chromium_sandbox=False,
             highlight_elements=False,
             viewport={"width": 1600, "height": 1200},
             user_data_dir=None,
             locale="en-US",
             storage_state=self.storage_state_path
         )
-        self.browser_session = BrowserSession(browser_profile=self.browser_profile)
+        self.browser_session = BrowserSession(
+            browser_profile=self.browser_profile,
+            browser=self.browser,
+            browser_context=self.browser_context
+        )
         self.agent_state = AgentState()
 
         if self.initial_url:

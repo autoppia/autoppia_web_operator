@@ -1,16 +1,18 @@
 from abc import ABC, abstractmethod
 from typing import Tuple
 from pathlib import Path
+from playwright.async_api import Browser
 
 
 class BaseAgent(ABC):
-    def  __init__(self, task: str, initial_url: str = None, storage_state_path: Path = None):
-        self.task = task
-        self.initial_url = initial_url
-        self.storage_state_path = storage_state_path
-
     @abstractmethod
-    async def init_agent(self) -> None:
+    async def init_agent(
+        self,
+        browser: Browser,
+        task: str, 
+        initial_url: str = None, 
+        storage_state_path: Path = None
+    ) -> None:
         pass
                         
     @abstractmethod

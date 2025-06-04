@@ -54,7 +54,7 @@ export const bittensorPrompts = [
     icon: faChartLine,
   },
   {
-    title: "Analyze subnet 36 APR and validators",
+    title: "Analyze subnet 36 State",
     prompt: "Tell me for subnet 36 web agents which is apr for 30d and which are the best validators to stake with. ",
     url: "https://taoyield.com",
     icon: faMap,

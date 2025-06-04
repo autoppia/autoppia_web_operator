@@ -9,6 +9,7 @@ from aiohttp import web
 from pathlib import Path
 
 from browser_use_agent import BrowserUseAgent
+from playwright.async_api import async_playwright
 
 AGENT_CLASS = BrowserUseAgent
 
@@ -26,6 +27,8 @@ class AutomataOperator:
         self.sio.attach(self.app)
 
         self.sessions = {}
+        self.playwright = None
+        self.browser = None
 
         self.app.router.add_get('/status', self.get_status)
         self._register_events()
@@ -43,10 +46,10 @@ class AutomataOperator:
 
         @self.sio.on('new-task')
         async def new_task(sid, data):
-            logger.info(f'New task received from {sid}: {data}')
-
             task = data.get('task')
             url = data.get('url')
+            logger.info(f'New task received from {sid}:\n Task: {task}\n Initial URL: {url}')
+
             storage_state = data.get('storageState')
             if not task:
                 await self.sio.emit('error', {'message': 'No task provided'}, to=sid)
@@ -58,8 +61,9 @@ class AutomataOperator:
                 with open(storage_state_path, 'w') as storage_state_file:
                     json.dump(storage_state, storage_state_file, indent=4)
 
-            agent = AGENT_CLASS(task, url, storage_state_path)
-            await agent.init_agent()
+            agent = AGENT_CLASS()
+            await self._init_browser()
+            await agent.init_agent(self.browser, task, url, storage_state_path)
 
             self.sessions[sid] = agent
 
@@ -93,6 +97,12 @@ class AutomataOperator:
             agent = self.sessions.get(sid)
             if agent:
                 await agent.close()
+
+    async def _init_browser(self):
+        if self.browser:
+            return
+        self.playwright = await async_playwright().start()
+        self.browser = await self.playwright.chromium.launch(headless=False)
 
     async def _perform_task(self, sid, max_steps=25):
         agent = self.sessions[sid]
