@@ -12,7 +12,7 @@ import ToggleTheme from "../common/toggle-theme";
 import IconButton from "../common/icon-button";
 import OperatorResponse from "./operator-response";
 import UserMessage from "./user-message";
-import { addAction, addTask, addResult } from "../../redux/chatSlice";
+import { addAction, addTask } from "../../redux/chatSlice";
 
 interface ChatSidebarProps {
   open: boolean;

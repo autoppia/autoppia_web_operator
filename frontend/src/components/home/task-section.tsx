@@ -225,8 +225,12 @@ export default function TaskSection(props: TaskSectionProps) {
                       setOpenedDropdown(null);
                     }}
                   >
-                    <FontAwesomeIcon icon={website.icon} className="me-3" />
-                    {website.title}
+                    <img
+                     alt=""
+                     src={website.favicon}
+                     className="w-5 me-2"
+                    />
+                    <span className="text-sm">{website.title}</span>
                   </div>
                 ))}
               </div>

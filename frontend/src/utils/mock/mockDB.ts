@@ -1,7 +1,4 @@
-import { faAmazon, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import {
-  faGlobe,
-  faMap,
   faChartSimple,
   faCartShopping,
   faShield,
@@ -16,57 +13,57 @@ export const websites = [
   {
     title: "Amazon",
     url: "https://amazon.com",
-    icon: faAmazon,
+    favicon: "/assets/images/favicons/amazon.png",
   },
   {
     title: "Autoppia",
     url: "https://autoppia.com",
-    icon: faGlobe,
+    favicon: "/assets/images/favicons/autoppia.png",
   },
   {
     title: "Autoppia Dashboard",
     url: "https://app.autoppia.com",
-    icon: faGlobe,
+    favicon: "/assets/images/favicons/autoppia.png",
   },
   {
     title: "Bitrefill",
     url: "https://www.bitrefill.com",
-    icon: faGlobe,
+    favicon: '/assets/images/favicons/bitrefill.png',
   },
   {
     title: "Bittensor",
     url: "https://www.bittensor.ai",
-    icon: faGlobe,
+    favicon: "/assets/images/favicons/bittensor.png"
   },
   {
     title: "Google Search",
     url: "https://google.com",
-    icon: faGoogle,
+    favicon: "/assets/images/favicons/google.png"
   },
   {
     title: "Google Maps",
     url: "https://maps.google.com",
-    icon: faMap,
+    favicon: '/assets/images/favicons/maps.google.png'
   },
   {
     title: "Pokemon Showdown",
     url: "https://pokemonshowdown.com",
-    icon: faGlobe,
+    favicon: "/assets/images/favicons/pokemonshowdown.png"
   },
   {
     title: "Tao App",
     url: "https://www.tao.app",
-    icon: faGlobe,
+    favicon: "/assets/images/favicons/taoapp.png"
   },
   {
     title: "Tao Stats",
     url: "https://taostats.io",
-    icon: faGlobe,
+    favicon: "/assets/images/favicons/taostats.png"
   },
   {
     title: "Tao Yield",
     url: "https://www.taoyield.com",
-    icon: faGlobe,
+    favicon: "/assets/images/favicons/taoyield.png",
   },
 ];
 
