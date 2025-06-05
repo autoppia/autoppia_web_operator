@@ -70,25 +70,25 @@ export const websites = [
 export const bittensorPrompts = [
   {
     title: "Subnet36 Key Stats in Bittensor.ai",
-    prompt: "Find subnet 36 page, go to detail page and tell me the Key alpha stats.",
+    prompt: "Find the subnet 36 page, go to the detail page, and tell me the key alpha stats.",
     url: "https://www.bittensor.ai",
     icon: faChartSimple,
   },
   {
     title: "Top SN36 Validators by APY in Taoyield",
-    prompt: "Which are the top 5 validators with more APY in a 30D period?",
+    prompt: "Which are the top 5 validators with the highest APY in a 30-day period?",
     url: "https://www.taoyield.com",
     icon: faShield,
   },
   {
     title: "Ask Savant in Tao.app",
-    prompt: "Ask the assistant which is the price of Autoppia and how much emissions they have.",
+    prompt: "Ask the assistant what the price of Autoppia is and how many emissions they have.",
     url: "https://www.tao.app/assistant",
     icon: faDollar,
   },
   {
     title: "Portfolio Wallet Creation in Taostats",
-    prompt: "Signup annonimously and create a new portfolio wallet for {ADDRESS} and tell me the balance and tao staked in root",
+    prompt: "Sign up anonymously and create a new portfolio wallet for {ADDRESS}, then tell me the balance and TAO staked in the root.",
     url: "https://taostats.io",
     icon: faWallet,
   }
@@ -97,25 +97,25 @@ export const bittensorPrompts = [
 export const generalPrompts = [
   {
     title: "Amazon Full Checkout",
-    prompt: "Search for a red shirt, add to cart, proceed to checkout, login and fill address.",
-    url: "https://amazon.com",
+    prompt: "Search for a red shirt, add it to the cart, proceed to checkout, log in, and fill in the address.",
+    url: "https://www.amazon.com",
     icon: faCartShopping,
   },
   {
     title: "Autoppia Platform Demo",
-    prompt: "Edit the postgres database integration and change port to existing port + 1.",
+    prompt: "Edit the PostgreSQL database integration and change the port to the existing port plus one.",
     url: "https://app.autoppia.com",
     icon: faDatabase,
   },
   {
     title: "Bitrefill Steam $50 Coupon",
-    prompt: "Find a Steam Coupon of 50 dollars and add to cart, then go to cart detail (do not change currency).",
+    prompt: "Find a Steam coupon for 50 dollars and add it to the cart, then go to the cart details (do not change the currency).",
     url: "https://www.bitrefill.com",
     icon: faTicket,
   },
   {
     title: "Pokemon Match",
-    prompt: "Play 1 match of pokemon vs a random opponent.",
+    prompt: "Play one match of Pokémon against a random opponent.",
     url: "https://pokemonshowdown.com",
     icon: faPaw,
   }
