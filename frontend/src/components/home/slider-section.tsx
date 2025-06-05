@@ -50,7 +50,7 @@ export default function SliderSection(props: SliderSectionProps) {
                 <div className="flex items-center justify-center bg-gradient-primary p-3 rounded-full me-2">
                   <FontAwesomeIcon icon={item.icon} className="text-white" />
                 </div>
-                <div>{item.title}</div>
+                <div className="text-sm">{item.title}</div>
               </div>
             ))}
           </div>
@@ -71,7 +71,7 @@ export default function SliderSection(props: SliderSectionProps) {
                 <div className="flex items-center justify-center bg-gradient-primary p-3 rounded-full me-2">
                   <FontAwesomeIcon icon={item.icon} className="text-white" />
                 </div>
-                <div>{item.title}</div>
+                <div className="text-sm">{item.title}</div>
               </div>
             ))}
           </div>

@@ -66,6 +66,16 @@ function OperatorResponse(props: OperatorResponseProps) {
                 <span>{"Task failed."}</span>
               </div>
             )}
+            {state === "disconnected" && (
+              <div className="text-gray-600 flex items-center dark:text-gray-100">
+                <FontAwesomeIcon
+                  icon={faCircleXmark}
+                  color="red"
+                  className="me-2 text-xl"
+                />
+                <span>{"Operator disconnected."}</span>
+              </div>
+            )}
             <FontAwesomeIcon
               icon={!collapse ? faChevronDown : faChevronUp}
               color="gray"

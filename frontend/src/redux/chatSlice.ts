@@ -42,7 +42,10 @@ const chatSlice = createSlice({
           ...state.chats[lastIndex],
           thinking: action.payload.action,
           actions: [...state.chats[lastIndex].actions!, action.payload.action],
-          actionResults: [...state.chats[lastIndex].actionResults!, action.payload.previous_success]
+          actionResults: [
+            ...state.chats[lastIndex].actionResults!,
+            action.payload.previous_success,
+          ],
         };
       } else {
         state.chats = [
@@ -70,8 +73,11 @@ const chatSlice = createSlice({
         state.chats[lastIndex] = {
           ...state.chats[lastIndex],
           content: action.payload.content,
-          state: action.payload.success ? "success" : "error",
-          actionResults: [...state.chats[lastIndex].actionResults!, action.payload.success]
+          state: action.payload.state,
+          actionResults: [
+            ...state.chats[lastIndex].actionResults!,
+            action.payload.success,
+          ],
         };
         state.completed += 1;
       } else {
@@ -81,15 +87,15 @@ const chatSlice = createSlice({
             role: "assistant",
             socketId: action.payload.socketId,
             content: action.payload.content,
-            state: action.payload.success ? "success" : "error",
-            actionResults: [...state.chats[lastIndex].actionResults!, action.payload.success]
+            state: action.payload.state,
+            actionResults: [
+              ...state.chats[lastIndex].actionResults!,
+              action.payload.success,
+            ],
           },
         ];
         state.completed += 1;
       }
-    },
-    addScreenshot: (state, action) => {
-      
     }
   },
 });

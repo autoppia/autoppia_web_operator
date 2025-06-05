@@ -47,15 +47,7 @@ export default function ChatSidebar(props: ChatSidebarProps) {
         socket.emit("continue-task", {
           task: task,
         });
-      } else {
-        dispatch(
-          addResult({
-            socketId: socket.id,
-            content: "Disconnected from Operator.",
-            success: false,
-          })
-        );
-      }
+      } 
     });
   };
   const handleChangeTask = (event: React.ChangeEvent<HTMLInputElement>) => {
