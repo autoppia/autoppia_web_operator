@@ -127,7 +127,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaskDetails'
+                $ref: '#/components/schemas/Task'
         '404':
           description: Task not found
           content:
