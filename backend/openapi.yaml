@@ -1,0 +1,292 @@
+openapi: 3.1.0
+info:
+  title: Automata API
+  description: API for web operating
+  version: 1.0.0
+
+paths:
+  /run-task:
+    post:
+      summary: Run a new automation task
+      description: Creates and executes a new web automation task
+      operationId: runTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - task
+                - url
+              properties:
+                task:
+                  type: string
+                  description: Description of the task to be performed
+                  example: "Click on the login button and fill in credentials"
+                url:
+                  type: string
+                  format: uri
+                  description: Target URL for the automation task
+                  example: "https://example.com/login"
+      responses:
+        '200':
+          description: Task created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: Unique task identifier
+                    example: "123e4567-e89b-12d3-a456-426614174000"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /update-task:
+    put:
+      summary: Update task progress
+      description: Updates the status, steps, screenshots, or output of an existing task
+      operationId: updateTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: Task identifier
+                  example: "123e4567-e89b-12d3-a456-426614174000"
+                status:
+                  type: string
+                  enum: [pending, running, completed, failed]
+                  description: Current task status
+                  example: "running"
+                step:
+                  $ref: '#/components/schemas/Step'
+                screenshot:
+                  type: string
+                  description: Base64 encoded screenshot or screenshot URL
+                  example: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
+                output:
+                  type: string
+                  description: Task execution output or result
+                  example: "Login successful"
+      responses:
+        '200':
+          description: Task updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Task updated successfully"
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /task/{id}:
+    get:
+      summary: Get task details
+      description: Retrieves detailed information about a specific task (excluding screenshots)
+      operationId: getTask
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Task identifier
+          schema:
+            type: string
+            format: uuid
+            example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Task details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDetails'
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /task/{id}/status:
+    get:
+      summary: Get task status
+      description: Retrieves the current status of a specific task
+      operationId: getTaskStatus
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Task identifier
+          schema:
+            type: string
+            format: uuid
+            example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Task status retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [pending, running, completed, failed]
+                    example: "completed"
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /task/{id}/screenshots:
+    get:
+      summary: Get task screenshots
+      description: Retrieves all screenshots captured during task execution
+      operationId: getTaskScreenshots
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Task identifier
+          schema:
+            type: string
+            format: uuid
+            example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Screenshots retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  screenshots:
+                    type: array
+                    items:
+                      type: string
+                      description: Base64 encoded screenshot or screenshot URL
+                    example: ["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."]
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Step:
+      type: object
+      required:
+        - next_goal
+        - evaluation_previous_goal
+        - previous_success
+      properties:
+        next_goal:
+          type: string
+          description: The next goal or action to be performed
+          example: "Click on the submit button"
+        evaluation_previous_goal:
+          type: string
+          description: Evaluation of the previous goal execution
+          example: "Successfully filled in the username field"
+        previous_success:
+          type: boolean
+          description: Whether the previous step was successful
+          example: true
+
+    TaskDetails:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique task identifier
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        task:
+          type: string
+          description: Description of the task
+          example: "Click on the login button and fill in credentials"
+        url:
+          type: string
+          format: uri
+          description: Target URL for the automation task
+          example: "https://example.com/login"
+        status:
+          type: string
+          enum: [pending, running, completed, failed]
+          description: Current task status
+          example: "completed"
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/Step'
+          description: List of step objects executed during the task
+          example:
+            - next_goal: "Navigate to login page"
+              evaluation_previous_goal: "Page loaded successfully"
+              previous_success: true
+            - next_goal: "Fill username field"
+              evaluation_previous_goal: "Login page elements found"
+              previous_success: true
+        output:
+          type: string
+          description: Task execution output or result
+          example: "Login successful"
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message or error object
+          example: "Task not found"
+

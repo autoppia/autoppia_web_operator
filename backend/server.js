@@ -1,12 +1,15 @@
 const express = require("express");
+const swaggerUi = require('swagger-ui-express');
+const fs = require('fs');
+const yaml = require('js-yaml');
 const cors = require("cors");
 const mongoose = require("mongoose");
 
 const app = express();
 
-const operatorRoutes = require("./routes/operator");
-const historyRoutes = require("./routes/history");
-const userRoutes = require("./routes/user");
+// Import Routes
+const webRoutes = require("./routes/web");
+const apiRoutes = require("./routes/api");
 
 // Connect to Database
 require("dotenv").config();
@@ -24,9 +27,14 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use("/operator", operatorRoutes);
-app.use("/history", historyRoutes);
-app.use("/user", userRoutes);
+app.use("/", webRoutes);
+app.use("/api", apiRoutes);
+
+const swaggerDocument = yaml.load(fs.readFileSync('./openapi.yaml', 'utf8'));
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
+    customCss: '.topbar { display: none; }'
+}));
 
 // Start Server
 const port = 4000;

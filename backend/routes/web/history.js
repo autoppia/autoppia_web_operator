@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const History = require('../models/history');
+const History = require('../../models/history');
 
 // GET history route
 router.get("/", async (req, res) => {

@@ -15,6 +15,7 @@ load_dotenv()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+
 class BrowserUseAgent(BaseAgent):
     def __init__(self):
         self.browser_profile = None
@@ -99,9 +100,11 @@ class BrowserUseAgent(BaseAgent):
             return None
 
         next_goal = model_thoughts[-1].next_goal
-        previous_success = False if 'Failed' in model_thoughts[-1].evaluation_previous_goal else True
+        evaluation_previous_goal = model_thoughts[-1].evaluation_previous_goal
+        previous_success = False if 'Failed' in evaluation_previous_goal else True
         return {
             'next_goal': next_goal,
+            'evaluation_previous_goal': evaluation_previous_goal,
             'previous_success': previous_success
         }
     
