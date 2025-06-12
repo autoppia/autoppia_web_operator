@@ -14,9 +14,9 @@ router.post("/run-task", async (req, res) => {
         const { task, url } = req.body;
         const taskId = crypto.randomUUID();
 
-        // const randomMiner = await Miner.aggregate([{ $sample: { size: 1 } }]);
-        // const endpoint = `${validatorUrl}/${randomMiner[0].apiPath}/run-task`
-        const endpoint = `http://localhost:5000/run-task`
+        const randomMiner = await Miner.aggregate([{ $sample: { size: 1 } }]);
+        const endpoint = `${validatorUrl}/${randomMiner[0].apiPath}/run-task`
+        // const endpoint = `http://localhost:5000/run-task`
 
         const response = await axios.post(endpoint, {
             id: taskId,
