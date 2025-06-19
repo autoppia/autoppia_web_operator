@@ -76,12 +76,14 @@ class AutomataOperator:
                 break
 
         screenshot = await agent.take_screenshot()
+        gif = agent.generate_gif()
         result = agent.get_result()
         if result['success']:
             await self._update_task({
                 'id': task_id,
                 'status': 'completed',
                 'screenshot': screenshot,
+                'gif': gif,
                 'output': result['content']
             })
         else:
@@ -89,6 +91,7 @@ class AutomataOperator:
                 'id': task_id,
                 'status': 'failed',
                 'screenshot': screenshot,
+                'gif': gif,
                 'output': result['content']
             })
 

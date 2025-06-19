@@ -49,64 +49,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /api/v1/update-task:
-    put:
-      summary: Update task progress
-      description: Updates the status, steps, screenshots, or output of an existing task
-      operationId: updateTask
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - id
-              properties:
-                id:
-                  type: string
-                  format: uuid
-                  description: Task identifier
-                  example: "123e4567-e89b-12d3-a456-426614174000"
-                status:
-                  type: string
-                  enum: [pending, running, completed, failed]
-                  description: Current task status
-                  example: "running"
-                step:
-                  $ref: '#/components/schemas/Step'
-                screenshot:
-                  type: string
-                  description: Base64 encoded screenshot or screenshot URL
-                  example: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
-                output:
-                  type: string
-                  description: Task execution output or result
-                  example: "Login successful"
-      responses:
-        '200':
-          description: Task updated successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Task updated successfully"
-        '404':
-          description: Task not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
   /api/v1/task/{id}:
     get:
       summary: Get task details
@@ -208,6 +150,45 @@ paths:
                       type: string
                       description: Base64 encoded screenshot or screenshot URL
                     example: ["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."]
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/v1/task/{id}/gif:
+    get:
+      summary: Get task gif
+      description: Retrieves the gif generated from task screenshots
+      operationId: getTaskGif
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Task identifier
+          schema:
+            type: string
+            format: uuid
+            example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Gif retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  gif:
+                    type: string
+                    description: Base64 encoded gif
+                    example: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP..."
         '404':
           description: Task not found
           content:

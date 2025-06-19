@@ -1,3 +1,6 @@
+import uuid
+import base64
+import tempfile
 import logging
 from typing import Tuple
 from dotenv import load_dotenv
@@ -6,6 +9,7 @@ from pathlib import Path
 from langchain_openai import ChatOpenAI
 from browser_use import Agent
 from browser_use.agent.views import AgentState
+from browser_use.agent.gif import create_history_gif
 from browser_use.browser import BrowserProfile, BrowserSession
 from playwright.async_api import Browser
 
@@ -115,5 +119,17 @@ class BrowserUseAgent(BaseAgent):
             'content': final_result,
             'success': is_successful
         }
-        
+    
+    def generate_gif(self) -> str:
+        random_uuid = str(uuid.uuid4())
+        output_path = f'{tempfile.gettempdir()}/{random_uuid}.gif'
 
+        create_history_gif(
+            self.task,
+            self.agent_state.history,
+            output_path,
+        )
+
+        with open(output_path, 'rb') as f:
+            base64_string = base64.b64encode(f.read()).decode('utf-8')
+            return base64_string

@@ -4,6 +4,7 @@ const express = require("express");
 const router = express.Router();
 
 const Miner = require("../../models/miner");
+const { NODE_ENV } = require("../../config");
 
 const tasks = {}
 
@@ -15,8 +16,9 @@ router.post("/run-task", async (req, res) => {
         const taskId = crypto.randomUUID();
 
         const randomMiner = await Miner.aggregate([{ $sample: { size: 1 } }]);
-        const endpoint = `${validatorUrl}/${randomMiner[0].apiPath}/run-task`
-        // const endpoint = `http://localhost:5000/run-task`
+        const endpoint = NODE_ENV == "production"
+            ? `${validatorUrl}/${randomMiner[0].apiPath}/run-task`
+            : `http://localhost:5000/run-task`
 
         const response = await axios.post(endpoint, {
             id: taskId,
@@ -34,6 +36,7 @@ router.post("/run-task", async (req, res) => {
             status: "pending",
             steps: [],
             screenshots: [],
+            gif: "",
             output: ""
         };
         res.status(200).json({ id: taskId });
@@ -80,7 +83,7 @@ router.get("/task/:id", async (req, res) => {
         if (!task) {
             return res.status(404).json({ error: "Task not found" });
         }
-        const { screenshots, ...rest } = task;
+        const { screenshots, gif, ...rest } = task;
         res.status(200).json(rest);
     } catch (err) {
         console.error(err);
@@ -110,6 +113,20 @@ router.get("/task/:id/screenshots", async (req, res) => {
             return res.status(404).json({ error: "Task not found" });
         }
         res.status(200).json({ screenshots: task.screenshots });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err });
+    }
+})
+
+router.get("/task/:id/gif", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const task = tasks[id];
+        if (!task) {
+            return res.status(404).json({ error: "Task not found" });
+        }
+        res.status(200).json({ gif: task.gif });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: err });

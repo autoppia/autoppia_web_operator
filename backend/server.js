@@ -11,11 +11,7 @@ const app = express();
 const webRoutes = require("./routes/web");
 const apiRoutes = require("./routes/api");
 
-// Connect to Database
-require("dotenv").config();
-
-const MONGO_CONNECTION_URI =
-  process.env.MONGO_CONNECTION_URI || "mongodb://localhost:27017/automata";
+const { MONGO_CONNECTION_URI } = require("./config");
 
 mongoose
   .connect(MONGO_CONNECTION_URI)
@@ -30,10 +26,10 @@ app.use(express.json());
 app.use("/", webRoutes);
 app.use("/api", apiRoutes);
 
-const swaggerDocument = yaml.load(fs.readFileSync('./openapi.yaml', 'utf8'));
+const swaggerDocument = yaml.load(fs.readFileSync('./config/openapi.yaml', 'utf8'));
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
-    customCss: '.topbar { display: none; }'
+  customCss: '.topbar { display: none; }'
 }));
 
 // Start Server

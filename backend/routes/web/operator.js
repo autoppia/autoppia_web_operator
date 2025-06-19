@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const Miner = require("../../models/miner");
+const { NODE_ENV } = require("../../config");
 
 const storageState = require("../../storage_state.json")
 const localPath = "/socket.io";
@@ -10,15 +11,13 @@ const localPath = "/socket.io";
 router.post("/", async (req, res) => {
     try {
         const { agentCount } = req.body;
-        
-        // For Production
-        const randomMiners = await Miner.aggregate([{ $sample: { size: agentCount } }]);
-        const socketioPaths = randomMiners.map(miner => miner.socketioPath);
 
-        // For Development
-        // const socketioPaths = Array(agentCount).fill().map(() => {
-        //     return localPath;
-        // });
+        const randomMiners = await Miner.aggregate([{ $sample: { size: agentCount } }]);
+        const socketioPaths = NODE_ENV == "production"
+            ? randomMiners.map(miner => miner.socketioPath)
+            : Array(agentCount).fill().map(() => {
+                return localPath;
+            });
 
         res.json({
             socketioPaths: socketioPaths,
