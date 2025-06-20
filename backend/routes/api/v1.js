@@ -48,7 +48,7 @@ router.post("/run-task", async (req, res) => {
 
 router.put("/update-task", async (req, res) => {
     try {
-        const { id, status, step, screenshot, output } = req.body;
+        const { id, status, step, screenshot, gif, output } = req.body;
         const task = tasks[id];
         if (!task) {
             return res.status(404).json({ error: "Task not found" });
@@ -64,6 +64,10 @@ router.put("/update-task", async (req, res) => {
 
         if (screenshot != undefined) {
             task.screenshots.push(screenshot);
+        }
+
+        if (gif != undefined) {
+            task.gif = gif;
         }
 
         if (output != undefined) {

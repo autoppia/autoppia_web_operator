@@ -1,4 +1,5 @@
 import os
+import uuid
 import json
 import socketio
 import asyncio
@@ -39,6 +40,8 @@ class AutomataOperator:
 
         self.storage_state_dir = Path(tempfile.gettempdir()) / 'automata' / 'storage_states'
         self.storage_state_dir.mkdir(parents=True, exist_ok=True)
+        self.history_gif_dir = Path(tempfile.gettempdir()) / 'autoamta' / 'history'
+        self.history_gif_dir.mkdir(parents=True, exist_ok=True)
 
     async def run_task(self, request):
         data = await request.json()
@@ -76,7 +79,7 @@ class AutomataOperator:
                 break
 
         screenshot = await agent.take_screenshot()
-        gif = agent.generate_gif()
+        gif = agent.generate_gif(self.history_gif_dir / f'{uuid.uuid4()}.gif')
         result = agent.get_result()
         if result['success']:
             await self._update_task({

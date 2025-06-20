@@ -1,6 +1,4 @@
-import uuid
 import base64
-import tempfile
 import logging
 from typing import Tuple
 from dotenv import load_dotenv
@@ -120,16 +118,17 @@ class BrowserUseAgent(BaseAgent):
             'success': is_successful
         }
     
-    def generate_gif(self) -> str:
-        random_uuid = str(uuid.uuid4())
-        output_path = f'{tempfile.gettempdir()}/{random_uuid}.gif'
+    def generate_gif(self, output_path: Path) -> str:
+        try:
+            create_history_gif(
+                task=self.task,
+                history=self.agent_state.history,
+                output_path=str(output_path),
+            )
 
-        create_history_gif(
-            self.task,
-            self.agent_state.history,
-            output_path,
-        )
-
-        with open(output_path, 'rb') as f:
-            base64_string = base64.b64encode(f.read()).decode('utf-8')
-            return base64_string
+            with open(output_path, 'rb') as f:
+                base64_string = base64.b64encode(f.read()).decode('utf-8')
+                return base64_string
+        except Exception as e:
+            logger.error(f'Error generating GIF: {e}')
+            return ""
