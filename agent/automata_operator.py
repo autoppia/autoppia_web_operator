@@ -98,6 +98,8 @@ class AutomataOperator:
                 'output': result['content']
             })
 
+        await agent.close()
+
     async def _update_task(self, json):
         async with aiohttp.ClientSession() as session:
             async with session.put(f'{automata_api_url}/update-task', json=json) as reponse:
