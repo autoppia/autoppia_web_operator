@@ -10,8 +10,10 @@ module.exports = async (req, res, next) => {
         const response = await axios.post('https://api.autoppia.com/api-keys/verify', {
             credential: apiKey,
         });
-        const data = await response.json();
-        console.log(data);
+        const { is_valid } = response.data;
+        if (!is_valid) {
+            return res.status(401).json({ error: 'Unauthorized: Invalid API key' });
+        }
         next();
     } catch (err) {
         console.error(err);
