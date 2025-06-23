@@ -3,3 +3,4 @@ python-socketio
 python-dotenv
 browser-use
 Pillow
+fastmcp
