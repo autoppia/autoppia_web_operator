@@ -11,6 +11,8 @@ const app = express();
 const webRoutes = require("./routes/web");
 const apiRoutes = require("./routes/api");
 
+const authenticateApiKey = require("./middleware/authMiddleware");
+
 const { MONGO_CONNECTION_URI } = require("./config");
 
 mongoose
@@ -25,7 +27,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // Routes
 app.use("/", webRoutes);
-app.use("/api", apiRoutes);
+app.use("/api", authenticateApiKey, apiRoutes);
 
 const swaggerDocument = yaml.load(fs.readFileSync('./config/openapi.yaml', 'utf8'));
 

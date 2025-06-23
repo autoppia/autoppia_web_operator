@@ -10,6 +10,8 @@ paths:
       summary: Run a new automation task
       description: Creates and executes a new web automation task
       operationId: runTask
+      security:
+        - ApiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -18,7 +20,6 @@ paths:
               type: object
               required:
                 - task
-                - url
               properties:
                 task:
                   type: string
@@ -36,14 +37,22 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - id
                 properties:
                   id:
                     type: string
                     format: uuid
                     description: Unique task identifier
                     example: "123e4567-e89b-12d3-a456-426614174000"
-        '500':
-          description: Internal server error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
           content:
             application/json:
               schema:
@@ -54,6 +63,8 @@ paths:
       summary: Get task details
       description: Retrieves detailed information about a specific task (excluding screenshots)
       operationId: getTask
+      security:
+        - ApiKeyAuth: []
       parameters:
         - name: id
           in: path
@@ -70,14 +81,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Task'
-        '404':
-          description: Task not found
+        '401':
+          description: Unauthorized
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '500':
-          description: Internal server error
+        '404':
+          description: Task not found
           content:
             application/json:
               schema:
@@ -88,6 +99,8 @@ paths:
       summary: Get task status
       description: Retrieves the current status of a specific task
       operationId: getTaskStatus
+      security:
+        - ApiKeyAuth: []
       parameters:
         - name: id
           in: path
@@ -104,19 +117,21 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - status
                 properties:
                   status:
                     type: string
                     enum: [pending, running, completed, failed]
                     example: "completed"
-        '404':
-          description: Task not found
+        '401':
+          description: Unauthorized
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '500':
-          description: Internal server error
+        '404':
+          description: Task not found
           content:
             application/json:
               schema:
@@ -127,6 +142,8 @@ paths:
       summary: Get task screenshots
       description: Retrieves all screenshots captured during task execution
       operationId: getTaskScreenshots
+      security:
+        - ApiKeyAuth: []
       parameters:
         - name: id
           in: path
@@ -143,6 +160,8 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - screenshots
                 properties:
                   screenshots:
                     type: array
@@ -150,14 +169,14 @@ paths:
                       type: string
                       description: Base64 encoded screenshot or screenshot URL
                     example: ["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."]
-        '404':
-          description: Task not found
+        '401':
+          description: Unauthorized
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '500':
-          description: Internal server error
+        '404':
+          description: Task not found
           content:
             application/json:
               schema:
@@ -168,6 +187,8 @@ paths:
       summary: Get task gif
       description: Retrieves the gif generated from task screenshots
       operationId: getTaskGif
+      security:
+        - ApiKeyAuth: []
       parameters:
         - name: id
           in: path
@@ -184,25 +205,32 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - gif
                 properties:
                   gif:
                     type: string
                     description: Base64 encoded gif
                     example: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP..."
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '404':
           description: Task not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
 
 components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
   schemas:
     Step:
       type: object
@@ -226,6 +254,11 @@ components:
 
     Task:
       type: object
+      required:
+        - id
+        - task
+        - url
+        - status
       properties:
         id:
           type: string
@@ -265,9 +298,10 @@ components:
 
     Error:
       type: object
+      required:
+        - error
       properties:
         error:
           type: string
           description: Error message or error object
-          example: "Task not found"
-
+          example: "Error Message"
