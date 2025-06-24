@@ -1,7 +1,7 @@
 import asyncio
 from fastmcp import Client
 
-client = Client("http://127.0.0.1:8080/mcp")
+client = Client("https://mcp-automata.autoppia.com/mcp")
 
 async def main():
     async with client:
