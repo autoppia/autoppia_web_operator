@@ -193,12 +193,12 @@ async def _execute_with_retry(
                 logger.error(f"Max retries reached. Failed to execute request.")
                 raise 
 
-async def main():
-    await mcp.run_async(
-        transport="streamable-http", 
+def main():
+    mcp.run(
+        transport="http", 
         host="0.0.0.0",
-        port=8080,
+        port=9000
     )
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
