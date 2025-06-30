@@ -40,7 +40,7 @@ class AutomataOperator:
 
         self.storage_state_dir = Path(tempfile.gettempdir()) / 'automata' / 'storage_states'
         self.storage_state_dir.mkdir(parents=True, exist_ok=True)
-        self.history_gif_dir = Path(tempfile.gettempdir()) / 'autoamta' / 'history'
+        self.history_gif_dir = Path(tempfile.gettempdir()) / 'automata' / 'history'
         self.history_gif_dir.mkdir(parents=True, exist_ok=True)
 
     async def run_task(self, request):
