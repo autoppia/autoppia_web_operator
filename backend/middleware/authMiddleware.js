@@ -2,6 +2,9 @@ const axios = require('axios');
 
 module.exports = async (req, res, next) => {
     try {
+        if (req.method === 'PUT') {
+            return next();
+        }
         const apiKey = req.headers['x-api-key'];
         if (!apiKey) {
             return res.status(401).json({ error: 'Unauthorized: Missing API key' });
